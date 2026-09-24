@@ -1,0 +1,177 @@
+/* Lumin ad design system — 1080x1920 (9:16) canvas.
+ *
+ * Safe zones (Meta, 2026): keep headlines and CTAs between y≈250 and y≈1300.
+ * Reels overlays the bottom ~35% with caption + buttons, and feed placements
+ * crop 9:16 to 4:5 (y 285–1635), so the band both survive is 285–1300.
+ * Ambient decoration may run edge to edge; words may not.
+ */
+@font-face { font-family: "Poppins"; font-weight: 600; src: url("../../assets/fonts/Poppins-600.ttf"); }
+@font-face { font-family: "Poppins"; font-weight: 700; src: url("../../assets/fonts/Poppins-700.ttf"); }
+@font-face { font-family: "Poppins"; font-weight: 800; src: url("../../assets/fonts/Poppins-800.ttf"); }
+@font-face { font-family: "Poppins"; font-weight: 900; src: url("../../assets/fonts/Poppins-900.ttf"); }
+@font-face { font-family: "Inter"; font-weight: 400; src: url("../../assets/fonts/Inter-400.ttf"); }
+@font-face { font-family: "Inter"; font-weight: 500; src: url("../../assets/fonts/Inter-500.ttf"); }
+@font-face { font-family: "Inter"; font-weight: 600; src: url("../../assets/fonts/Inter-600.ttf"); }
+@font-face { font-family: "Inter"; font-weight: 700; src: url("../../assets/fonts/Inter-700.ttf"); }
+@font-face { font-family: "Caveat"; font-weight: 700; src: url("../../assets/fonts/Caveat-700.ttf"); }
+@font-face { font-family: "Mono"; font-weight: 500; src: url("../../assets/fonts/JetBrainsMono-500.ttf"); }
+@font-face { font-family: "Mono"; font-weight: 700; src: url("../../assets/fonts/JetBrainsMono-700.ttf"); }
+
+:root {
+  --bg0: #040816;
+  --bg1: #0a1330;
+  --panel: rgba(13, 24, 56, 0.86);
+  --panel-solid: #0d1838;
+  --line: rgba(122, 211, 248, 0.22);
+  --brand: #7ad3f8;          /* Lumin icon blue */
+  --cyan: #38d6ff;
+  --blue: #3d7bff;
+  --violet: #9b6bff;
+  --green: #22e39b;
+  --red: #ff4d6d;
+  --amber: #ffc542;
+  --ink: #eef5ff;
+  --muted: #9fb0cf;
+  --dim: #5f7196;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { background: #000; overflow: hidden; }
+body { display: grid; place-items: center; height: 100vh; }
+
+#stage {
+  position: relative; width: 1080px; height: 1920px; overflow: hidden;
+  font-family: "Inter", sans-serif; color: var(--ink);
+  background:
+    radial-gradient(900px 700px at 85% 8%, rgba(61, 123, 255, 0.35), transparent 60%),
+    radial-gradient(800px 800px at 10% 60%, rgba(56, 214, 255, 0.16), transparent 60%),
+    radial-gradient(1000px 700px at 60% 105%, rgba(155, 107, 255, 0.22), transparent 60%),
+    linear-gradient(180deg, var(--bg1), var(--bg0) 70%);
+  transform-origin: center;
+}
+.abs { position: absolute; }
+.center-x { left: 50%; transform: translateX(-50%); }
+
+/* ---------- ambient background ---------- */
+.grid-floor {
+  position: absolute; left: -40%; right: -40%; bottom: -10%; height: 55%;
+  background-image:
+    linear-gradient(rgba(56, 214, 255, 0.22) 2px, transparent 2px),
+    linear-gradient(90deg, rgba(56, 214, 255, 0.22) 2px, transparent 2px);
+  background-size: 90px 90px;
+  transform: perspective(700px) rotateX(62deg);
+  mask-image: linear-gradient(180deg, transparent, #000 45%);
+  animation: gridMove 3s linear infinite;
+  opacity: 0.45;
+}
+@keyframes gridMove { to { background-position: 0 90px, 0 0; } }
+
+.particle {
+  position: absolute; width: 6px; height: 6px; border-radius: 50%;
+  background: var(--cyan); box-shadow: 0 0 14px 4px rgba(56, 214, 255, 0.6);
+  animation: floatUp linear infinite; opacity: 0;
+}
+@keyframes floatUp {
+  0% { transform: translateY(0); opacity: 0; }
+  15% { opacity: 0.9; }
+  100% { transform: translateY(-900px); opacity: 0; }
+}
+.bg-candles { position: absolute; inset: 0; opacity: 0.12; }
+
+/* ---------- brand bar ---------- */
+.brandbar { position: absolute; left: 64px; top: 84px; display: flex; align-items: center; gap: 20px; z-index: 20; }
+.logo {
+  width: 92px; height: 92px; border-radius: 24px; background: var(--brand);
+  display: grid; place-items: center; box-shadow: 0 0 40px rgba(122, 211, 248, 0.55);
+}
+.logo svg { width: 46px; height: 52px; }
+.brandbar .name { font: 800 54px/1 "Poppins"; letter-spacing: -1px; }
+.brandbar .sub { font: 500 24px/1.2 "Inter"; color: var(--muted); margin-top: 6px; }
+.tagline-top {
+  position: absolute; right: 64px; top: 110px; text-align: right; z-index: 20;
+  font: 600 22px/1.5 "Inter"; letter-spacing: 6px; color: var(--muted);
+}
+
+/* ---------- type ---------- */
+.h1 { font: 900 104px/1.02 "Poppins"; letter-spacing: -3px; text-shadow: 0 6px 40px rgba(0,0,0,.6); }
+.h2 { font: 800 76px/1.06 "Poppins"; letter-spacing: -2px; }
+.h3 { font: 700 50px/1.15 "Poppins"; letter-spacing: -1px; }
+.body { font: 500 36px/1.4 "Inter"; color: var(--muted); }
+.grad { background: linear-gradient(90deg, #5fe3ff, #38d6ff 40%, #6f9bff); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.grad-warm { background: linear-gradient(90deg, #ffb347, #ff4d6d); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.grad-green { background: linear-gradient(90deg, #6affc6, #22e39b); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.script {
+  font: 700 64px/1.05 "Caveat"; color: #dff6ff;
+  text-shadow: 0 0 24px rgba(56, 214, 255, 0.55);
+}
+.swoosh { display: block; height: 22px; margin-top: 4px; }
+.mono { font-family: "Mono"; }
+
+/* ---------- cards ---------- */
+.card {
+  position: absolute; border-radius: 34px; background: var(--panel);
+  border: 2px solid rgba(56, 214, 255, 0.45);
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.04) inset, 0 0 60px rgba(56, 214, 255, 0.22), 0 30px 80px rgba(0, 0, 0, 0.55);
+}
+.card.green { border-color: rgba(34, 227, 155, 0.7); box-shadow: 0 0 70px rgba(34, 227, 155, 0.3), 0 30px 80px rgba(0, 0, 0, 0.55); }
+.card.red { border-color: rgba(255, 77, 109, 0.7); box-shadow: 0 0 70px rgba(255, 77, 109, 0.28), 0 30px 80px rgba(0, 0, 0, 0.55); }
+.card.dull { background: rgba(40, 44, 58, 0.92); border-color: rgba(255, 255, 255, 0.12); box-shadow: 0 30px 80px rgba(0, 0, 0, 0.6); }
+
+.pill {
+  display: inline-flex; align-items: center; gap: 12px; padding: 10px 22px; border-radius: 999px;
+  font: 700 28px/1 "Inter"; letter-spacing: 1px;
+}
+.pill.long { background: rgba(34, 227, 155, 0.16); color: var(--green); border: 2px solid rgba(34, 227, 155, 0.55); }
+.pill.short { background: rgba(255, 77, 109, 0.16); color: var(--red); border: 2px solid rgba(255, 77, 109, 0.55); }
+.pill.live { background: rgba(56, 214, 255, 0.14); color: var(--cyan); border: 2px solid rgba(56, 214, 255, 0.55); }
+.dot { width: 14px; height: 14px; border-radius: 50%; background: currentColor; box-shadow: 0 0 12px currentColor; animation: blink 1s ease-in-out infinite; }
+@keyframes blink { 50% { opacity: 0.25; } }
+
+.row { display: flex; justify-content: space-between; align-items: center; padding: 22px 0; border-bottom: 1px solid rgba(255, 255, 255, 0.07); font: 500 36px/1 "Inter"; color: var(--muted); }
+.row:last-child { border-bottom: 0; }
+.row b { font: 700 42px/1 "Mono"; color: var(--ink); }
+.row b.g { color: var(--green); }
+.row b.r { color: var(--red); }
+
+.check {
+  display: flex; align-items: center; gap: 24px; padding: 26px 30px; border-radius: 24px;
+  background: rgba(34, 227, 155, 0.08); border: 2px solid rgba(34, 227, 155, 0.35);
+  font: 600 38px/1.1 "Inter";
+}
+.tick { width: 58px; height: 58px; border-radius: 50%; background: var(--green); display: grid; place-items: center; flex: none; box-shadow: 0 0 26px rgba(34, 227, 155, 0.7); }
+.tick svg { width: 32px; height: 32px; }
+.cross { background: var(--red); box-shadow: 0 0 26px rgba(255, 77, 109, 0.7); }
+
+.glow-pulse { animation: glowPulse 1.6s ease-in-out infinite; }
+@keyframes glowPulse { 50% { filter: brightness(1.35); } }
+
+/* ---------- end card ---------- */
+.cta {
+  display: inline-flex; align-items: center; gap: 18px; padding: 34px 64px; border-radius: 999px;
+  background: linear-gradient(90deg, #2f7bff, #38d6ff); color: #041022;
+  font: 800 46px/1 "Poppins"; box-shadow: 0 0 60px rgba(56, 214, 255, 0.6);
+}
+.disclaimer {
+  position: absolute; left: 70px; right: 70px; border-radius: 30px; padding: 44px 48px;
+  background: rgba(8, 14, 36, 0.94); border: 2px solid rgba(255, 197, 66, 0.55);
+  text-align: center;
+}
+.disclaimer h4 { font: 800 34px/1 "Poppins"; color: var(--amber); letter-spacing: 3px; margin-bottom: 26px; }
+.disclaimer p { font: 600 34px/1.4 "Inter"; color: #fff; }
+.disclaimer small { display: block; margin-top: 20px; font: 500 26px/1.45 "Inter"; color: var(--muted); }
+.illus { font: 500 22px/1 "Inter"; color: var(--dim); letter-spacing: 1px; }
+
+/* ---------- lower-third decoration (below the text safe zone) ---------- */
+.deco-chart { position: absolute; left: 0; top: 1330px; width: 1080px; height: 420px; opacity: .9; }
+.deco-chart .area { animation: breathe 3.2s ease-in-out infinite; }
+@keyframes breathe { 50% { opacity: .55; } }
+.deco-chart .glowdot { animation: blink 1.2s ease-in-out infinite; }
+.ticker {
+  position: absolute; left: 0; top: 1790px; width: 1080px; height: 70px; overflow: hidden;
+  border-top: 1px solid rgba(56,214,255,.25); border-bottom: 1px solid rgba(56,214,255,.25);
+  background: rgba(5,10,28,.7);
+}
+.ticker-track { position: absolute; top: 18px; white-space: nowrap; font: 600 30px/1 "Mono"; color: #9fb0cf; animation: tick 14s linear infinite; }
+.ticker-track b { color: #eef5ff; margin: 0 8px 0 40px; }
+.ticker-track .u { color: var(--green); } .ticker-track .d { color: var(--red); }
+@keyframes tick { from { transform: translateX(0); } to { transform: translateX(-50%); } }
