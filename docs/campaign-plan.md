@@ -38,15 +38,19 @@ UTMs in `referrer`. That gives a measurable funnel **without touching the app**:
 - URL: same page with `utm_campaign=android_play`.
 - Budget: ₹250/day.
 
-Both: the 3 videos as 3 ads per ad set, Meta picks the winner. Ad names
-`ad01_signal_seconds`, `ad02_clear_exit`, `ad03_auto_trade` so `utm_content` is readable.
+Both: **one ad**, `out/hero-auto-trade.mp4`, named `hero_3am_auto` so
+`utm_content` is readable. In Ads Manager set the cover to `hero-auto-trade.jpg`
+for Reels/Stories and `hero-auto-trade_4x5.jpg` for Feed. Frame 0 is the
+same picture, so autoplay starts on the cover rather than cutting away from it.
 
 ## Reading the first 5–7 days
 
 - **CTR above ~6% with few `Lead` events** → still accidental taps; check placements again.
 - **Landing views fine, `Lead` rate under ~10%** → the landing page, not the ad, is the leak.
 - **`Lead` fine, few sign-ups** → the in-app funnel (6 screens + OTP before the first signal) is the leak; that is an app change, not an ad change.
-- Compare ads by **cost per `Lead`**, never by clicks.
+- **Hook rate** (3-second video plays ÷ impressions) is the read on the cover and the first 2.5s. Under ~25% means the hook, not the offer, is the problem.
+- **Hold rate** (ThruPlays ÷ 3-second plays): if people drop before 12.5s they never see the CTA.
+- Judge the ad by **cost per `Lead`**, never by clicks.
 
 ## Before you spend
 
@@ -54,4 +58,4 @@ Both: the 3 videos as 3 ads per ad set, Meta picks the winner. Ad names
 2. Repo Settings → Pages → Source: **GitHub Actions**; merge to `main` → the page deploys.
 3. Optional custom domain: Settings → Pages → Custom domain `get.luminapp.org`, then a Cloudflare DNS **CNAME** `get` → `mkmk749278.github.io` (DNS only / grey cloud until the certificate issues).
 4. Confirm the account's crypto-advertising eligibility in Meta Business Settings (see `compliance-checklist.md`).
-5. Upload the MP4s from `out/`; add music from Meta's library if wanted (the files carry a silent track).
+5. Upload `out/hero-auto-trade.mp4`. It carries its own synthesized soundtrack (−14 LUFS, beat-synced). **Don't** add library music over it, or the SFX and cuts drift off the beat.

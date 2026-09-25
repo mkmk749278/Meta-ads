@@ -6,9 +6,9 @@ script seeks headless Chromium to each frame, screenshots it, and pipes the
 frames into ffmpeg. Same input, same pixels, every run.
 
     pip install playwright imageio-ffmpeg
-    python tools/render.py ads/01-signal-in-seconds            # -> out/01-signal-in-seconds.mp4
+    python tools/render.py ads/hero-auto-trade           # -> out/hero-auto-trade.mp4 + covers
     python tools/render.py ads/*/ --fps 30
-    python tools/render.py ads/02-clear-exit --stills 1000,6000   # QA PNGs only
+    python tools/render.py ads/hero-auto-trade --stills 0,6600   # QA PNGs only
 
 Chromium: uses $CHROMIUM_PATH, else /opt/pw-browsers (the Claude Code cloud
 image), else Playwright's own download.
@@ -22,8 +22,12 @@ import pathlib
 import shutil
 import subprocess
 import sys
+import tempfile
 
 from playwright.sync_api import sync_playwright
+
+sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
+import soundtrack  # noqa: E402
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 W, H = 1080, 1920
@@ -60,15 +64,24 @@ def render_video(ad_dir: pathlib.Path, fps: int, out: pathlib.Path) -> None:
     with sync_playwright() as p:
         browser, page, duration = open_ad(p, ad_dir)
         frames = int(round(duration / 1000 * fps))
+        # An ad with a #soundtrack cue list gets its synthesized score,
+        # loudness-normalised to -14 LUFS (what Reels/Feed normalise to anyway).
+        # Otherwise a silent stereo track: some placements treat audio-less
+        # uploads as "no sound" creatives.
+        wav = pathlib.Path(tempfile.gettempdir()) / f"{ad_dir.name}.wav"
+        if soundtrack.render(ad_dir, wav):
+            audio = ["-i", str(wav)]
+            afilter = ["-af", "loudnorm=I=-14:TP=-1.5:LRA=11", "-ar", "48000"]
+        else:
+            audio = ["-f", "lavfi", "-i", "anullsrc=r=48000:cl=stereo"]
+            afilter = []
         cmd = [
             ffmpeg_path(), "-y", "-loglevel", "error",
             "-f", "image2pipe", "-vcodec", "mjpeg", "-framerate", str(fps), "-i", "-",
-            # Silent stereo track: some placements treat audio-less uploads as
-            # "no sound" creatives. Swap in music in Ads Manager if wanted.
-            "-f", "lavfi", "-i", "anullsrc=r=48000:cl=stereo",
-            "-map", "0:v", "-map", "1:a", "-shortest",
+            *audio,
+            "-map", "0:v", "-map", "1:a", "-shortest", *afilter,
             "-c:v", "libx264", "-preset", "slow", "-crf", "18", "-pix_fmt", "yuv420p",
-            "-profile:v", "high", "-c:a", "aac", "-b:a", "128k",
+            "-profile:v", "high", "-c:a", "aac", "-b:a", "192k",
             "-movflags", "+faststart", str(out),
         ]
         enc = subprocess.Popen(cmd, stdin=subprocess.PIPE)
@@ -81,8 +94,12 @@ def render_video(ad_dir: pathlib.Path, fps: int, out: pathlib.Path) -> None:
         if enc.wait() != 0:
             sys.exit(f"ffmpeg failed for {ad_dir.name}")
         # Poster frame for the Meta thumbnail picker and the landing page.
-        page.evaluate("t => window.Ad.seek(t)", float(page.evaluate("document.getElementById('stage').dataset.poster || 7000")))
+        page.evaluate("t => window.Ad.seek(t)", float(page.evaluate("document.getElementById('stage').dataset.poster ?? 7000")))
         page.screenshot(path=str(out.with_suffix(".jpg")), type="jpeg", quality=90)
+        # Feed placements crop 9:16 to 4:5 (y 285-1635); ship that cover too so
+        # the thumbnail picked in Ads Manager is the one the feed actually shows.
+        page.screenshot(path=str(out.with_name(out.stem + "_4x5.jpg")), type="jpeg", quality=90,
+                        clip={"x": 0, "y": 285, "width": W, "height": 1350})
         browser.close()
     print(f"\r{ad_dir.name}: wrote {out.relative_to(ROOT)} ({out.stat().st_size / 1e6:.1f} MB)")
 
