@@ -14,7 +14,7 @@ no win rate, no "safe"/"guaranteed", no exchange logo, no competitor named.
 ## Hero — "Aap so rahe the" (`out/hero-auto-trade.mp4`, ad name `hero_3am_auto`)
 
 **Primary text**
-> Raat 3 baje setup bana. Aap so rahe the — Lumin Auto Trade ne aapke apne Binance account pe entry, stop-loss aur target laga diya. Signals FREE, Auto Trade jab chaho.
+> Raat 3 baje setup bana. Aap so rahe the — Lumin Auto Trade ne aapke apne Binance account pe entry, stop-loss aur target laga diya. Live signals 3 din FREE, Auto Trade jab chaho.
 
 **Headline:** Aap so rahe the. Trade lag gaya.
 **Description:** Ek entry. Ek stop. Ek exit.

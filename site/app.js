@@ -61,7 +61,7 @@
   } else if (isIOS) {
     set(primary, "Lumin kholo (iPhone)", webUrl, "webapp");
     secondary.hidden = true;
-    note.textContent = "App Store ki zarurat nahi · 18+ only · Signals free";
+    note.textContent = "App Store ki zarurat nahi · 18+ only · 3 din live signals free";
     document.getElementById("a2hs").hidden = false;
   } else {
     set(primary, "Web app kholo", webUrl, "webapp");
