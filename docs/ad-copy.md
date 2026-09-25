@@ -22,6 +22,34 @@ no win rate, no "safe"/"guaranteed", no exchange logo, no competitor named.
 Variant primary text (A/B, same video):
 > Signal aaya aur aap busy the? Lumin ka engine 24/7 scan karta hai. Auto Trade ON ho to order aapke account pe khud lagta hai, stop-loss ke saath. Withdrawal permission wali key hum accept hi nahi karte.
 
+---
+
+## B — "Ye signal abhi LIVE hai" (`out/unlock-live.mp4`, ad name `b_unlock_live`)
+
+**Primary text**
+> Ye signal abhi live hai — entry, stop-loss, target sab ready. Lumin kholo, koi number nahi maangte. Sign up karo aur 3 din saare live signals FREE dekho.
+
+**Headline:** Ye signal abhi LIVE hai.
+**Description:** Number nahi. Form nahi. Seedha app mein.
+
+Variant primary text:
+> Live signal ke levels chhupe hue hain? Ek tap. Entry, stop-loss aur target saaf dikhenge. App bina number ke kholo, sign up pe 3 din saare live signals FREE.
+
+---
+
+## C — "20 indicators. 0 clarity." (`out/chaos-clarity.mp4`, ad name `c_chaos_clarity`)
+
+**Primary text**
+> 20 indicators laga ke bhi confusion? Lumin trend, volume, structure aur market regime padhta hai — aapko milte hain sirf teen number: entry, stop-loss, target. Har trade ka record, jeet bhi haar bhi. Live signals 3 din FREE.
+
+**Headline:** Chart kam. Clarity zyada.
+**Description:** Teen number. Bas.
+
+Variant primary text:
+> Buy? Sell? Breakout ya fakeout? Chart ghoorna band karo. Ek signal, ek entry, ek stop, ek exit — aur har result record mein. Live signals 3 din FREE.
+
+---
+
 Retired 2026-09-25: the three earlier ads (signal-in-seconds, clear-exit,
 auto-trade) and their copy. See git history.
 

@@ -20,8 +20,13 @@ Marketing repo for **Lumin** (consumer app of the 360 Crypto Eye engine). See
 - **Frame 0 is the thumbnail** (owner, 2026-09-25: the cover earns the click). It must
   read fully composed with no motion; check `out/*_4x5.jpg` too, because Feed crops to
   y 285–1635 and anything above 285 (the brand bar) is cut there.
-- **One ad, not a set.** `hero-auto-trade` is the ad; the three older ones are in
-  git history. Add a new ad only when there is a test it answers.
+- **One ad per hook, and every ad answers a test.** `hero-auto-trade` (outcome),
+  `unlock-live` (curiosity), `chaos-clarity` (pain) differ only in the hook;
+  offer and end card are shared. After the test, budget goes to the winner.
+  A new ad needs a new hook to test, never just a new look.
+- **No win-rate reading in pictures either.** A record shown on screen carries as
+  many losses as wins (`chaos-clarity` shows 3 TP / 3 SL); a win-heavy list is a
+  win-rate claim without the number.
 - The soundtrack is synthesized (`tools/soundtrack.py`), so there is no music licence
   to track. Cuts and SFX sit on its 120 BPM grid; move them together.
 - Re-render after any edit to `ads/` and commit the new `out/*.mp4` with the source.

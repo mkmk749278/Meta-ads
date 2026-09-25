@@ -38,16 +38,30 @@ UTMs in `referrer`. That gives a measurable funnel **without touching the app**:
 - URL: same page with `utm_campaign=android_play`.
 - Budget: ₹250/day.
 
-Both: **one ad**, `out/hero-auto-trade.mp4`, named `hero_3am_auto` so
-`utm_content` is readable. In Ads Manager set the cover to `hero-auto-trade.jpg`
-for Reels/Stories and `hero-auto-trade_4x5.jpg` for Feed. Frame 0 is the
-same picture, so autoplay starts on the cover rather than cutting away from it.
+Both campaigns: **three ads in each ad set**, one per hook, so Meta splits
+delivery and the hook is the only thing that differs:
+
+| Ad name (`utm_content`) | File | Hook |
+|---|---|---|
+| `hero_3am_auto` | `out/hero-auto-trade.mp4` | Outcome: "Aap so rahe the. Trade lag gaya." |
+| `b_unlock_live` | `out/unlock-live.mp4` | Curiosity: "Ye signal abhi LIVE hai." |
+| `c_chaos_clarity` | `out/chaos-clarity.mp4` | Pain: "20 indicators. 0 clarity." |
+
+In Ads Manager set each ad's cover to its `out/<ad>.jpg` for Reels/Stories and
+`out/<ad>_4x5.jpg` for Feed. Frame 0 is the same picture, so autoplay starts on
+the cover rather than cutting away from it.
+
+**Picking the winner.** After ~₹1,500 per ad set (or 7 days), compare the three on
+**hook rate** first (3-second plays ÷ impressions), then **cost per `Lead`**.
+Move the budget to the best one and pause the others; keep the loser's source,
+since a hook that loses on Android can win on iPhone. Don't judge on CTR alone:
+the first campaign's 16% CTR was accidental taps.
 
 ## Reading the first 5–7 days
 
 - **CTR above ~6% with few `Lead` events** → still accidental taps; check placements again.
 - **Landing views fine, `Lead` rate under ~10%** → the landing page, not the ad, is the leak.
-- **`Lead` fine, few sign-ups** → the in-app funnel (6 screens + OTP before the first signal) is the leak; that is an app change, not an ad change.
+- **`Lead` fine, few sign-ups** → the in-app funnel is the leak. Since 2026-09-25 a visitor enters on one welcome screen with no phone number and sees live signals masked; sign-up is asked only on "Sign up free to see signal". Compare guests opened vs accounts created in ops before changing the ads.
 - **Hook rate** (3-second video plays ÷ impressions) is the read on the cover and the first 2.5s. Under ~25% means the hook, not the offer, is the problem.
 - **Hold rate** (ThruPlays ÷ 3-second plays): if people drop before 12.5s they never see the CTA.
 - Judge the ad by **cost per `Lead`**, never by clicks.
@@ -58,4 +72,4 @@ same picture, so autoplay starts on the cover rather than cutting away from it.
 2. Repo Settings → Pages → Source: **GitHub Actions**; merge to `main` → the page deploys.
 3. Optional custom domain: Settings → Pages → Custom domain `get.luminapp.org`, then a Cloudflare DNS **CNAME** `get` → `mkmk749278.github.io` (DNS only / grey cloud until the certificate issues).
 4. Confirm the account's crypto-advertising eligibility in Meta Business Settings (see `compliance-checklist.md`).
-5. Upload `out/hero-auto-trade.mp4`. It carries its own synthesized soundtrack (−14 LUFS, beat-synced). **Don't** add library music over it, or the SFX and cuts drift off the beat.
+5. Upload the three `out/*.mp4`. Each carries its own synthesized soundtrack (−14 LUFS, beat-synced). **Don't** add library music over it, or the SFX and cuts drift off the beat.

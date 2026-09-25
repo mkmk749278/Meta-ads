@@ -29,6 +29,12 @@ first and a policy problem second.
 | Withdrawal-permission keys auto-rejected | Owner Brief B18 |
 | Funds stay in the user's account (non-custodial) | Owner Brief B16, B18 |
 | "Live signals 3 din FREE" (end card, landing) | Owner decision 2026-09-25 (360-v2 `src/api/signal_access.py`, OWNER_BRIEF B1/B16): every account gets 3 days of live signals from sign-up; closed signals always free. True before and after the paywall start, so the ad needs no re-render when it is switched on. **Never** write "Signals FREE" again — live signals are paid after 3 days |
+| "Number nahi. Form nahi. Seedha app mein." (`unlock-live`) | lumin-app #165 (2026-09-25): guest mode — one welcome screen, anonymous sign-in, no phone number to browse. Phone number is asked only at sign-up |
+| Live signal shown masked, "Sign up free to see signal" (`unlock-live`) | lumin-app #166 + 360-v2 `signal_access.py`: live levels withheld from guests; the button copy is the app's own |
+| "Sign up karo. 3 din saare live signals FREE." (`unlock-live`) | Same row as "Live signals 3 din FREE". The ad never states a price, so it stays true before and after `signals_paywall_start` |
+| Lumin reads Trend / Volume / Structure / Market regime (`chaos-clarity`) | `360-v2` scoring: SMC structure dimension, volume inputs, regime classifier (`src/regime.py`), EMA trend. Named as what is read, never as an edge |
+| "Har trade ka record. Jeet bhi. Haar bhi." (`chaos-clarity`) | Owner Brief B3, B9; app Track record shows every closed signal. The on-screen list is 3 TP / 3 SL on purpose — no implied win rate |
+| "20 indicators. 0 clarity." | A description of a cluttered chart, not of the viewer (Meta personal attributes) and not a claim about any product |
 | Signals plan / Assist = one tap / Auto = hands-free | Owner Brief B16 (2026-09-25 revision) |
 | Every result recorded, wins and losses | Owner Brief B3, B9; app Track record |
 | Paper mode | app onboarding ("Paper mode — prove it first") |
