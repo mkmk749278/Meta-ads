@@ -28,7 +28,8 @@ first and a policy problem second.
 | Stop-loss on every trade | Owner Brief B12 + naked-position hard limit. ⚠ Audit 2026-09-24 item 1 (an engine-initiated close can strand a position) is a latent exception — fix before scaling Auto spend |
 | Withdrawal-permission keys auto-rejected | Owner Brief B18 |
 | Funds stay in the user's account (non-custodial) | Owner Brief B16, B18 |
-| Signals, levels, charts free; Assist = one tap; Auto = hands-free | Owner Brief B1, B16; web Upgrade page |
+| "Live signals 3 din FREE" (end card, landing) | Owner decision 2026-09-25 (360-v2 `src/api/signal_access.py`, OWNER_BRIEF B1/B16): every account gets 3 days of live signals from sign-up; closed signals always free. True before and after the paywall start, so the ad needs no re-render when it is switched on. **Never** write "Signals FREE" again — live signals are paid after 3 days |
+| Signals plan / Assist = one tap / Auto = hands-free | Owner Brief B16 (2026-09-25 revision) |
 | Every result recorded, wins and losses | Owner Brief B3, B9; app Track record |
 | Paper mode | app onboarding ("Paper mode — prove it first") |
 

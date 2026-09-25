@@ -79,7 +79,7 @@ h1 { font: 900 clamp(34px, 9.5vw, 48px)/1.05 Poppins, sans-serif; letter-spacing
 
 .plans { margin-top: 34px; text-align: center; }
 .plans h2 { font: 900 30px Poppins; margin-bottom: 14px; }
-.tiers { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 14px; }
+.tiers { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; margin-bottom: 14px; }
 .tier { padding: 16px 8px; border-radius: 16px; background: var(--panel); border: 1px solid rgba(122,211,248,.25); display: grid; gap: 6px; }
 .tier b { font: 900 18px Poppins; } .tier span { font-size: 13px; color: #cfe3ff; }
 .tier.hi { border-color: rgba(34,227,155,.6); box-shadow: 0 0 24px rgba(34,227,155,.25); }
