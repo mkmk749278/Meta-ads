@@ -6,11 +6,11 @@ Paid-social creative and landing page for **Lumin** (consumer app of the
 
 | Path | What |
 |---|---|
-| `out/hero-auto-trade.mp4` | The ad — 1080×1920, 30fps, 18s, H.264 + AAC soundtrack (−14 LUFS), ready to upload |
-| `out/hero-auto-trade.jpg` | 9:16 cover (= frame 0) — Reels / Stories thumbnail |
-| `out/hero-auto-trade_4x5.jpg` | 4:5 cover (y 285–1635 crop) — Feed thumbnail |
+| `out/<ad>.mp4` | The ads — 1080×1920, 30fps, 18s, H.264 + AAC soundtrack (−14 LUFS), ready to upload |
+| `out/<ad>.jpg` | 9:16 cover (= frame 0) — Reels / Stories thumbnail |
+| `out/<ad>_4x5.jpg` | 4:5 cover (y 285–1635 crop) — Feed thumbnail |
 | `ads/<name>/index.html` | Source of each ad — an HTML animation, open it in a browser to preview |
-| `ads/_shared/` | Design system (`base.css`), deterministic timeline (`runtime.js`) |
+| `ads/_shared/` | Design system (`base.css`), deterministic timeline (`runtime.js`), effects (`fx.js`: live candle chart, number decode, camera shake + RGB split, particle bursts) |
 | `tools/render.py` | HTML → MP4 renderer (+ covers) |
 | `tools/soundtrack.py` | Synthesizes the score + SFX from the ad's `#soundtrack` cue list — no samples, nothing to license |
 | `site/` | Landing page, deployed to GitHub Pages by `.github/workflows/pages.yml` |
@@ -18,27 +18,23 @@ Paid-social creative and landing page for **Lumin** (consumer app of the
 | `docs/campaign-plan.md` | Campaign structure, targeting, what to measure |
 | `docs/compliance-checklist.md` | Rules every creative passes + where each claim comes from |
 
-## The ad
+## The ads — one per hook, run as an A/B/C test
 
-**One ad, `hero-auto-trade`** (owner, 2026-09-25: the three older ads read like
-slide decks; one strong ad is enough, and the cover is what earns the click).
-The three older ads are in git history before this change.
+Three ads, identical offer and end card, **different hooks** (owner, 2026-09-25:
+"attract users, not basic"). Each one exists because it answers a test: which
+opening stops the scroll for this audience. Frame 0 of each is its thumbnail and
+is fully composed with no motion.
 
-**Frame 0 is the thumbnail.** It is fully composed with no motion needed: *"Aap so rahe
-the. Trade lag gaya."* over a phone lock screen at 3:12 AM with the Auto Trade
-notification (entry ✓ stop-loss ✓ target ✓). Reels shows frame 0 before autoplay,
-so the cover and the hook are the same picture.
+| Ad | Hook (frame 0) | Test | Story |
+|---|---|---|---|
+| `hero-auto-trade` | *"Aap so rahe the. Trade lag gaya."* — 3:12 AM lock screen | **Outcome** (Auto Trade while you sleep) | scan → signal → Auto Trade → CTA |
+| `unlock-live` | *"Ye signal abhi LIVE hai."* — a live card, levels blurred under a padlock | **Curiosity** (the new masked-live funnel) | tap → lock bursts → levels decode → "Number nahi. Form nahi." → 3 din FREE |
+| `chaos-clarity` | *"20 indicators. 0 clarity."* — a chart buried under overlays and scribbles | **Pain** (chart overload) | mess collapses into Lumin → Entry/Stop/Target draw in → wins *and* losses on the record |
 
-| Time | Beat |
-|---|---|
-| 0–2.5s | **Hook**: 3 AM, phone buzzes, Auto Trade placed the trade |
-| 2.5–5s | **"Kaise?"**: engine scans 24/7, 75+ pairs, every 15s, locks on a setup |
-| 5–8.5s | **Signal**: entry / stop / target, then *1 Entry · 1 Stop · 1 Exit* on the beat |
-| 8.5–12.5s | **Auto Trade**: toggle ON, your Binance account, orders placed, withdrawal keys rejected |
-| 12.5–18s | CTA + ASCI disclaimer (5.5s) |
-
-Cuts land on a 120 BPM grid; the camera pushes in and bumps on each kick; each
-cut flashes. The soundtrack is synthesized from the cue list at the top of the ad's HTML.
+`unlock-live` and `chaos-clarity` open on a pad and glitches only and **drop the
+beat on the first cut** (`drums_from` in the cue list); every cut shakes the
+camera and splits RGB. Only the winning hook should get budget after the test,
+see `docs/campaign-plan.md`.
 
 ## Edit and re-render
 

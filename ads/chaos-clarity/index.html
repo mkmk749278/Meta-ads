@@ -1,0 +1,332 @@
+<!doctype html>
+<!--
+  CHAOS → CLARITY — "20 indicators. 0 clarity."   (hook test C: pain point)
+  Tests a problem-first hook against the hero (outcome) and unlock-live
+  (curiosity). The pain is the viewer's own chart, not their finances, so it
+  stays clear of Meta's personal-attributes rule.
+
+  Frame 0 IS the thumbnail: a chart buried under six moving averages, an RSI
+  and a MACD pane, red scribbles, "BUY?" "SELL?", and the headline glitching.
+
+  Story on a 120 BPM grid (cues in #soundtrack below). The beat DROPS on the
+  first cut — the hook runs on a pad and glitches only:
+    0.0–2.5s  HOOK     the mess; "0 clarity." tears on the glitches
+    2.5–5.5s  COLLAPSE everything is sucked into one point → Lumin; Trend /
+                       Volume / Structure / Market regime slam in and fuse
+    5.5–9.0s  CLARITY  a clean chart; Entry, Stop, Target draw in; "Teen
+                       number. Bas."
+    9.0–12.5s HONESTY  "Har trade ka record. Jeet bhi. Haar bhi." — wins and
+                       losses stamp in, evenly
+    12.5–18s  END      CTA + ASCI disclaimer (5.5s)
+
+  Claims audit: docs/compliance-checklist.md. No P&L, %, win rate; the record
+  shows as many losses as wins on purpose. Prices are ILLUSTRATION.
+-->
+<html data-duration="18000">
+<head>
+<meta charset="utf-8">
+<title>Lumin — 20 indicators, 0 clarity</title>
+<link rel="stylesheet" href="../_shared/base.css">
+<style>
+  #stage {
+    background:
+      radial-gradient(800px 600px at 85% 6%, rgba(255,77,109,.26), transparent 62%),
+      radial-gradient(900px 760px at 6% 50%, rgba(155,107,255,.18), transparent 62%),
+      radial-gradient(1100px 800px at 50% 110%, rgba(56,214,255,.20), transparent 60%),
+      linear-gradient(180deg, #0d0a1e 0%, #070515 55%, #02030b 100%);
+  }
+  #cam { position:absolute; inset:0; transform-origin: 50% 50%; }
+  .brand-mini { position:absolute; left:64px; top:108px; display:flex; align-items:center; gap:16px; z-index:30; }
+  .brand-mini .logo { width:72px; height:72px; border-radius:20px; }
+  .brand-mini .logo svg { width:34px; height:40px; }
+  .brand-mini span { font:800 46px/1 "Poppins"; letter-spacing:-1px; }
+
+  .hook { font:900 118px/0.98 "Poppins"; letter-spacing:-4px; }
+  .zero { color:#ff4d6d; }
+
+  #mess { position:absolute; left:0; top:0; width:1080px; height:1920px; transform-origin: 540px 1000px; }
+  .pane { position:absolute; left:40px; width:1000px; border-radius:26px; background: rgba(8,10,28,.72);
+    border:2px solid rgba(255,255,255,.08); overflow:hidden; }
+  .pane .lbl { position:absolute; left:18px; top:12px; font:700 22px/1 "Mono"; color:#7d8bb0; z-index:2; }
+  .legend { position:absolute; left:18px; top:12px; display:flex; flex-wrap:wrap; gap:10px 18px; width:960px; z-index:2;
+    font:700 20px/1 "Mono"; }
+  .scrib { position:absolute; font:700 64px/1 "Caveat"; color:#ff5c7a; text-shadow:0 0 18px rgba(255,77,109,.6); }
+  .scrib.y { color:#ffd166; text-shadow:0 0 18px rgba(255,209,102,.6); }
+
+  /* scene B */
+  .core { position:absolute; left:540px; top:900px; width:240px; height:240px; margin:-120px 0 0 -120px; border-radius:64px;
+    background: var(--brand); display:grid; place-items:center; box-shadow: 0 0 120px rgba(122,211,248,.9), 0 0 0 10px rgba(122,211,248,.15); }
+  .core svg { width:110px; height:126px; }
+  .ring { position:absolute; left:540px; top:900px; width:100px; height:100px; margin:-50px 0 0 -50px; border-radius:50%;
+    border:8px solid #7ad3f8; opacity:0; }
+  .fac { position:absolute; padding:22px 34px; border-radius:24px; font:800 44px/1 "Poppins"; white-space:nowrap;
+    background: rgba(13,24,56,.94); border:3px solid; box-shadow: 0 0 50px currentColor; }
+
+  /* scene C */
+  #clean { position:absolute; left:0; top:560px; width:1080px; height:760px; }
+  .tag { position:absolute; right:30px; padding:12px 20px; border-radius:14px; font:800 34px/1 "Mono"; color:#041022; white-space:nowrap; }
+  .tag small { font:800 22px "Inter"; margin-right:10px; letter-spacing:1px; }
+
+  /* scene D */
+  .ledger { position:absolute; left:80px; right:80px; top:540px; padding:30px 36px 18px; border-radius:36px;
+    background: rgba(10,16,40,.95); border:2px solid rgba(122,211,248,.3); box-shadow: 0 40px 120px rgba(0,0,0,.6); }
+  .ledger .hd { display:flex; justify-content:space-between; font:700 26px/1 "Inter"; color:#8fa2c8; margin-bottom:14px; }
+  .lr { display:flex; justify-content:space-between; align-items:center; padding:20px 4px; border-top:1px solid rgba(255,255,255,.07);
+    font:700 38px/1 "Poppins"; }
+  .lr .when { font:600 26px/1 "Inter"; color:#7d8bb0; margin-left:16px; }
+  .res { font:900 30px/1 "Inter"; padding:12px 20px; border-radius:14px; letter-spacing:1px; }
+  .res.w { background:rgba(34,227,155,.16); color:var(--green); border:2px solid rgba(34,227,155,.5); }
+  .res.l { background:rgba(255,77,109,.16); color:var(--red); border:2px solid rgba(255,77,109,.5); }
+
+  .slam { font:900 100px/1 "Poppins"; letter-spacing:-3px; display:inline-block; }
+  #flash { position:absolute; inset:0; background:#fff; opacity:0; pointer-events:none; z-index:50; mix-blend-mode:overlay; }
+</style>
+</head>
+<body>
+<script type="application/json" id="soundtrack">
+{
+  "bpm": 120,
+  "prog": "lift",
+  "music_from": 0,
+  "drums_from": 2500,
+  "music_until": 12500,
+  "end": 18000,
+  "sfx": [
+    [0, "glitch"], [0, "sub"], [650, "glitch"], [1250, "tick"], [1500, "glitch"], [1500, "riser1"], [2100, "glitch"],
+    [2500, "sub"], [2500, "impact"], [2520, "whoosh"], [3000, "shatter"], [3000, "impact"],
+    [3500, "hit"], [3750, "hit"], [4000, "hit"], [4250, "hit"], [4000, "riser1"], [4750, "whoosh"], [5000, "ding"], [5000, "impact"],
+    [5500, "whoosh"], [5500, "impact"], [6000, "zap"], [6000, "scramble"], [6500, "zap"], [6500, "scramble"],
+    [7000, "zap"], [7000, "scramble"], [7500, "hit"], [8000, "riser1"],
+    [9000, "impact"], [9000, "whoosh"], [9500, "stamp"], [9900, "stamp"], [10300, "stamp"], [10700, "stamp"],
+    [11100, "stamp"], [11500, "stamp"], [11500, "riser1"], [12500, "impact"], [12500, "sub"]
+  ]
+}
+</script>
+
+<div id="stage" data-end-at="12500" data-poster="0">
+<div id="cam">
+  <div class="brand-mini" data-out="fade" data-until="12200">
+    <div class="logo" data-logo></div><span>Lumin</span>
+  </div>
+
+  <!-- ============ A. HOOK — the thumbnail (0–2.5s) ============ -->
+  <div id="mess">
+    <div class="pane" style="top:560px; height:560px"><canvas id="c1" width="1000" height="560"></canvas>
+      <div class="legend"><span style="color:#38d6ff">EMA9</span><span style="color:#ffd166">EMA21</span><span style="color:#9b6bff">SMA50</span>
+        <span style="color:#ff7ab6">SMA100</span><span style="color:#7dffb0">BB(20,2)</span><span style="color:#ff9f45">VWAP</span>
+        <span style="color:#9fb0cf">ICHIMOKU</span><span style="color:#c3a6ff">SUPERTREND</span></div></div>
+    <div class="pane" style="top:1140px; height:170px"><div class="lbl">RSI(14) · STOCH RSI</div><canvas id="c2" width="1000" height="170"></canvas></div>
+    <div class="pane" style="top:1330px; height:170px"><div class="lbl">MACD(12,26,9) · OBV · ADX</div><canvas id="c3" width="1000" height="170"></canvas></div>
+    <svg class="abs" style="left:0; top:0" width="1080" height="1920" viewBox="0 0 1080 1920">
+      <ellipse cx="760" cy="760" rx="120" ry="70" fill="none" stroke="#ff4d6d" stroke-width="7" transform="rotate(-12 760 760)"/>
+      <path d="M200 1000 C 260 900, 330 880, 400 820" stroke="#ffd166" stroke-width="7" fill="none" stroke-linecap="round"/>
+      <path d="M380 806 L402 818 L392 842" stroke="#ffd166" stroke-width="7" fill="none" stroke-linecap="round"/>
+      <path d="M620 1040 L 900 900" stroke="#ff4d6d" stroke-width="6" stroke-dasharray="14 12"/>
+      <ellipse cx="300" cy="1225" rx="90" ry="48" fill="none" stroke="#ff4d6d" stroke-width="6"/>
+    </svg>
+    <div class="scrib" style="left:650px; top:648px">BUY?</div>
+    <div class="scrib y" style="left:150px; top:1020px">SELL??</div>
+    <div class="scrib" style="left:820px; top:980px">???</div>
+    <div class="scrib y" style="left:520px; top:1190px; font-size:54px">divergence??</div>
+    <div class="scrib" style="left:130px; top:720px; font-size:56px">breakout ya fakeout?</div>
+  </div>
+
+  <div class="abs" style="left:64px; top:296px" data-out="left" data-until="2450" data-odur="200">
+    <div class="hook">20 indicators.</div>
+    <div class="hook zero" id="zero" style="margin-top:10px">0 clarity.</div>
+  </div>
+
+  <!-- ============ B. COLLAPSE (2.5–5.5s) ============ -->
+  <div class="abs" style="left:64px; top:296px" data-in="left" data-at="2700" data-dur="300" data-out="up" data-until="5450" data-odur="220">
+    <div class="slam" style="font-size:80px">Lumin sab <span class="grad">padhta hai.</span></div>
+  </div>
+  <div class="abs" style="left:66px; top:410px" data-in="left" data-at="3000" data-dur="300" data-out="up" data-until="5450" data-odur="220">
+    <div class="h3" style="font-size:48px; color:#cfe3ff">Aapko sirf <span class="grad-green">1 signal</span> milta hai.</div>
+  </div>
+  <div class="ring" id="ring1"></div><div class="ring" id="ring2"></div>
+  <div class="core" id="core" data-logo-xl></div>
+  <div class="fac" id="f1" style="color:#38d6ff; border-color:#38d6ff">Trend</div>
+  <div class="fac" id="f2" style="color:#ffd166; border-color:#ffd166">Volume</div>
+  <div class="fac" id="f3" style="color:#c3a6ff; border-color:#c3a6ff">Structure</div>
+  <div class="fac" id="f4" style="color:#22e39b; border-color:#22e39b">Market regime</div>
+
+  <!-- ============ C. CLARITY (5.5–9.0s) ============ -->
+  <div class="abs" style="left:64px; top:296px; white-space:nowrap">
+    <span class="slam" data-in="pop" data-at="5500" data-dur="260" data-out="left" data-until="8950" data-odur="220">Teen</span>
+    <span class="slam grad" data-in="pop" data-at="5750" data-dur="260" data-out="left" data-until="8950" data-odur="220">number.</span>
+    <span class="slam grad-green" data-in="pop" data-at="7500" data-dur="260" data-out="left" data-until="8950" data-odur="220">Bas.</span>
+  </div>
+  <div class="abs" style="left:66px; top:410px" data-in="left" data-at="7700" data-dur="300" data-out="left" data-until="8950" data-odur="220">
+    <div class="h3" style="font-size:46px; color:#cfe3ff">Target pe <span class="grad-green">100% close.</span> Koi confusion nahi.</div>
+  </div>
+  <div id="cleanwrap" data-in="fade" data-at="5500" data-dur="350" data-out="fade" data-until="8950" data-odur="220">
+    <canvas id="clean" width="1080" height="760"></canvas>
+    <div class="tag" id="tE" style="background:#38d6ff"><small>ENTRY</small><span></span></div>
+    <div class="tag" id="tS" style="background:#ff4d6d"><small>STOP</small><span></span></div>
+    <div class="tag" id="tT" style="background:#22e39b"><small>TARGET</small><span></span></div>
+    <div class="illus abs" style="left:40px; top:1290px">ILLUSTRATION</div>
+  </div>
+
+  <!-- ============ D. HONESTY (9.0–12.5s) ============ -->
+  <div class="abs" style="left:64px; top:296px" data-in="left" data-at="9000" data-dur="300" data-out="left" data-until="12450" data-odur="220">
+    <div class="slam" style="font-size:88px">Har trade ka record.</div>
+  </div>
+  <div class="abs" style="left:66px; top:410px" data-in="left" data-at="9250" data-dur="300" data-out="left" data-until="12450" data-odur="220">
+    <div class="h3" style="font-size:60px"><span class="grad-green">Jeet bhi.</span> <span style="color:#ff6d8a">Haar bhi.</span></div>
+  </div>
+  <div class="ledger" data-in="up" data-at="9150" data-dur="350" data-out="fade" data-until="12450" data-odur="220">
+    <div class="hd"><span>TRACK RECORD · every closed signal</span><span>ILLUSTRATION</span></div>
+    <div class="lr" data-in="left" data-at="9500" data-dur="220"><span>ETHUSDT<span class="when">SHORT · 2h</span></span><span class="res w">TP HIT</span></div>
+    <div class="lr" data-in="left" data-at="9900" data-dur="220"><span>LINKUSDT<span class="when">LONG · 3h</span></span><span class="res l">SL HIT</span></div>
+    <div class="lr" data-in="left" data-at="10300" data-dur="220"><span>SOLUSDT<span class="when">LONG · 5h</span></span><span class="res w">TP HIT</span></div>
+    <div class="lr" data-in="left" data-at="10700" data-dur="220"><span>ARBUSDT<span class="when">SHORT · 6h</span></span><span class="res l">SL HIT</span></div>
+    <div class="lr" data-in="left" data-at="11100" data-dur="220"><span>BNBUSDT<span class="when">LONG · 8h</span></span><span class="res l">SL HIT</span></div>
+    <div class="lr" data-in="left" data-at="11500" data-dur="220"><span>XRPUSDT<span class="when">LONG · 9h</span></span><span class="res w">TP HIT</span></div>
+    <div data-in="up" data-at="11800" data-dur="300" style="margin:14px 0 10px; text-align:center; font:800 38px/1 Poppins; color:#cfe3ff">Kuch <span class="grad">chhupaya</span> nahi.</div>
+  </div>
+
+  <!-- ============ E. END — CTA + ASCI disclaimer (12.5–18s, 5.5s) ============ -->
+  <div class="abs center-x" style="top:292px; width:100%; text-align:center" data-in="pop" data-at="12500" data-dur="500">
+    <div style="display:flex; align-items:center; justify-content:center; gap:22px">
+      <div class="logo" style="width:104px; height:104px; border-radius:28px" data-logo-lg></div>
+      <div style="font:900 84px/1 Poppins; letter-spacing:-2px">Lumin</div>
+    </div>
+    <div class="h2" style="margin-top:28px; font-size:72px">Chart kam. <span class="grad">Clarity zyada.</span></div>
+    <div class="h2" style="margin-top:6px; font-size:72px">Live signals <span class="grad-green">3 din FREE.</span></div>
+  </div>
+  <div class="abs center-x" style="top:640px; text-align:center; width:100%" data-in="up" data-at="12800" data-dur="450">
+    <div class="cta glow-pulse">Lumin try karo
+      <svg width="40" height="40" viewBox="0 0 40 40"><path d="M8 20h24M22 10l10 10-10 10" stroke="#041022" stroke-width="5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </div>
+    <div class="body" style="margin-top:22px; color:#cfe3ff">app.luminapp.org &nbsp;·&nbsp; Google Play</div>
+  </div>
+  <div class="disclaimer" style="top:865px" data-in="fade" data-at="12500" data-dur="300">
+    <h4>RISK DISCLAIMER</h4>
+    <p>Crypto products and NFTs are unregulated and can be highly risky. There may be no regulatory recourse for any loss from such transactions.</p>
+    <small>Futures trading carries a high risk of loss. Signals are not financial advice. 18+ only.</small>
+  </div>
+</div>
+<div id="flash"></div>
+</div>
+
+<script src="../_shared/runtime.js"></script>
+<script src="../_shared/fx.js"></script>
+<script>
+(function () {
+  FX.icons();
+  const $ = (id) => document.getElementById(id);
+  $("core").innerHTML = '<svg viewBox="0 0 46 52"><path d="M0 0h16v38h30v14H0z" fill="#0b1020"/></svg>';
+
+  // The mess: one market drawn under eight overlays, plus two oscillator panes.
+  const messChart = FX.candles($("c1"), { seed: 5, base: 100, vol: 1.1, n: 500 });
+  const MAS = [[5, "#38d6ff", 4], [9, "#ffd166", 4], [14, "#9b6bff", 4], [21, "#ff7ab6", 4],
+    [30, "#7dffb0", 3], [40, "#ff9f45", 3], [55, "#9fb0cf", 3], [70, "#c3a6ff", 3]];
+  const c2 = $("c2").getContext("2d"), c3 = $("c3").getContext("2d");
+  function osc(t) {
+    [[c2, 170], [c3, 170]].forEach(([ctx, h], k) => {
+      ctx.clearRect(0, 0, 1000, h);
+      if (k === 1) {
+        for (let i = 0; i < 60; i++) {
+          const v = Math.sin(i / 4 + t / 500) * 50 + Math.sin(i / 1.7 + t / 300) * 18;
+          ctx.fillStyle = v > 0 ? "rgba(34,227,155,.7)" : "rgba(255,77,109,.7)";
+          ctx.fillRect(i * 16.6, 95, 11, -v);
+        }
+      }
+      const lines = k === 0 ? [["#c3a6ff", 0], ["#ffd166", 2.1], ["#38d6ff", 4.2]] : [["#38d6ff", 1], ["#ff9f45", 3], ["#ff7ab6", 5]];
+      lines.forEach(([col, ph]) => {
+        ctx.strokeStyle = col; ctx.lineWidth = 3; ctx.beginPath();
+        for (let x = 0; x <= 1000; x += 8) {
+          const y = h / 2 + Math.sin(x / 60 + t / 400 + ph) * 40 + Math.sin(x / 23 + ph * 2 + t / 170) * 16;
+          x ? ctx.lineTo(x, y) : ctx.moveTo(x, y);
+        }
+        ctx.stroke();
+      });
+      if (k === 0) { ctx.strokeStyle = "rgba(255,255,255,.25)"; ctx.setLineDash([10, 10]);
+        [40, 130].forEach((y) => { ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(1000, y); ctx.stroke(); }); ctx.setLineDash([]); }
+    });
+  }
+
+  // The clean chart: same kind of market, no overlays, a still window.
+  const clean = FX.candles($("clean"), { seed: 23, base: 142, vol: 0.9, n: 400 });
+  const OFF = 180, COUNT = 26;
+  const live = clean.data[OFF + COUNT - 1];
+  const entry = live.o, stop = entry - 2.4, target = entry + 2.9;
+  const fmt = (v) => v.toFixed(2);
+  const tags = [[$("tE"), entry, 6000], [$("tS"), stop, 6500], [$("tT"), target, 7000]];
+
+  const CUTS = [2500, 5500, 9000, 12500];
+  const cam = $("cam"), flash = $("flash"), mess = $("mess"), zero = $("zero");
+  const facs = [[$("f1"), 3500, -330, -230], [$("f2"), 3750, 250, -200], [$("f3"), 4000, -300, 210], [$("f4"), 4250, 230, 230]];
+  // glitch windows: when the hook tears
+  const TEARS = [[0, 140], [650, 800], [1500, 1650], [2100, 2260]];
+
+  Ad.onFrame((t) => {
+    // The hook's glitches drive the camera too.
+    let tear = 0;
+    for (const [a, b] of TEARS) if (t >= a && t < b) tear = 1;
+    if (t === 0) tear = 0; // the thumbnail is clean
+    const kick = FX.camera(t, { cam, flash, cuts: CUTS, musicFrom: 2500, musicEnd: 12500, shake: 18, split: 12 });
+    if (tear) {
+      const j = Math.sin(t * 7.3) * 12;
+      cam.style.filter = `drop-shadow(${j.toFixed(1)}px 0 0 rgba(255,40,110,.8)) drop-shadow(${(-j).toFixed(1)}px 0 0 rgba(40,220,255,.8))`;
+    }
+    zero.style.textShadow = t > 0 && t < 2500
+      ? `${(Math.sin(t / 37) * 6).toFixed(1)}px 0 0 rgba(40,220,255,.85), ${(-Math.sin(t / 29) * 6).toFixed(1)}px 0 0 rgba(255,209,102,.6)`
+      : "0 0 40px rgba(255,77,109,.6)";
+    zero.style.transform = tear ? `translateX(${(Math.sin(t * 3.1) * 16).toFixed(1)}px) skewX(${(Math.sin(t * 1.7) * 8).toFixed(1)}deg)` : "";
+
+    // The mess, until everything is sucked into one point at 2.5–3.0s.
+    const suck = Ad.ease.inOut(Ad.span(t, 2500, 3000));
+    if (suck < 1) {
+      mess.style.display = "block";
+      mess.style.transform = `rotate(${(suck * 200).toFixed(1)}deg) scale(${(1 - suck).toFixed(4)})`;
+      mess.style.opacity = (1 - suck * 0.6).toFixed(3);
+      mess.style.filter = suck > 0 ? `blur(${(suck * 10).toFixed(1)}px)` : "";
+      messChart.draw(t, { offset: 120 + t / 1000 * 2, count: 44, mas: MAS, glow: 8 });
+      osc(t);
+    } else mess.style.display = "none";
+
+    // Core logo: pops at 3.0s, pulses on the kick, absorbs the factors at 4.75s, leaves at 5.4s.
+    const core = $("core");
+    const cin = Ad.ease.back(Ad.span(t, 2950, 3250));
+    const cout = Ad.span(t, 5350, 5500);
+    const absorb = t > 4750 && t < 5200 ? Math.sin(Ad.span(t, 4750, 5200) * Math.PI) * 0.3 : 0;
+    core.style.opacity = t < 2950 ? "0" : (1 - cout).toFixed(3);
+    core.style.transform = `scale(${(cin * (1 + 0.06 * kick + absorb) * (1 - 0.5 * cout)).toFixed(4)}) rotate(${((1 - cin) * -30).toFixed(1)}deg)`;
+    [[$("ring1"), 3000], [$("ring2"), 5000]].forEach(([r, at]) => {
+      const k = Ad.span(t, at, at + 700);
+      r.style.opacity = t < at || k >= 1 ? "0" : (1 - k).toFixed(3);
+      r.style.transform = `scale(${(1 + 14 * Ad.ease.out(k)).toFixed(3)})`;
+    });
+    facs.forEach(([el, at, dx, dy]) => {
+      const inn = Ad.ease.back(Ad.span(t, at, at + 260));
+      const fuse = Ad.ease.inOut(Ad.span(t, 4750, 5050));
+      const orbit = (t - at) / 1400;
+      const ox = dx * (1 - fuse) + Math.cos(orbit) * 10 * (1 - fuse), oy = dy * (1 - fuse) + Math.sin(orbit) * 10 * (1 - fuse);
+      el.style.opacity = t < at ? "0" : (1 - fuse).toFixed(3);
+      el.style.visibility = t < at || fuse >= 1 ? "hidden" : "visible";
+      el.style.left = "540px"; el.style.top = "900px";
+      el.style.transform = `translate(-50%, -50%) translate(${ox.toFixed(1)}px, ${oy.toFixed(1)}px) scale(${(inn * (1 - 0.6 * fuse)).toFixed(3)})`;
+    });
+
+    // Clarity: levels draw on the beat, tags decode their prices.
+    if (t >= 5400 && t < 9200) {
+      const levels = [
+        { price: entry, color: "#38d6ff", p: Ad.ease.out(Ad.span(t, 6000, 6400)) },
+        { price: stop, color: "#ff4d6d", p: Ad.ease.out(Ad.span(t, 6500, 6900)) },
+        { price: target, color: "#22e39b", p: Ad.ease.out(Ad.span(t, 7000, 7400)) },
+      ];
+      clean.draw(t, { offset: OFF, count: COUNT, glow: 16, range: [stop - 1.0, target + 0.9], levels });
+      tags.forEach(([el, price, at], i) => {
+        const p = Ad.span(t, at + 150, at + 650);
+        el.style.top = `${(560 + levels[i].y - 30).toFixed(1)}px`;
+        el.style.opacity = t < at + 150 ? "0" : "1";
+        el.style.transform = `scale(${(0.7 + 0.3 * Ad.ease.back(Ad.span(t, at + 150, at + 400))).toFixed(3)})`;
+        el.querySelector("span").textContent = FX.scramble(fmt(price), p, t, i + 2);
+      });
+    }
+  });
+})();
+</script>
+</body>
+</html>
