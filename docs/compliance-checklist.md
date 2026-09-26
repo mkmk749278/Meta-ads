@@ -38,6 +38,13 @@ first and a policy problem second.
 | Signals plan / Assist = one tap / Auto = hands-free | Owner Brief B16 (2026-09-25 revision) |
 | Every result recorded, wins and losses | Owner Brief B3, B9; app Track record |
 | Paper mode | app onboarding ("Paper mode — prove it first") |
+| "API key dena = paisa dena? NAHI." / "Lumin ko milta hai sirf trade ka access" (`api-connect-reel`) | `360-v2/src/security/binance_connect_validator.py` + Owner Brief B18: a key with withdrawal permission is rejected at connect, no override. States what the key *can* do, never "safe" |
+| "Withdrawal ON wali key? Lumin khud reject kar deta hai." | Same validator (`WithdrawEnabledError`) |
+| "Key chalegi sirf Lumin ke server se. Kahin aur se? Block." | Validator requires IP restriction with Lumin's server IP on the list (`IpRestrictDisabledError` / `IpNotWhitelistedError`); Binance enforces the list |
+| Default limit "$500 max position · 5 orders/min" | `360-v2/src/execution/tripwires.py` (`DEFAULT_POSITION_CAP_USD = 500`, `DEFAULT_RATE_LIMIT_PER_MIN = 5`), same copy in the app's connect screen. ⚠ `OWNER_BRIEF` B18 still says 10/min — the code wins; re-render if the constant changes |
+| "Lumin team kabhi DM / WhatsApp pe key nahi maangti" | Product fact: keys enter only through the in-app connect form (`/api/binance/connect`). **Owner to confirm this is also support policy** before spending on it |
+| Walkthrough screens (`api-connect-guide`) | Lumin labels copied from `lumin-app` settings pages (2026-09-26). Binance labels are Binance's published API Management wording; their layout changes, so every mock screen says ILLUSTRATION. Lumin's server IP is **never shown** — masked, "app se copy karo" — so the video cannot go stale when the server moves |
+| "Auto Trade plan active" (guide checklist) | Owner Brief B16: hands-off execution runs only for `auto` tier. No price shown |
 
 ## Not verified here — owner to confirm
 

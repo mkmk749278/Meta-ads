@@ -50,6 +50,25 @@ Variant primary text:
 
 ---
 
+## Awareness — "API key dena = paisa dena?" (`out/api-connect-reel.mp4`, ad name `aw_api_connect`)
+
+Not a hook test: an awareness piece for people who hesitate to connect a key.
+Run it to existing users / warm audiences, or pin it on the profile.
+
+**Primary text**
+> API key dene se darr lagta hai? Lumin ko sirf trade ka access milta hai — withdrawal wali key hum reject karte hain, aur key sirf Lumin ke server IP se chalti hai. 3 steps: Binance pe API banao → Lumin mein paste → Live Trading ON.
+
+**Headline:** API key dena = paisa dena? Nahi.
+**Description:** Aapka paisa. Aapka account. Aapka control.
+
+## Guide — "Auto Trade setup" (`out/api-connect-guide.mp4`, 2m24s)
+
+For in-app help, WhatsApp support replies, YouTube and the landing page — not
+paid Reels (too long). Suggested caption:
+> Binance API key banao aur Lumin Auto Trade se connect karo — 6 steps. Withdrawals OFF, Futures ON, IP lock. Lumin ka server IP hamesha app se copy karo.
+
+---
+
 Retired 2026-09-25: the three earlier ads (signal-in-seconds, clear-exit,
 auto-trade) and their copy. See git history.
 

@@ -1,0 +1,449 @@
+<!doctype html>
+<!--
+  GUIDE — "Auto Trade setup: Binance API + Lumin" (2m24s walkthrough)
+
+  Owner, 2026-09-26: an awareness + guidance video on creating a Binance API
+  key and connecting it to Lumin for auto-trade. Not a hook test like the three
+  ads: this is the video a new subscriber follows step by step, so it is paced
+  for reading (every step holds 12–22s) and runs on a calm bed (no kick).
+  Linked from the reel (api-connect-reel), usable in-app / WhatsApp / YouTube.
+
+  What each step shows is the REAL flow, verified 2026-09-26 against:
+    Lumin   Menu → "Auto-trade & execution" → "Exchange connection"
+            (page "Server-side auto-trade": "Read this before connecting",
+            "Lumin's server IP" + Copy, fields "API key" / "API secret",
+            button "Connect for server-side trading", result "Connected" with
+            Withdraw disabled / Futures enabled / IP access list OK)
+            → "Auto-trade" → "Live Trading" → "Enable LIVE auto-trade?"
+            lumin-app lib/features/settings/pages/*.dart
+    Engine  360-v2 src/security/binance_connect_validator.py rejects a key with
+            withdrawals ON, futures OFF, no IP restriction, or Lumin's IP
+            missing (B18). Defaults src/execution/tripwires.py: $500 position
+            cap, 5 orders/min. Live hands-off execution is the Auto plan (B16).
+    Binance API Management wording (Create API · System generated · Edit
+            restrictions · Enable Futures · Enable Withdrawals · Restrict
+            access to trusted IPs only). Binance changes its layout, so every
+            mock screen is marked ILLUSTRATION.
+
+  Deliberately NOT in the video:
+    - Lumin's server IP. The app fetches it live; a baked-in IP goes stale the
+      day the server moves and sends every viewer to a failed connect. The
+      video masks it and says "copy it from the app".
+    - Any real key or secret, even blurred. Values are bullet-masked.
+    - Any P&L, win rate or "safe" claim (docs/compliance-checklist.md).
+
+  Timeline (120 BPM grid, cuts on beats):
+      0.0–7.0   INTRO (frame 0 = thumbnail)
+      7.0–19.0  Pehle ye ready rakho (KYC · 2FA · Futures account · Auto plan)
+     19.0–33.0  1/6 Lumin: server IP copy
+     33.0–49.0  2/6 Binance: Create API
+     49.0–62.0  3/6 Copy API Key + Secret Key (secret shows once)
+     62.0–84.0  4/6 Edit restrictions: IP lock → Futures ON → Withdrawals OFF → Save
+     84.0–102   5/6 Lumin: paste → Connect → 3 checks
+    102.0–120   6/6 Auto-trade → Live Trading → Enable LIVE (Paper tip)
+    120.0–136.5 Recap: aapka paisa, aapka account, aapka control
+    136.5–144   END: CTA + ASCI disclaimer (7.5s, ≥5s rule)
+-->
+<html data-duration="144000">
+<head>
+<meta charset="utf-8">
+<title>Lumin — Auto Trade setup guide</title>
+<link rel="stylesheet" href="../_shared/base.css">
+<link rel="stylesheet" href="../_shared/guide.css">
+<style>
+  #stage {
+    background:
+      radial-gradient(760px 560px at 90% 4%, rgba(61,123,255,.34), transparent 62%),
+      radial-gradient(900px 760px at 6% 46%, rgba(56,214,255,.12), transparent 62%),
+      radial-gradient(1100px 800px at 50% 110%, rgba(155,107,255,.2), transparent 60%),
+      linear-gradient(180deg, #0a1330 0%, #060b20 55%, #02040d 100%);
+  }
+  #cam { position:absolute; inset:0; transform-origin: 50% 45%; }
+  #flash { position:absolute; inset:0; background:#fff; opacity:0; pointer-events:none; z-index:50; mix-blend-mode:overlay; }
+  .brand-mini { position:absolute; left:64px; top:108px; display:flex; align-items:center; gap:16px; z-index:30; }
+  .brand-mini .logo { width:72px; height:72px; border-radius:20px; }
+  .brand-mini .logo svg { width:34px; height:40px; }
+  .brand-mini span { font:800 46px/1 "Poppins"; letter-spacing:-1px; }
+  .slot { position:absolute; left:64px; right:64px; top:470px; }
+
+  /* intro */
+  .keycard { position:absolute; left:140px; top:690px; width:800px; height:330px; border-radius:40px; padding:40px 46px;
+    background: linear-gradient(135deg, rgba(56,214,255,.16), rgba(155,107,255,.14)); border:2px solid rgba(122,211,248,.55);
+    box-shadow: 0 0 90px rgba(56,214,255,.25), 0 40px 90px rgba(0,0,0,.6); }
+  .keycard .k { font:800 26px/1 "Inter"; letter-spacing:4px; color:var(--muted); }
+  .keycard .m { font:700 50px/1 "Mono"; margin-top:26px; letter-spacing:4px; color:#dff6ff; }
+  .keycard .m2 { font:700 36px/1 "Mono"; margin-top:22px; letter-spacing:6px; color:var(--dim); }
+  .keyicon { position:absolute; right:40px; top:34px; width:120px; height:120px; }
+  .chiprow { position:absolute; left:0; right:0; top:1070px; display:flex; justify-content:center; gap:16px; }
+  .gchip { padding:18px 26px; border-radius:20px; font:800 30px/1 "Inter"; border:2px solid; background:rgba(8,14,36,.9); white-space:nowrap; }
+  .gchip.r { color:#ffd0d8; border-color:var(--red); box-shadow:0 0 30px rgba(255,77,109,.35); }
+  .gchip.g { color:#c9ffe9; border-color:var(--green); box-shadow:0 0 30px rgba(34,227,155,.35); }
+  .gchip.c { color:#cfefff; border-color:var(--cyan); box-shadow:0 0 30px rgba(56,214,255,.35); }
+
+  /* checklist */
+  .todo { position:absolute; left:64px; right:64px; display:flex; gap:26px; align-items:center; padding:26px 30px; border-radius:26px;
+    background:rgba(13,24,56,.9); border:2px solid rgba(122,211,248,.28); }
+  .todo .n { width:66px; height:66px; flex:none; border-radius:50%; display:grid; place-items:center; font:800 32px/1 "Poppins";
+    background:rgba(56,214,255,.14); border:2px solid var(--cyan); color:var(--cyan); }
+  .todo b { display:block; font:700 38px/1.15 "Inter"; }
+  .todo span { display:block; font:500 27px/1.35 "Inter"; color:var(--muted); margin-top:6px; }
+  .todo .who { margin-left:auto; flex:none; font:800 22px/1 "Inter"; letter-spacing:2px; }
+
+  /* recap */
+  .rc { position:absolute; left:64px; right:64px; display:flex; gap:28px; align-items:center; padding:26px 30px; border-radius:28px;
+    background:rgba(13,24,56,.92); border:2px solid; }
+  .rc .ic { width:84px; height:84px; flex:none; border-radius:24px; display:grid; place-items:center; font:900 40px/1 "Poppins"; }
+  .rc b { display:block; font:800 40px/1.1 "Poppins"; }
+  .rc span { display:block; font:500 28px/1.35 "Inter"; color:#cfe3ff; margin-top:6px; }
+  .spin { width:40px; height:40px; border-radius:50%; border:5px solid rgba(56,214,255,.25); border-top-color:var(--cyan); animation: spin .8s linear infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+</style>
+</head>
+<body>
+<!-- Cue list for tools/soundtrack.py. Times in ms. Keep in step with the scenes. -->
+<script type="application/json" id="soundtrack">
+{
+  "bpm": 120,
+  "prog": "lift",
+  "kick": false,
+  "music_from": 0,
+  "music_until": 136500,
+  "end": 144000,
+  "sfx": [
+    [0, "impact"], [60, "ding"], [4500, "blip"],
+    [7000, "whoosh"], [7800, "tick"], [9300, "tick"], [10800, "tick"], [12300, "tick"],
+    [19000, "whoosh"], [21500, "tap"], [24300, "tap"], [28000, "tap"], [28400, "ding"],
+    [33000, "whoosh"], [36500, "tap"], [40500, "tap"], [42500, "tap"], [45500, "tap"], [46500, "lock"],
+    [49000, "whoosh"], [52500, "alarm"], [54000, "tap"], [56000, "tap"],
+    [62000, "whoosh"], [65500, "tap"], [67000, "tap"], [68500, "tap"], [69000, "lock"],
+    [72000, "tap"], [72100, "toggle"], [75000, "alarm"], [79500, "tap"], [80500, "lock"],
+    [84000, "whoosh"], [87000, "tap"], [89000, "tap"], [91500, "tap"], [93500, "ding"],
+    [94000, "tick"], [94500, "tick"], [95000, "tick"],
+    [102000, "whoosh"], [105500, "tap"], [108000, "tap"], [108500, "toggle"], [109000, "ding"],
+    [120000, "whoosh"], [120000, "impact"], [121000, "hit"], [123000, "hit"], [125000, "hit"], [127000, "hit"],
+    [135500, "riser1"], [136500, "impact"], [136500, "whoosh"]
+  ]
+}
+</script>
+
+<div id="stage" data-end-at="136500" data-poster="0">
+<div id="cam">
+  <div class="grid-floor" style="opacity:.28"></div>
+  <div class="brand-mini" data-w="-,0,136300">
+    <div class="logo" data-logo></div><span>Lumin</span>
+  </div>
+  <div class="pips" id="pips" data-w="fade,19000,119800"><i></i><i></i><i></i><i></i><i></i><i></i></div>
+
+  <!-- ============ INTRO — the thumbnail (0–7s) ============ -->
+  <div class="abs" style="left:64px; top:300px" data-w="-,0,6900">
+    <div class="h1" style="font-size:98px">Auto Trade setup</div>
+    <div class="h2" style="font-size:66px; margin-top:12px"><span class="grad">Binance API</span> + Lumin</div>
+    <div class="body" style="margin-top:18px; color:#cfe3ff">Step-by-step · 6 steps · Hinglish guide</div>
+  </div>
+  <div class="keycard" data-w="-,0,6900">
+    <div class="k">API KEY</div>
+    <div class="m">Xk9•••••••••••2Qa</div>
+    <div class="k" style="margin-top:34px">SECRET KEY</div>
+    <div class="m2">••••••••••••••••</div>
+    <svg class="keyicon" viewBox="0 0 120 120"><circle cx="40" cy="60" r="26" fill="none" stroke="#7ad3f8" stroke-width="10"/><path d="M64 60h46M92 60v18M106 60v12" stroke="#7ad3f8" stroke-width="10" stroke-linecap="round"/></svg>
+  </div>
+  <div class="chiprow" data-w="-,0,6900">
+    <span class="gchip r">✕ Withdrawals OFF</span><span class="gchip g">✓ Futures ON</span><span class="gchip c">🔒 IP lock</span>
+  </div>
+  <div class="abs center-x" style="top:1170px; width:100%; text-align:center" data-w="up,4500,6900">
+    <span class="illus" style="font-size:26px; color:var(--muted)">Binance app + Lumin app — dono saath kholo</span>
+  </div>
+
+  <!-- ============ PEHLE YE READY RAKHO (7–19s) ============ -->
+  <div class="stephead" data-w="left,7000,18800">
+    <span class="stepno">SHURU KARNE SE PEHLE</span>
+    <div class="steptitle">Ye 4 cheezein ready rakho</div>
+  </div>
+  <div class="todo" style="top:520px" data-w="left,7800,18800">
+    <div class="n">1</div><div><b>Binance account verified</b><span>KYC complete ho</span></div><span class="who" style="color:var(--amber)">BINANCE</span>
+  </div>
+  <div class="todo" style="top:700px" data-w="left,9300,18800">
+    <div class="n">2</div><div><b>2FA ON</b><span>API key banane ke liye zaroori</span></div><span class="who" style="color:var(--amber)">BINANCE</span>
+  </div>
+  <div class="todo" style="top:880px" data-w="left,10800,18800">
+    <div class="n">3</div><div><b>Futures account open</b><span>Tabhi key pe "Enable Futures" milega</span></div><span class="who" style="color:var(--amber)">BINANCE</span>
+  </div>
+  <div class="todo" style="top:1060px" data-w="left,12300,18800">
+    <div class="n">4</div><div><b>Auto Trade plan active</b><span>Live Auto Trade isi plan pe chalta hai</span></div><span class="who" style="color:var(--brand)">LUMIN</span>
+  </div>
+
+  <!-- ============ 1/6 LUMIN — copy server IP (19–33s) ============ -->
+  <div class="stephead" data-w="left,19000,32800">
+    <span class="stepno">STEP 1/6 <small>LUMIN APP</small></span>
+    <div class="steptitle">Lumin ka server IP copy karo</div>
+  </div>
+  <div class="slot" data-w="up,19300,25300">
+    <span class="crumb">Menu <b>›</b> Auto-trade &amp; execution <b>›</b> Exchange connection</span>
+  </div>
+  <div class="slot" data-w="up,25500,29300"><div class="note warn" style="position:static">Pehli baar? "Read terms" accept karo — phir IP dikhega.</div></div>
+  <div class="slot" data-w="up,29500,32800"><div class="note danger" style="position:static">IP hamesha app se copy karo — video se nahi.</div></div>
+
+  <div class="screen" style="top:600px" data-w="up,19500,22400">
+    <div class="bar">Menu<span class="who">LUMIN</span></div>
+    <div class="sec">ACCOUNT</div>
+    <div class="srow"><div class="ico">◉</div><div class="grow">Profile</div><span class="chev">›</span></div>
+    <div class="srow"><div class="ico">◔</div><div class="grow">Notifications</div><span class="chev">›</span></div>
+    <div class="sec">TRADING</div>
+    <div class="srow"><div class="ico">⟳</div><div class="grow">Auto-trade &amp; execution<span class="sub">Sizing, leverage, exchange connection</span></div><span class="chev">›</span>
+      <div class="ring" data-w="fade,20600,22400"></div><i class="tap" data-t="21500" style="left:800px; top:50%"></i></div>
+    <div class="sec">SUPPORT</div>
+    <div class="srow"><div class="ico">§</div><div class="grow">Legal</div><span class="chev">›</span></div>
+  </div>
+
+  <div class="screen" style="top:600px" data-w="left,22500,25400">
+    <div class="bar"><span class="back">‹</span>Auto-trade &amp; execution<span class="who">LUMIN</span></div>
+    <div class="sec">EXECUTION</div>
+    <div class="srow"><div class="ico">⟳</div><div class="grow">Auto-trade<span class="sub">Position size, leverage</span></div><span class="chev">›</span></div>
+    <div class="srow"><div class="ico">☁</div><div class="grow">Exchange connection<span class="sub">Engine trades even when your phone is offline</span></div><span class="chev">›</span>
+      <div class="ring" data-w="fade,23300,25400"></div><i class="tap" data-t="24300" style="left:800px; top:50%"></i></div>
+    <div class="sec">TRADING PREFERENCES</div>
+    <div class="srow dim"><div class="ico">≡</div><div class="grow">Symbol preference</div><span class="chev">›</span></div>
+    <div class="srow dim"><div class="ico">◈</div><div class="grow">Pre-TP grab</div><span class="chev">›</span></div>
+  </div>
+
+  <div class="screen" style="top:600px; height:680px" data-w="left,25500,32800">
+    <div class="bar"><span class="back">‹</span>Server-side auto-trade<span class="who">LUMIN</span></div>
+    <div class="warnbox"><b>Read this before connecting</b>• Withdraw permission must be DISABLED on your Binance key.<br>• Your key's IP access list must include Lumin's server IP.</div>
+    <div style="padding:10px 34px 0; font:600 26px/1.3 Inter; color:var(--ink)">Add Lumin's server IP to your Binance key's IP access list:</div>
+    <div class="field" style="margin-top:14px"><label>LUMIN'S SERVER IP · aapke app mein asli IP dikhega</label>
+      <div class="v">•••.•••.•••.•••</div><span class="copy">⧉ Copy</span>
+      <div class="ring" data-w="fade,26800,29000"></div><i class="tap" data-t="28000" style="left:790px; top:62%"></i></div>
+    <div class="toast" style="bottom:56px" data-w="up,28400,32800">Lumin's server IP copied to clipboard</div>
+    <span class="illus">ILLUSTRATION</span>
+  </div>
+
+  <!-- ============ 2/6 BINANCE — create API (33–49s) ============ -->
+  <div class="stephead" data-w="left,33000,48800">
+    <span class="stepno bnb">STEP 2/6 <small>BINANCE APP</small></span>
+    <div class="steptitle">Nayi API key banao</div>
+  </div>
+  <div class="slot" data-w="up,33300,43800"><span class="crumb">Profile <b>›</b> Account <b>›</b> API Management <b>›</b> Create API</span></div>
+  <div class="slot" data-w="up,44000,48800"><div class="note" style="position:static">Naam kuch bhi — jaise "Lumin". Phir 2FA se verify.</div></div>
+
+  <div class="screen bnb" style="top:600px; height:560px" data-w="up,33500,38400">
+    <div class="bar">API Management<span class="who">BINANCE</span></div>
+    <div style="padding:30px 34px 6px; font:500 27px/1.4 Inter; color:var(--muted)">API keys se apps aapke account pe trade kar sakti hain. Aapki keys:</div>
+    <div class="srow dim"><div class="grow">Koi key nahi</div></div>
+    <div class="btnx amber" style="margin-top:40px">Create API
+      <div class="ring" data-w="fade,35400,37600" style="border-radius:20px"></div><i class="tap" data-t="36500" style="left:416px; top:50%"></i></div>
+    <span class="illus">ILLUSTRATION</span>
+  </div>
+
+  <div class="screen bnb" style="top:600px; height:600px" data-w="left,38500,43400">
+    <div class="bar"><span class="back">‹</span>Choose API key type<span class="who">BINANCE</span></div>
+    <div class="srow" style="padding:30px 34px"><div class="radio"></div><div class="grow">System generated<span class="sub">HMAC key · recommended</span></div>
+      <div class="radio on" style="position:absolute; left:34px" data-w="pop,40500,-"></div>
+      <div class="ring" data-w="fade,39500,41600"></div><i class="tap" data-t="40500" style="left:790px; top:50%"></i></div>
+    <div class="srow dim" style="padding:30px 34px"><div class="radio"></div><div class="grow">Self-generated</div></div>
+    <div class="btnx amber" style="margin-top:50px">Next<i class="tap" data-t="42500" style="left:416px; top:50%"></i></div>
+    <span class="illus">ILLUSTRATION</span>
+  </div>
+
+  <div class="screen bnb" style="top:600px; height:600px" data-w="left,43500,48800">
+    <div class="bar"><span class="back">‹</span>Label your API key<span class="who">BINANCE</span></div>
+    <div class="field" style="margin-top:36px"><label>API KEY LABEL</label><div class="v"><span data-w="wipe,44000,-" style="display:inline-block">Lumin</span></div></div>
+    <div class="btnx amber" style="margin-top:30px">Next<i class="tap" data-t="45500" style="left:416px; top:50%"></i></div>
+    <div class="warnbox okbox" style="margin-top:24px" data-w="pop,46500,-"><b>Security verification ✓</b>Authenticator / SMS / email code se confirm</div>
+    <span class="illus">ILLUSTRATION</span>
+  </div>
+
+  <!-- ============ 3/6 COPY KEY + SECRET (49–62s) ============ -->
+  <div class="stephead" data-w="left,49000,61800">
+    <span class="stepno bnb">STEP 3/6 <small>BINANCE APP</small></span>
+    <div class="steptitle">Key aur Secret copy karo</div>
+  </div>
+  <div class="slot" data-w="up,49300,56800"><span class="crumb">API Management <b>›</b> Lumin</span></div>
+  <div class="slot" data-w="up,57000,61800"><div class="note danger" style="position:static">Screenshot mat lo. WhatsApp / DM pe kisi ko mat bhejo.</div></div>
+
+  <div class="screen bnb" style="top:600px; height:640px" data-w="up,49500,61800">
+    <div class="bar">API key: Lumin<span class="who">BINANCE</span></div>
+    <div class="field" style="margin-top:28px"><label>API KEY</label><div class="v">Xk9•••••••••••••••••••2Qa</div><span class="copy">⧉</span>
+      <i class="tap" data-t="54000" style="left:800px; top:62%"></i></div>
+    <div class="field"><label>SECRET KEY</label><div class="v">••••••••••••••••••••••••</div><span class="copy">⧉</span>
+      <i class="tap" data-t="56000" style="left:800px; top:62%"></i></div>
+    <div class="warnbox dangerbox" style="margin-top:26px" data-w="pop,52500,-"><b>Secret Key sirf EK baar dikhegi</b>Abhi copy karo. Baad mein nahi milegi — nayi key banani padegi.</div>
+    <span class="illus">ILLUSTRATION</span>
+  </div>
+
+  <!-- ============ 4/6 RESTRICTIONS (62–84s) ============ -->
+  <div class="stephead" data-w="left,62000,83800">
+    <span class="stepno bnb">STEP 4/6 <small>BINANCE APP</small></span>
+    <div class="steptitle">Permissions set karo</div>
+  </div>
+  <div class="slot" data-w="up,62300,63800"><span class="crumb">API key: Lumin <b>›</b> Edit restrictions</span></div>
+  <div class="slot" data-w="up,64000,70800"><div class="note" style="position:static">① Pehle IP lock: Lumin ka IP paste karo.</div></div>
+  <div class="slot" data-w="up,71000,74300"><div class="note ok" style="position:static">② Enable Futures ✓ ON</div></div>
+  <div class="slot" data-w="up,74500,78800"><div class="note danger" style="position:static">③ Enable Withdrawals — OFF hi rehne do. Hamesha.</div></div>
+  <div class="slot" data-w="up,79000,83800"><div class="note" style="position:static">④ Save karo aur 2FA se verify karo.</div></div>
+
+  <div class="screen bnb" style="top:590px; height:700px" data-w="up,62500,83800">
+    <div class="bar">Edit restrictions<span class="who">BINANCE</span></div>
+    <div class="srow" style="padding:13px 34px"><div class="cb on"></div><div class="grow">Enable Reading</div></div>
+    <div class="srow" style="padding:13px 34px"><div class="cbwrap"><div class="cb stack"></div><div class="cb on stack" data-w="pop,72000,-"></div></div>
+      <div class="grow">Enable Futures</div><span class="tag on" data-w="pop,72300,-">ON</span>
+      <div class="ring green" data-w="fade,71000,73800"></div><i class="tap" data-t="72000" style="left:59px; top:50%"></i></div>
+    <div class="srow" style="padding:13px 34px"><div class="cb"></div><div class="grow">Enable Withdrawals</div><span class="tag off" data-w="pop,75000,-">OFF RAKHO</span>
+      <div class="ring red" data-w="fade,74500,78700"></div></div>
+    <div class="sec" style="padding-top:14px">IP ACCESS RESTRICTIONS</div>
+    <div class="srow dim" style="padding:9px 34px; border:0"><div class="radio"></div><div class="grow" style="font-size:30px">Unrestricted</div></div>
+    <div class="srow" style="padding:9px 34px; border:0"><div class="radio"></div><div class="grow" style="font-size:30px">Restrict access to trusted IPs only</div>
+      <div class="radio on" style="position:absolute; left:34px" data-w="pop,65500,-"></div>
+      <div class="ring" data-w="fade,64500,66500"></div><i class="tap" data-t="65500" style="left:56px; top:50%"></i></div>
+    <div class="field" style="margin:4px 34px 0; padding:14px 24px"><label>TRUSTED IP</label>
+      <div class="v" style="font-size:30px"><span class="ph" data-w="-,0,66900">Lumin ka IP paste karo</span></div>
+      <div class="filled v" style="font-size:30px; bottom:14px" data-w="wipe,67000,-">•••.•••.•••.•••</div>
+      <span class="copy" style="bottom:14px; color:var(--amber)">Confirm</span>
+      <i class="tap" data-t="67000" style="left:300px; top:60%"></i><i class="tap" data-t="68500" style="left:770px; top:60%"></i>
+      <span class="tag on" style="position:absolute; right:190px; bottom:12px" data-w="pop,69000,-">✓ IP added</span></div>
+    <div class="btnx amber" style="margin:14px 34px 0; padding:20px">Save<i class="tap" data-t="79500" style="left:416px; top:50%"></i></div>
+    <div class="dialog" style="top:250px" data-w="pop,80500,83800"><h5>Security verification ✓</h5><p>Restrictions saved.</p></div>
+  </div>
+
+  <!-- ============ 5/6 LUMIN — paste + connect (84–102s) ============ -->
+  <div class="stephead" data-w="left,84000,101800">
+    <span class="stepno">STEP 5/6 <small>LUMIN APP</small></span>
+    <div class="steptitle">Lumin mein paste karo</div>
+  </div>
+  <div class="slot" data-w="up,84300,96300"><span class="crumb">Menu <b>›</b> Auto-trade &amp; execution <b>›</b> Exchange connection</span></div>
+  <div class="slot" data-w="up,96500,101800"><div class="note ok" style="position:static">Koi setting galat? App batayega kaunsi fix karni hai.</div></div>
+
+  <div class="screen" style="top:600px; height:690px" data-w="up,84500,101800">
+    <div class="bar"><span class="back">‹</span>Server-side auto-trade<span class="who">LUMIN</span></div>
+    <div data-w="-,0,93300">
+    <div style="padding:24px 34px 0; font:700 30px/1.2 Inter">Connect Binance Futures API key</div>
+    <div class="field"><label>API key</label><div class="v"><span class="ph" data-w="-,0,86900">Paste</span></div>
+      <div class="filled v" data-w="wipe,87000,-">Xk9•••••••••••••••••••2Qa</div><i class="tap" data-t="87000" style="left:420px; top:55%"></i></div>
+    <div class="field"><label>API secret</label><div class="v"><span class="ph" data-w="-,0,88900">Paste</span></div>
+      <div class="filled v" data-w="wipe,89000,-">••••••••••••••••••••••••</div><i class="tap" data-t="89000" style="left:420px; top:55%"></i></div>
+    <div class="btnx">Connect for server-side trading<i class="tap" data-t="91500" style="left:416px; top:50%"></i></div>
+    </div>
+    <div class="abs" style="left:34px; right:34px; top:590px; display:flex; gap:18px; align-items:center; font:600 28px/1 Inter; color:var(--muted)" data-w="fade,92000,93400"><div class="spin"></div>Binance se check ho raha hai…</div>
+    <div class="warnbox okbox" style="position:absolute; left:0; right:0; top:130px; margin:0 34px; padding:30px 30px" data-w="up,93500,-">
+      <b style="font-size:32px">✓ Connected</b>
+      <div style="font:500 24px/1.3 Inter; color:#cfe3ff; margin:4px 0 12px">Key stored encrypted on Lumin's servers. Checks passed:</div>
+      <div style="font:700 30px/1.6 Inter">
+        <div data-w="left,94000,-">✅ Withdraw disabled</div>
+        <div data-w="left,94500,-">✅ Futures enabled</div>
+        <div data-w="left,95000,-">✅ IP access list OK</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ 6/6 LIVE ON (102–120s) ============ -->
+  <div class="stephead" data-w="left,102000,119800">
+    <span class="stepno">STEP 6/6 <small>LUMIN APP</small></span>
+    <div class="steptitle">Auto Trade ON karo</div>
+  </div>
+  <div class="slot" data-w="up,102300,110300"><span class="crumb">Menu <b>›</b> Auto-trade &amp; execution <b>›</b> Auto-trade</span></div>
+  <div class="slot" data-w="up,110500,114300"><div class="note warn" style="position:static">Pehle dekhna hai? Paper Trading se shuru karo.</div></div>
+  <div class="slot" data-w="up,114500,119800"><div class="note" style="position:static">Position size aur leverage yahin apne hisaab se set karo.</div></div>
+
+  <div class="screen" style="top:600px; height:640px" data-w="up,102500,119800">
+    <div class="bar"><span class="back">‹</span>Auto-trade<span class="who">LUMIN</span></div>
+    <div class="sec" style="padding-top:26px">EXECUTION MODE</div>
+    <div class="srow"><div class="grow">Live Trading<span class="sub">Real orders on your Binance account</span></div>
+      <div class="swwrap"><div class="sw stack"><i></i></div><div class="sw on stack" data-w="fade,108500,-"><i></i></div></div>
+      <div class="ring green" data-w="fade,104500,110000"></div><i class="tap" data-t="105500" style="left:800px; top:50%"></i></div>
+    <div class="srow" style="position:relative"><div class="grow">Paper Trading<span class="sub">Simulated — no real money</span></div>
+      <div class="swwrap"><div class="sw stack"><i></i></div></div>
+      <div class="ring" data-w="fade,110500,114000"></div></div>
+    <div style="padding:20px 34px; font:700 28px/1 Inter; color:var(--muted)">Mode: <span style="position:relative; display:inline-block"><span data-w="-,0,108900">Off</span><span style="color:var(--green); position:absolute; left:0" data-w="fade,109000,-">Live</span></span></div>
+    <div class="srow" style="border-top:1px solid rgba(255,255,255,.07)"><div class="grow">Position size · Leverage<span class="sub">Aapki marzi, aapki limit</span></div><span class="chev">›</span>
+      <div class="ring" data-w="fade,114500,119600"></div></div>
+    <div class="scrim" data-w="fade,106000,108400"></div>
+    <div class="dialog" style="top:200px" data-w="pop,106000,108400">
+      <h5>Enable LIVE auto-trade?</h5>
+      <p>Real orders will be placed on your Binance account.</p>
+      <div class="btns"><span style="color:var(--muted)">Cancel</span><span style="background:var(--green); color:#04140d">Enable LIVE<i class="tap" data-t="108000" style="left:50%; top:50%"></i></span></div>
+    </div>
+  </div>
+
+  <!-- ============ RECAP (120–136.5s) ============ -->
+  <div class="abs" style="left:64px; top:292px" data-w="pop,120000,136300">
+    <div class="h2" style="font-size:60px">Aapka paisa.</div>
+    <div class="h2" style="font-size:60px">Aapka account. <span class="grad-green">Aapka control.</span></div>
+  </div>
+  <div class="rc" style="top:490px; border-color:var(--red)" data-w="left,121000,136300">
+    <div class="ic" style="background:rgba(255,77,109,.16); color:var(--red)">✕</div>
+    <div><b>Withdrawals OFF</b><span>Lumin paisa nikaal hi nahi sakta. ON wali key hum reject karte hain.</span></div>
+  </div>
+  <div class="rc" style="top:690px; border-color:var(--cyan)" data-w="left,123000,136300">
+    <div class="ic" style="background:rgba(56,214,255,.14); color:var(--cyan)">🔒</div>
+    <div><b>IP lock</b><span>Key sirf Lumin ke server se chalti hai. Kahin aur se — block.</span></div>
+  </div>
+  <div class="rc" style="top:890px; border-color:var(--amber)" data-w="left,125000,136300">
+    <div class="ic" style="background:rgba(255,197,66,.14); color:var(--amber)">!</div>
+    <div><b>Secret sirf app mein</b><span>Lumin team kabhi DM / WhatsApp pe key nahi maangti.</span></div>
+  </div>
+  <div class="rc" style="top:1090px; border-color:var(--green)" data-w="left,127000,136300">
+    <div class="ic" style="background:rgba(34,227,155,.14); color:var(--green)">✓</div>
+    <div><b>Limit aur exit aapke haath</b><span>Default: $500 max position · 5 orders/min. Disconnect kabhi bhi.</span></div>
+  </div>
+
+  <!-- ============ END — CTA + ASCI disclaimer (136.5–144s, 7.5s) ============ -->
+  <div class="abs center-x" style="top:292px; width:100%; text-align:center" data-in="pop" data-at="136500" data-dur="500">
+    <div style="display:flex; align-items:center; justify-content:center; gap:22px">
+      <div class="logo" style="width:104px; height:104px; border-radius:28px" data-logo-lg></div>
+      <div style="font:900 84px/1 Poppins; letter-spacing:-2px">Lumin</div>
+    </div>
+    <div class="h2" style="margin-top:28px; font-size:66px">Auto Trade — <span class="grad">aapke apne</span></div>
+    <div class="h2" style="margin-top:4px; font-size:66px"><span class="grad">Binance account pe.</span></div>
+  </div>
+  <div class="abs center-x" style="top:640px; text-align:center; width:100%" data-in="up" data-at="136800" data-dur="450">
+    <div class="cta glow-pulse" style="font-size:40px">Menu › Auto-trade &amp; execution</div>
+    <div class="body" style="margin-top:22px; color:#cfe3ff">app.luminapp.org &nbsp;·&nbsp; Google Play</div>
+  </div>
+  <div class="disclaimer" style="top:865px" data-in="fade" data-at="136500" data-dur="300">
+    <h4>RISK DISCLAIMER</h4>
+    <p>Crypto products and NFTs are unregulated and can be highly risky. There may be no regulatory recourse for any loss from such transactions.</p>
+    <small>Futures trading carries a high risk of loss. Signals are not financial advice. 18+ only.</small>
+  </div>
+</div>
+<div id="flash"></div>
+</div>
+
+<script>
+/* Shorthand, expanded before runtime.js collects:
+ *   data-w="IN,AT,UNTIL"  IN is a runtime in-type or "-" (present from t=0);
+ *                         UNTIL "-" = stays until its parent leaves.
+ *   .tap[data-t=T]        pops at T, gone at T+650.                         */
+document.querySelectorAll("[data-w]").forEach((el) => {
+  const [kind, at, until] = el.dataset.w.split(",");
+  if (kind !== "-") { el.dataset.in = kind; el.dataset.at = at; el.dataset.dur = kind === "wipe" ? "700" : "350"; }
+  if (until !== "-") { el.dataset.out = "fade"; el.dataset.until = until; el.dataset.odur = "220"; }
+});
+document.querySelectorAll(".tap[data-t]").forEach((el) => {
+  const t = +el.dataset.t;
+  Object.assign(el.dataset, { in: "pop", at: t - 150, dur: "200", out: "fade", until: t + 450, odur: "200" });
+});
+</script>
+<script src="../_shared/runtime.js"></script>
+<script>
+(function () {
+  const L = '<svg viewBox="0 0 46 52"><path d="M0 0h16v38h30v14H0z" fill="#0b1020"/></svg>';
+  document.querySelectorAll("[data-logo]").forEach((el) => (el.innerHTML = L));
+  document.querySelectorAll("[data-logo-lg]").forEach((el) => (el.innerHTML = L.replace('viewBox', 'style="width:50px;height:58px" viewBox')));
+
+  const cam = document.getElementById("cam"), flash = document.getElementById("flash");
+  const pips = [...document.querySelectorAll("#pips i")];
+  const STEPS = [19000, 33000, 49000, 62000, 84000, 102000];
+  const CUTS = [7000, ...STEPS, 120000, 136500];
+
+  Ad.onFrame((t) => {
+    // Gentle push inside each scene; no beat bump (calm reading pace).
+    let sceneStart = 0; for (const c of CUTS) if (t >= c) sceneStart = c;
+    const drift = Math.min(1, (t - sceneStart) / 12000);
+    cam.style.transform = `scale(${(1 + 0.02 * drift).toFixed(4)})`;
+    let f = 0; for (const c of CUTS) { const d = t - c; if (d >= 0 && d < 200) f = Math.max(f, 1 - d / 200); }
+    flash.style.opacity = (0.35 * f).toFixed(3);
+    pips.forEach((p, i) => p.classList.toggle("on", t >= STEPS[i]));
+  });
+})();
+</script>
+</body>
+</html>
