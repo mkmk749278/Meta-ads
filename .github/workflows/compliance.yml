@@ -1,0 +1,28 @@
+name: Compliance
+
+# The mechanical half of docs/compliance-checklist.md, on every PR: ASCI
+# disclaimer verbatim and legible >= 5s, the end-card timings in step with the
+# soundtrack, 18+, and no performance claims in the ads, landing page or copy.
+# The self-test runs first so a rule that quietly stopped matching fails here
+# instead of reading as a clean repo. Stdlib only — nothing to install.
+on:
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Self-test (every rule still fires)
+        run: python tools/check_compliance.py --self-test
+      - name: Check ads, landing page and ad copy
+        run: python tools/check_compliance.py

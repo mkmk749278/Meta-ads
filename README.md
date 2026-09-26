@@ -17,6 +17,7 @@ Paid-social creative and landing page for **Lumin** (consumer app of the
 | `docs/ad-copy.md` | Hinglish primary text / headline / description per ad |
 | `docs/campaign-plan.md` | Campaign structure, targeting, what to measure |
 | `docs/compliance-checklist.md` | Rules every creative passes + where each claim comes from |
+| `tools/check_compliance.py` | The checklist's mechanical rules, run on every PR (`--self-test` proves each rule still fires) |
 
 ## The ads — one per hook, run as an A/B/C test
 

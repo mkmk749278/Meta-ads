@@ -32,4 +32,6 @@ Marketing repo for **Lumin** (consumer app of the 360 Crypto Eye engine). See
 - The soundtrack is synthesized (`tools/soundtrack.py`), so there is no music licence
   to track. Cuts and SFX sit on its 120 BPM grid; move them together.
 - Re-render after any edit to `ads/` and commit the new `out/*.mp4` with the source.
+- Run `python tools/check_compliance.py` before pushing (CI runs it on every PR). A
+  failure names the rule; fix the creative, never loosen the rule to get green.
 - Every change ships via PR; merging to `main` deploys `site/` to GitHub Pages.
