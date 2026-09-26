@@ -3,7 +3,7 @@
 
 An ad opts in with a <script type="application/json" id="soundtrack"> block:
 
-    {"bpm": 120, "music_until": 12500, "end": 18000,
+    {"bpm": 120, "music_until": 12500, "end": 18000, "kick": true,
      "sfx": [[0, "impact"], [60, "ding"], [9000, "toggle"], ...]}
 
 Everything is generated here from sine waves and seeded noise: no samples, no
@@ -265,6 +265,10 @@ def build(cues: dict) -> np.ndarray:
     # Drums (and the bass that rides them) may enter later than the pad, so an
     # ad can open on tension and DROP the beat on its first cut.
     dstart = cues.get("drums_from", start)
+    # "kick": false keeps hats + bass + pad but drops the four-on-the-floor
+    # (and its sidechain pump) — a calmer bed for the long walkthrough, where
+    # two minutes of kick would fight the reading.
+    use_kick = cues.get("kick", True)
     prog = PROGS.get(cues.get("prog", "am"), PROGS["am"])
     n = int(end / 1000 * SR)
     drums = np.zeros(n)
@@ -274,14 +278,15 @@ def build(cues: dict) -> np.ndarray:
     k, h = kick(), hat()
     t = dstart
     while t < until:
-        place(drums, k, t, 0.9)
-        place(drums, h, t + beat / 2, 0.5)
+        if use_kick:
+            place(drums, k, t, 0.9)
+        place(drums, h, t + beat / 2, 0.5 if use_kick else 0.28)
         t += beat
 
     # Sidechain: duck bass + pad under each kick.
     duck = np.ones(n)
     t = dstart
-    while t < until:
+    while use_kick and t < until:
         i = int(t / 1000 * SR)
         m = min(n, i + int(0.25 * SR))
         duck[i:m] = 1 - 0.75 * np.exp(-np.arange(m - i) / SR / 0.07)

@@ -31,6 +31,17 @@ is fully composed with no motion.
 | `unlock-live` | *"Ye signal abhi LIVE hai."* — a live card, levels blurred under a padlock | **Curiosity** (the new masked-live funnel) | tap → lock bursts → levels decode → "Number nahi. Form nahi." → 3 din FREE |
 | `chaos-clarity` | *"20 indicators. 0 clarity."* — a chart buried under overlays and scribbles | **Pain** (chart overload) | mess collapses into Lumin → Entry/Stop/Target draw in → wins *and* losses on the record |
 
+### Awareness + guidance (not part of the hook test)
+
+| Video | Length | What |
+|---|---|---|
+| `api-connect-reel` | 45s | *"Share an API key = share your money? NO."* — why connecting a key cannot move funds (withdrawals rejected, IP lock), then the 3 steps |
+| `api-connect-guide` | 2m24s | Follow-along walkthrough: prerequisites → copy Lumin's server IP → create the Binance key → copy key + secret → restrictions (IP, Futures ON, Withdrawals OFF) → paste in Lumin → Live Trading ON → recap. Calm bed (`"kick": false`), for in-app help / WhatsApp / YouTube |
+
+Both use designed mock screens (`ads/_shared/guide.css`), labelled
+ILLUSTRATION, with keys and Lumin's server IP masked. **English only** (owner, 2026-09-26) — the Hinglish rule in `CLAUDE.md` covers the hook ads, not these — the IP is always "copy
+it from the app", so the video never goes stale when the server moves.
+
 `unlock-live` and `chaos-clarity` open on a pad and glitches only and **drop the
 beat on the first cut** (`drums_from` in the cue list); every cut shakes the
 camera and splits RGB. Only the winning hook should get budget after the test,
