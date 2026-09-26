@@ -4,6 +4,12 @@ Run every new creative through this before it spends a rupee. The app is live
 with real users' capital behind it; an ad that over-promises is a trust problem
 first and a policy problem second.
 
+The mechanical part — disclaimer verbatim and legible ≥ 5s, end-card timings
+in step with the soundtrack, 18+, the safe-zone top, and the banned claim words
+in the ads, landing page and `ad-copy.md` — runs on every PR
+(`python tools/check_compliance.py`, `.github/workflows/compliance.yml`). The
+rest of this list needs a human.
+
 ## Hard rules (every ad, every landing-page change)
 
 - [ ] **ASCI crypto disclaimer, verbatim:** "Crypto products and NFTs are unregulated and can be highly risky. There may be no regulatory recourse for any loss from such transactions." Video: on screen ≥ 5s, legible, inside the safe zone. Current ad: 5.5s (12.5–18s), y 866–1265.
