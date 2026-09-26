@@ -35,11 +35,11 @@ is fully composed with no motion.
 
 | Video | Length | What |
 |---|---|---|
-| `api-connect-reel` | 45s | *"API key dena = paisa dena? NAHI."* — why connecting a key cannot move funds (withdrawals rejected, IP lock), then the 3 steps |
+| `api-connect-reel` | 45s | *"Share an API key = share your money? NO."* — why connecting a key cannot move funds (withdrawals rejected, IP lock), then the 3 steps |
 | `api-connect-guide` | 2m24s | Follow-along walkthrough: prerequisites → copy Lumin's server IP → create the Binance key → copy key + secret → restrictions (IP, Futures ON, Withdrawals OFF) → paste in Lumin → Live Trading ON → recap. Calm bed (`"kick": false`), for in-app help / WhatsApp / YouTube |
 
 Both use designed mock screens (`ads/_shared/guide.css`), labelled
-ILLUSTRATION, with keys and Lumin's server IP masked — the IP is always "copy
+ILLUSTRATION, with keys and Lumin's server IP masked. **English only** (owner, 2026-09-26) — the Hinglish rule in `CLAUDE.md` covers the hook ads, not these — the IP is always "copy
 it from the app", so the video never goes stale when the server moves.
 
 `unlock-live` and `chaos-clarity` open on a pad and glitches only and **drop the

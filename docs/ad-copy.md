@@ -50,22 +50,26 @@ Variant primary text:
 
 ---
 
-## Awareness — "API key dena = paisa dena?" (`out/api-connect-reel.mp4`, ad name `aw_api_connect`)
+## Awareness — "Share an API key = share your money?" (`out/api-connect-reel.mp4`, ad name `aw_api_connect`)
 
 Not a hook test: an awareness piece for people who hesitate to connect a key.
 Run it to existing users / warm audiences, or pin it on the profile.
 
 **Primary text**
-> API key dene se darr lagta hai? Lumin ko sirf trade ka access milta hai — withdrawal wali key hum reject karte hain, aur key sirf Lumin ke server IP se chalti hai. 3 steps: Binance pe API banao → Lumin mein paste → Live Trading ON.
+English only (owner, 2026-09-26), unlike the Hinglish hook ads.
 
-**Headline:** API key dena = paisa dena? Nahi.
-**Description:** Aapka paisa. Aapka account. Aapka control.
+> Worried about sharing an API key? Lumin only gets access to trade — keys with withdrawals ON are rejected, and the key only works from Lumin's server IP. 3 steps: create an API key on Binance → paste it into Lumin → turn Live Trading ON.
+
+**Headline:** Share an API key = share your money? No.
+**Description:** Your money. Your account. Your control.
 
 ## Guide — "Auto Trade setup" (`out/api-connect-guide.mp4`, 2m24s)
 
 For in-app help, WhatsApp support replies, YouTube and the landing page — not
 paid Reels (too long). Suggested caption:
-> Binance API key banao aur Lumin Auto Trade se connect karo — 6 steps. Withdrawals OFF, Futures ON, IP lock. Lumin ka server IP hamesha app se copy karo.
+> Create a Binance API key and connect it to Lumin Auto Trade in 6 steps. Withdrawals OFF, Futures ON, IP lock. Always copy Lumin's server IP from the app.
+
+Last line for both: *Crypto futures are high risk. Signals are not financial advice. 18+.*
 
 ---
 
