@@ -1,0 +1,448 @@
+<!doctype html>
+<!--
+  UNLOCK — "Ye signal abhi LIVE hai."   (hook test B: curiosity)
+  Tests a curiosity hook against the hero's 3 AM hook, and sells the funnel
+  that shipped 2026-09-25: open the app with no phone number, see every live
+  signal masked, sign up, 3 days of live signals free.
+
+  Frame 0 IS the thumbnail: a live signal card whose levels are blurred under
+  a padlock, "Sign up free to see signal" on it (the app's own button copy),
+  a live chart breathing behind it.
+
+  Story on a 120 BPM grid (cues in #soundtrack below):
+    0.0–2.5s  HOOK    "Ye signal abhi LIVE hai." — levels hidden, padlock
+    2.5–6.0s  UNLOCK  tap → shackle opens → lock bursts → levels decode;
+                      "Entry. Stop. Target." slam on the beat, "Sab clear."
+    6.0–9.5s  ENTRY   "+91 ____" form is slashed and drops; the phone opens
+                      straight onto one welcome screen → feed. "Number nahi.
+                      Form nahi. Seedha app mein."
+    9.5–12.5s OFFER   "Sign up karo." DAY 1 / 2 / 3 tiles, live cards stream
+    12.5–18s  END     CTA + ASCI disclaimer (5.5s)
+
+  Claims audit: docs/compliance-checklist.md. No P&L, %, win rate. Prices are
+  ILLUSTRATION. No exchange named at all in this ad.
+-->
+<html data-duration="18000">
+<head>
+<meta charset="utf-8">
+<title>Lumin — Ye signal abhi LIVE hai</title>
+<link rel="stylesheet" href="../_shared/base.css">
+<style>
+  #stage {
+    background:
+      radial-gradient(760px 560px at 90% 4%, rgba(255,77,109,.30), transparent 62%),
+      radial-gradient(900px 760px at 4% 44%, rgba(56,214,255,.16), transparent 62%),
+      radial-gradient(1100px 800px at 50% 110%, rgba(155,107,255,.26), transparent 60%),
+      linear-gradient(180deg, #0b0a24 0%, #060516 55%, #02030b 100%);
+  }
+  #cam { position:absolute; inset:0; transform-origin: 50% 45%; }
+  #bgchart { position:absolute; left:0; top:260px; width:1080px; height:1500px; }
+  .vignette { position:absolute; inset:0; pointer-events:none;
+    background: radial-gradient(1200px 1500px at 50% 45%, transparent 55%, rgba(0,0,0,.65)); }
+
+  .brand-mini { position:absolute; left:64px; top:108px; display:flex; align-items:center; gap:16px; z-index:30; }
+  .brand-mini .logo { width:72px; height:72px; border-radius:20px; }
+  .brand-mini .logo svg { width:34px; height:40px; }
+  .brand-mini span { font:800 46px/1 "Poppins"; letter-spacing:-1px; }
+
+  .hook { font:900 112px/0.98 "Poppins"; letter-spacing:-4px; }
+  .live-word { display:inline-block; padding:0 22px 6px; border-radius:26px; margin-left:4px;
+    background: linear-gradient(90deg, #ff3d6e, #ff7a45); color:#fff;
+    box-shadow: 0 0 60px rgba(255,61,110,.75); animation: livePulse 1s ease-in-out infinite; }
+  @keyframes livePulse { 50% { box-shadow: 0 0 20px rgba(255,61,110,.35); filter: brightness(1.15); } }
+
+  /* the signal card — outer is tweened, inner carries the 3D pose */
+  .sigwrap { position:absolute; left:80px; top:520px; width:920px; height:660px; perspective:2400px; }
+  .sig { position:absolute; inset:0; border-radius:40px; padding:40px 48px;
+    background: linear-gradient(160deg, rgba(20,28,66,.97), rgba(9,13,36,.97));
+    border:3px solid rgba(255,77,109,.7);
+    box-shadow: 0 0 90px rgba(255,77,109,.35), 0 40px 120px rgba(0,0,0,.7), inset 0 0 0 1px rgba(255,255,255,.05); }
+  .sig .top { display:flex; justify-content:space-between; align-items:center; }
+  .pill.redlive { background: rgba(255,61,110,.16); color:#ff5c85; border:2px solid rgba(255,61,110,.6); }
+  .ago { font:600 28px/1 "Inter"; color:var(--muted); margin-left:14px; }
+  .sym { display:flex; align-items:center; gap:22px; margin:28px 0 4px; }
+  .sym b { font:800 66px/1 "Poppins"; letter-spacing:-1px; }
+  .dir { padding:12px 24px; border-radius:999px; font:800 30px/1 "Mono"; letter-spacing:2px;
+    background: rgba(255,255,255,.08); color:#9fb0cf; border:2px solid rgba(255,255,255,.2); }
+  .agent { font:600 30px/1 "Inter"; color:#8fa2c8; margin-bottom:18px; }
+  .lv { display:flex; justify-content:space-between; align-items:center; padding:22px 0;
+    border-bottom:1px solid rgba(255,255,255,.08); font:500 38px/1 "Inter"; color:var(--muted); }
+  .lv:last-of-type { border-bottom:0; }
+  .lv b { font:700 46px/1 "Mono"; color:var(--ink); display:inline-block; }
+  .lv b.r { color:var(--red); } .lv b.g { color:var(--green); }
+  .lockbox { position:absolute; left:0; right:0; top:250px; height:250px; display:grid; place-items:center; }
+  .lockic { width:150px; height:190px; color:#ffd166; filter: drop-shadow(0 0 30px rgba(255,209,102,.8)); }
+  .lockic svg { width:100%; height:100%; overflow:visible; }
+  .lockic .shackle { transform-origin: 92px 70px; }
+  .unlockbtn { position:absolute; left:48px; right:48px; bottom:36px; height:96px; border-radius:26px;
+    display:flex; align-items:center; justify-content:center; gap:16px;
+    background: linear-gradient(90deg, #2f7bff, #38d6ff); color:#041022; font:800 38px/1 "Poppins";
+    box-shadow: 0 0 50px rgba(56,214,255,.6); }
+  .closebar { position:absolute; left:48px; right:48px; bottom:36px; height:96px; border-radius:26px;
+    display:flex; align-items:center; justify-content:center; font:700 36px/1 "Inter"; color:#bff5de;
+    background: rgba(34,227,155,.12); border:2px solid rgba(34,227,155,.55); }
+  .ripple { position:absolute; width:60px; height:60px; margin:-30px 0 0 -30px; border-radius:50%;
+    border:6px solid #fff; opacity:0; pointer-events:none; }
+  .touch { position:absolute; width:74px; height:74px; margin:-37px 0 0 -37px; border-radius:50%;
+    background: radial-gradient(circle, rgba(255,255,255,.95), rgba(255,255,255,.35) 60%, transparent 70%); opacity:0; }
+  .hint { font:700 70px/1 "Caveat"; color:#ffe3a3; text-shadow:0 0 26px rgba(255,209,102,.6); }
+
+  .deck { position:absolute; height:60px; border-radius:0 0 34px 34px; background: rgba(20,26,60,.95);
+    border:3px solid rgba(255,77,109,.45); border-top:0; box-shadow: 0 20px 60px rgba(0,0,0,.6); }
+  .livecount { position:absolute; top:1400px; white-space:nowrap;
+    display:flex; align-items:center; gap:16px; padding:20px 34px; border-radius:999px;
+    background: rgba(255,61,110,.14); border:2px solid rgba(255,61,110,.55); color:#ffc2d0; font:800 34px/1 "Inter"; }
+  .livecount .dot { color:#ff4d6d; }
+  .slam { font:900 100px/1 "Poppins"; letter-spacing:-3px; display:inline-block; }
+
+  /* scene C */
+  .form { position:absolute; left:130px; top:640px; width:820px; padding:44px 48px; border-radius:36px;
+    background: rgba(240,244,255,.97); color:#1a2340; box-shadow: 0 40px 120px rgba(0,0,0,.6); }
+  .form h5 { font:800 44px/1.1 "Poppins"; margin-bottom:28px; }
+  .form .inp { display:flex; gap:18px; align-items:center; padding:26px 28px; border-radius:22px; border:3px solid #c8d2ea;
+    font:700 44px/1 "Mono"; color:#8a96b5; }
+  .form .inp span { color:#1a2340; }
+  .form .btn { margin-top:24px; padding:26px; border-radius:22px; background:#c9d3ea; color:#5b6788; text-align:center; font:800 38px/1 "Poppins"; }
+  .slash { position:absolute; left:-30px; right:-30px; top:50%; height:22px; margin-top:-11px; border-radius:22px;
+    background: linear-gradient(90deg, #ff3d6e, #ff7a45); box-shadow:0 0 40px rgba(255,61,110,.9); transform-origin:left center; }
+
+  .phone-wrap { position:absolute; left:250px; top:640px; width:580px; height:1060px; perspective:2400px; }
+  .ph { position:absolute; inset:0; border-radius:84px; overflow:hidden;
+    background:#070818; border:3px solid rgba(255,255,255,.2);
+    box-shadow: inset 0 0 0 14px #04050d, 0 0 0 2px rgba(56,214,255,.35), 0 60px 140px rgba(0,0,0,.75), 0 0 120px rgba(56,214,255,.25); }
+  .ph::before { content:""; position:absolute; left:50%; top:28px; width:150px; height:40px; margin-left:-75px; border-radius:30px; background:#02030a; z-index:5; }
+  .scr { position:absolute; inset:16px; border-radius:70px; overflow:hidden; }
+  .welcome { background: radial-gradient(500px 420px at 70% 10%, rgba(61,123,255,.45), transparent 70%), #0a1030;
+    display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:60px; }
+  .welcome .logo { width:150px; height:150px; border-radius:40px; }
+  .welcome .logo svg { width:70px; height:80px; }
+  .welcome h6 { font:800 54px/1.1 "Poppins"; margin-top:40px; }
+  .welcome p { font:500 30px/1.4 "Inter"; color:var(--muted); margin-top:16px; }
+  .welcome .go { margin-top:60px; width:100%; padding:34px 0; border-radius:28px; background: linear-gradient(90deg, #2f7bff, #38d6ff);
+    color:#041022; font:800 40px/1 "Poppins"; }
+  .welcome small { position:absolute; bottom:60px; left:40px; right:40px; font:500 22px/1.4 "Inter"; color:#6f80a6; }
+  .feed { background:#080d26; padding:90px 30px 30px; }
+  .feed h6 { font:800 46px/1 "Poppins"; margin-bottom:24px; }
+  .tabs { display:flex; gap:14px; margin-bottom:24px; }
+  .tabs span { padding:12px 22px; border-radius:999px; font:700 24px/1 "Inter"; background:rgba(255,255,255,.07); color:#9fb0cf; }
+  .tabs span.on { background: rgba(56,214,255,.18); color:#7fe3ff; }
+  .fc { border-radius:26px; padding:22px 24px; margin-bottom:16px; background: rgba(20,30,70,.9); border:2px solid rgba(255,255,255,.08); }
+  .fc .l1 { display:flex; justify-content:space-between; font:800 30px/1 "Poppins"; }
+  .fc .l2 { display:flex; justify-content:space-between; margin-top:12px; font:600 22px/1 "Inter"; color:#8fa2c8; }
+  .fc .blurv { filter: blur(7px); color:#fff; }
+  .fc.lockd { border-color: rgba(255,61,110,.55); }
+  .res { font:800 22px/1 "Inter"; padding:6px 12px; border-radius:10px; }
+  .res.w { background:rgba(34,227,155,.16); color:var(--green); }
+  .res.l { background:rgba(255,77,109,.16); color:var(--red); }
+
+  /* scene D */
+  .day { position:absolute; top:640px; width:290px; height:330px; border-radius:36px; text-align:center; padding-top:46px;
+    background: linear-gradient(170deg, rgba(34,227,155,.24), rgba(10,30,40,.95)); border:3px solid rgba(34,227,155,.8);
+    box-shadow: 0 0 70px rgba(34,227,155,.45), 0 30px 80px rgba(0,0,0,.6); transform-origin: 50% 0; }
+  .day small { display:block; font:800 30px/1 "Inter"; letter-spacing:6px; color:#9ff5d2; }
+  .day b { display:block; font:900 150px/1 "Poppins"; margin-top:10px; }
+  .day span { display:inline-block; margin-top:16px; padding:10px 20px; border-radius:999px; font:800 24px/1 "Inter";
+    background: rgba(255,255,255,.12); color:#fff; letter-spacing:2px; }
+  #stream { position:absolute; left:0; right:0; top:1010px; height:560px; overflow:hidden;
+    mask-image: linear-gradient(180deg, transparent, #000 20%, #000 70%, transparent); }
+  .sc { position:absolute; width:470px; padding:22px 26px; border-radius:24px; background: rgba(13,24,56,.92); border:2px solid rgba(56,214,255,.4); }
+  .sc .l1 { display:flex; justify-content:space-between; font:800 30px/1 "Poppins"; }
+  .sc .l2 { margin-top:12px; font:600 21px/1 "Mono"; color:#9fb0cf; white-space:nowrap; }
+  .sc .l2 .g { color:var(--green); } .sc .l2 .r { color:var(--red); }
+  .stamp { position:absolute; left:50%; top:760px; padding:22px 44px; border:8px solid #22e39b; border-radius:24px;
+    font:900 76px/1 "Poppins"; color:#22e39b; letter-spacing:6px; background: rgba(4,20,14,.75);
+    box-shadow: 0 0 80px rgba(34,227,155,.7); }
+
+  #flash { position:absolute; inset:0; background:#fff; opacity:0; pointer-events:none; z-index:50; mix-blend-mode:overlay; }
+</style>
+</head>
+<body>
+<script type="application/json" id="soundtrack">
+{
+  "bpm": 120,
+  "prog": "dark",
+  "music_from": 0,
+  "drums_from": 2500,
+  "music_until": 12500,
+  "end": 18000,
+  "sfx": [
+    [0, "sub"], [0, "glitch"], [700, "tick"], [1200, "tick"], [1700, "tick"],
+    [1500, "riser1"], [2500, "tap"], [2650, "unlock"], [2900, "shatter"], [2900, "sub"],
+    [2950, "scramble"], [3500, "hit"], [4000, "hit"], [4500, "hit"], [5000, "ding"],
+    [5000, "riser1"], [6000, "glitch"], [6000, "impact"],
+    [6500, "tick"], [6750, "zap"], [7000, "whoosh"], [7250, "whoosh"],
+    [7750, "tap"], [7900, "ding"], [8000, "hit"],
+    [8500, "riser1"], [9500, "impact"], [9500, "whoosh"],
+    [10000, "lock"], [10500, "lock"], [11000, "lock"], [11500, "stamp"], [11500, "riser1"],
+    [12500, "impact"], [12500, "sub"]
+  ]
+}
+</script>
+
+<div id="stage" data-end-at="12500" data-poster="0">
+<div id="cam">
+  <canvas id="bgchart" width="1080" height="1500"></canvas>
+  <div class="vignette"></div>
+  <div id="bursts" style="position:absolute; inset:0; z-index:40; pointer-events:none"></div>
+
+  <div class="brand-mini" data-out="fade" data-until="12200">
+    <div class="logo" data-logo></div><span>Lumin</span>
+  </div>
+
+  <!-- ============ A. HOOK — the thumbnail (0–2.5s) ============ -->
+  <div class="abs" style="left:64px; top:290px" data-out="left" data-until="2450" data-odur="250">
+    <div class="hook">Ye signal</div>
+    <div class="hook" style="margin-top:10px">abhi <span class="live-word">LIVE</span> hai.</div>
+  </div>
+
+  <!-- deck of more masked live signals behind the hero card (thumbnail depth) -->
+  <div class="deck" style="left:120px; top:1172px; width:840px; opacity:.75" data-out="fade" data-until="2450" data-odur="200"></div>
+  <div class="deck" style="left:160px; top:1206px; width:760px; opacity:.45" data-out="fade" data-until="2450" data-odur="200"></div>
+  <div class="livecount center-x" data-out="fade" data-until="2450" data-odur="200"><span class="dot"></span>8 signals live abhi · sab locked</div>
+
+  <div class="sigwrap" data-out="fade" data-until="5900" data-odur="250">
+    <div class="sig" id="sig">
+      <div class="top">
+        <div><span class="pill redlive"><span class="dot"></span>LIVE</span><span class="ago">2 min ago</span></div>
+        <span class="illus">ILLUSTRATION</span>
+      </div>
+      <div class="sym"><b>SOLUSDT</b><span class="dir" id="dir">? ? ?</span></div>
+      <div class="agent">Trend Pullback · A+ setup</div>
+      <div id="levels">
+        <div class="lv"><span>Entry</span><b id="v1">142.35</b></div>
+        <div class="lv"><span>Stop Loss</span><b class="r" id="v2">139.80</b></div>
+        <div class="lv"><span>Target</span><b class="g" id="v3">145.60</b></div>
+      </div>
+      <div class="lockbox" id="lockbox"><div class="lockic" id="lockic" data-lock></div></div>
+      <div class="unlockbtn" id="unlockbtn">
+        <svg width="34" height="40" viewBox="0 0 120 150"><rect x="8" y="64" width="104" height="82" rx="22" fill="#041022"/><path d="M28 70V44a32 32 0 0 1 64 0v26" stroke="#041022" stroke-width="14" fill="none"/></svg>
+        Sign up free to see signal
+      </div>
+      <div class="closebar" id="closebar">Target pe <span style="color:var(--green); margin:0 10px">100% close.</span> Bas.</div>
+      <div class="touch" id="touch1" style="left:600px; top:596px"></div>
+      <div class="ripple" id="ripple1" style="left:600px; top:596px"></div>
+    </div>
+  </div>
+  <div class="abs" style="left:560px; top:1282px" data-out="fade" data-until="2450" data-odur="200">
+    <div class="hint">Levels dekhne hain?</div>
+  </div>
+  <svg class="abs" style="left:470px; top:1248px" width="90" height="80" viewBox="0 0 90 80" data-out="fade" data-until="2450" data-odur="200">
+    <path d="M80 60 C 50 60, 30 45, 20 15" stroke="#ffe3a3" stroke-width="6" fill="none" stroke-linecap="round"/>
+    <path d="M8 26 L20 10 L34 24" stroke="#ffe3a3" stroke-width="6" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+  </svg>
+
+  <!-- ============ B. UNLOCK (2.5–6.0s) ============ -->
+  <div class="abs" style="left:64px; top:300px; white-space:nowrap">
+    <span class="slam" data-in="pop" data-at="3500" data-dur="240" data-out="up" data-until="5900" data-odur="220">Entry.</span>
+    <span class="slam" style="color:#ff6d8a" data-in="pop" data-at="4000" data-dur="240" data-out="up" data-until="5900" data-odur="220">Stop.</span>
+    <span class="slam grad-green" data-in="pop" data-at="4500" data-dur="240" data-out="up" data-until="5900" data-odur="220">Target.</span>
+  </div>
+  <div class="abs" style="left:64px; top:414px" data-in="left" data-at="5000" data-dur="300" data-out="up" data-until="5900" data-odur="220">
+    <div class="slam grad" style="font-size:88px">Sab clear.</div>
+  </div>
+
+  <!-- ============ C. NO NUMBER (6.0–9.5s) ============ -->
+  <div class="abs" style="left:64px; top:290px" data-in="left" data-at="6000" data-dur="280" data-out="left" data-until="9450" data-odur="220">
+    <div class="slam" style="font-size:96px">Number <span style="color:#ff6d8a">nahi.</span></div>
+  </div>
+  <div class="abs" style="left:64px; top:392px" data-in="left" data-at="6500" data-dur="280" data-out="left" data-until="9450" data-odur="220">
+    <div class="slam" style="font-size:96px">Form <span style="color:#ff6d8a">nahi.</span></div>
+  </div>
+  <div class="abs" style="left:64px; top:494px" data-in="pop" data-at="8000" data-dur="300" data-out="left" data-until="9450" data-odur="220">
+    <div class="slam grad-green" style="font-size:96px">Seedha app mein.</div>
+  </div>
+
+  <div id="formwrap" class="abs" style="left:0; top:0; width:1080px; height:1920px" data-in="up" data-at="6150" data-dur="320">
+    <div class="form" id="form">
+      <h5>Enter mobile number</h5>
+      <div class="inp"><span>+91</span> _ _ _ _ _ _ _ _ _ _</div>
+      <div class="btn">Send OTP</div>
+      <div class="slash" id="slash"></div>
+    </div>
+  </div>
+
+  <div class="phone-wrap" data-in="up" data-at="7350" data-dur="400" data-out="fade" data-until="9450" data-odur="220">
+    <div class="ph" id="ph">
+      <div class="scr welcome" id="scrWelcome">
+        <div class="logo" data-logo></div>
+        <h6>Welcome to Lumin</h6>
+        <p>Crypto signals, clear and simple.</p>
+        <div class="go" id="goBtn">Get started</div>
+        <small>By continuing you agree to the Terms &amp; Risk Disclosure.</small>
+        <div class="touch" id="touch2" style="left:274px; top:640px"></div>
+        <div class="ripple" id="ripple2" style="left:274px; top:640px"></div>
+      </div>
+      <div class="scr feed" id="scrFeed">
+        <h6>Signals</h6>
+        <div class="tabs"><span class="on">All</span><span>Open</span><span>Closed</span></div>
+        <div class="fc lockd"><div class="l1"><span>SOLUSDT</span><span class="pill redlive" style="font-size:20px; padding:6px 14px">LIVE</span></div>
+          <div class="l2"><span>Entry <span class="blurv">142.35</span></span><span>Sign up to see</span></div></div>
+        <div class="fc lockd"><div class="l1"><span>ARBUSDT</span><span class="pill redlive" style="font-size:20px; padding:6px 14px">LIVE</span></div>
+          <div class="l2"><span>Entry <span class="blurv">0.7412</span></span><span>Sign up to see</span></div></div>
+        <div class="fc"><div class="l1"><span>ETHUSDT</span><span class="res w">TP HIT</span></div><div class="l2"><span>Closed · 1h</span><span>ILLUSTRATION</span></div></div>
+        <div class="fc"><div class="l1"><span>LINKUSDT</span><span class="res l">SL HIT</span></div><div class="l2"><span>Closed · 3h</span><span>ILLUSTRATION</span></div></div>
+        <div class="fc"><div class="l1"><span>BNBUSDT</span><span class="res w">TP HIT</span></div><div class="l2"><span>Closed · 5h</span><span>ILLUSTRATION</span></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ D. OFFER (9.5–12.5s) ============ -->
+  <div class="abs" style="left:64px; top:290px" data-in="left" data-at="9500" data-dur="300" data-out="left" data-until="12450" data-odur="220">
+    <div class="slam" style="font-size:96px">Sign up karo.</div>
+  </div>
+  <div class="abs" style="left:64px; top:400px" data-in="left" data-at="9750" data-dur="300" data-out="left" data-until="12450" data-odur="220">
+    <div class="h3" style="font-size:58px; color:#cfe3ff">3 din saare live signals <span class="grad-green">FREE.</span></div>
+  </div>
+  <div class="day" id="d1" style="left:60px"><small>DAY</small><b>1</b><span>LIVE ✓</span></div>
+  <div class="day" id="d2" style="left:395px"><small>DAY</small><b>2</b><span>LIVE ✓</span></div>
+  <div class="day" id="d3" style="left:730px"><small>DAY</small><b>3</b><span>LIVE ✓</span></div>
+  <div id="stream" data-in="fade" data-at="9700" data-dur="400" data-out="fade" data-until="12450" data-odur="220"></div>
+  <div class="stamp" id="stamp" data-base="translateX(-50%) rotate(-8deg)">UNLOCKED</div>
+
+  <!-- ============ E. END — CTA + ASCI disclaimer (12.5–18s, 5.5s) ============ -->
+  <div class="abs center-x" style="top:292px; width:100%; text-align:center" data-in="pop" data-at="12500" data-dur="500">
+    <div style="display:flex; align-items:center; justify-content:center; gap:22px">
+      <div class="logo" style="width:104px; height:104px; border-radius:28px" data-logo-lg></div>
+      <div style="font:900 84px/1 Poppins; letter-spacing:-2px">Lumin</div>
+    </div>
+    <div class="h2" style="margin-top:28px; font-size:70px">Live signal dekhna hai?</div>
+    <div class="h2" style="margin-top:6px; font-size:70px">Sign up. <span class="grad-green">3 din FREE.</span></div>
+  </div>
+  <div class="abs center-x" style="top:640px; text-align:center; width:100%" data-in="up" data-at="12800" data-dur="450">
+    <div class="cta glow-pulse">Free mein dekho
+      <svg width="40" height="40" viewBox="0 0 40 40"><path d="M8 20h24M22 10l10 10-10 10" stroke="#041022" stroke-width="5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </div>
+    <div class="body" style="margin-top:22px; color:#cfe3ff">app.luminapp.org &nbsp;·&nbsp; Google Play</div>
+  </div>
+  <div class="disclaimer" style="top:865px" data-in="fade" data-at="12500" data-dur="300">
+    <h4>RISK DISCLAIMER</h4>
+    <p>Crypto products and NFTs are unregulated and can be highly risky. There may be no regulatory recourse for any loss from such transactions.</p>
+    <small>Futures trading carries a high risk of loss. Signals are not financial advice. 18+ only.</small>
+  </div>
+</div>
+<div id="flash"></div>
+</div>
+
+<script src="../_shared/runtime.js"></script>
+<script src="../_shared/fx.js"></script>
+<script>
+(function () {
+  FX.icons();
+  const $ = (id) => document.getElementById(id);
+  const chart = FX.candles($("bgchart"), { seed: 42, base: 142, vol: 0.55, n: 500 });
+
+  // Unlocked live signals streaming up behind the day tiles (all illustration).
+  const rows = [["BTCUSDT", "LONG", "64,120", "63,380", "65,010"], ["ETHUSDT", "SHORT", "3,412", "3,468", "3,351"],
+    ["XRPUSDT", "LONG", "0.5821", "0.5712", "0.5944"], ["DOGEUSDT", "LONG", "0.1204", "0.1181", "0.1231"],
+    ["AVAXUSDT", "SHORT", "27.41", "27.96", "26.83"], ["SUIUSDT", "LONG", "1.884", "1.842", "1.931"]];
+  const stream = $("stream");
+  const scs = rows.map(([s, d, e, sl, tp], i) => {
+    const el = document.createElement("div");
+    el.className = "sc";
+    el.innerHTML = `<div class="l1"><span>${s}</span><span class="pill ${d === "LONG" ? "long" : "short"}" style="font-size:20px; padding:6px 14px">${d}</span></div>
+      <div class="l2">${e} · <span class="r">SL ${sl}</span> · <span class="g">TP ${tp}</span></div>`;
+    stream.appendChild(el);
+    return [el, i];
+  });
+
+  const burst = FX.burst($("bursts"), 46, 9, ["#ffd166", "#ff6d8a", "#38d6ff", "#22e39b", "#ffffff"]);
+  const CUTS = [2500, 6000, 9500, 12500];
+  const cam = $("cam"), flash = $("flash");
+  const lockic = $("lockic"), shackle = lockic.querySelector(".shackle");
+  const vals = [[$("v1"), "142.35"], [$("v2"), "139.80"], [$("v3"), "145.60"]];
+
+  function tapFx(touch, ripple, t, t0) {
+    const d = t - t0;
+    touch.style.opacity = d >= -250 && d < 350 ? (d < 0 ? (d + 250) / 250 : 1 - d / 350).toFixed(3) : "0";
+    touch.style.transform = `scale(${d < 0 ? 1.3 + d / -800 : 0.85})`;
+    const k = d >= 0 && d < 500 ? d / 500 : -1;
+    ripple.style.opacity = k < 0 ? "0" : (1 - k).toFixed(3);
+    ripple.style.transform = `scale(${k < 0 ? 0 : (1 + 5 * Ad.ease.out(k)).toFixed(3)})`;
+  }
+
+  Ad.onFrame((t) => {
+    const kick = FX.camera(t, { cam, flash, cuts: CUTS, musicFrom: 2500, musicEnd: 12500, shake: 16, split: 12 });
+
+    // Live chart behind everything; it quiets under the end card.
+    chart.draw(t, { offset: 200 + t / 1000 * 1.4, count: 34, alpha: t < 12500 ? 0.24 + 0.06 * kick : 0.1, glow: 14,
+      mas: [[9, "rgba(56,214,255,.8)", 4], [21, "rgba(155,107,255,.8)", 4]] });
+
+    // Card pose: a slow 3D sway, settling face-on as it unlocks.
+    const sig = $("sig");
+    const face = Ad.ease.inOut(Ad.span(t, 2400, 3200));
+    sig.style.transform = `rotateY(${((-7 + Math.sin(t / 900) * 2) * (1 - face)).toFixed(2)}deg) rotateX(${(4 * (1 - face)).toFixed(2)}deg)`;
+
+    // Locked → unlocked.
+    tapFx($("touch1"), $("ripple1"), t, 2500);
+    const open = Ad.ease.back(Ad.span(t, 2620, 2860));
+    shackle.style.transform = `translateY(${(-26 * open).toFixed(1)}px) rotate(${(34 * open).toFixed(1)}deg)`;
+    const pop = Ad.span(t, 2870, 3080);
+    lockic.style.transform = `scale(${(1 + 0.12 * Math.sin(t / 160) * (1 - Ad.span(t, 2400, 2600)) + 0.6 * pop).toFixed(3)})`;
+    lockic.style.opacity = (1 - pop).toFixed(3);
+    burst.draw(t, 2900, 540, 540 + 380);
+    const blur = 18 * (1 - Ad.ease.out(Ad.span(t, 2900, 3350)));
+    vals.forEach(([el, v], i) => {
+      el.style.filter = blur > 0.2 ? `blur(${blur.toFixed(1)}px)` : "";
+      const p = Ad.span(t, 2950 + i * 180, 3650 + i * 180);
+      el.textContent = t < 2950 ? v : FX.scramble(v, p, t, i + 1);
+    });
+    const dir = $("dir");
+    if (t >= 2950) {
+      const p = Ad.span(t, 2950, 3450);
+      dir.textContent = FX.scramble("LONG", p, t, 7);
+      dir.style.cssText = "background:rgba(34,227,155,.16); color:#22e39b; border-color:rgba(34,227,155,.6)";
+    } else { dir.textContent = "? ? ?"; dir.style.cssText = ""; }
+    const btnOut = Ad.span(t, 2880, 3080);
+    $("unlockbtn").style.opacity = (1 - btnOut).toFixed(3);
+    $("unlockbtn").style.transform = `scale(${(1 - 0.08 * btnOut + (t > 2450 && t < 2650 ? -0.04 : 0)).toFixed(3)})`;
+    const barIn = Ad.ease.out(Ad.span(t, 3900, 4250));
+    $("closebar").style.opacity = barIn.toFixed(3);
+    $("closebar").style.transform = `translateY(${(30 * (1 - barIn)).toFixed(1)}px)`;
+    const unlocked = t >= 2950;
+    sig.style.borderColor = unlocked ? "rgba(34,227,155,.8)" : "rgba(255,77,109,.7)";
+    sig.style.boxShadow = unlocked
+      ? `0 0 ${(90 + 60 * kick).toFixed(0)}px rgba(34,227,155,.45), 0 40px 120px rgba(0,0,0,.7)`
+      : `0 0 ${(80 + 40 * Math.sin(t / 250)).toFixed(0)}px rgba(255,77,109,.38), 0 40px 120px rgba(0,0,0,.7)`;
+
+    // Scene C: the phone-number form is slashed, then falls out of frame.
+    const form = $("form");
+    const slash = Ad.ease.out(Ad.span(t, 6750, 6950));
+    $("slash").style.transform = `rotate(-8deg) scaleX(${slash.toFixed(3)})`;
+    const fall = Math.max(0, t - 7000);
+    form.style.transform = `translateY(${(0.0065 * fall * fall).toFixed(1)}px) rotate(${(0.018 * fall).toFixed(2)}deg)`;
+    $("formwrap").style.display = t > 6100 && t < 8200 ? "block" : "none";
+
+    // Phone: rises tilted, settles; tap Get started → feed.
+    const ph = $("ph");
+    const settle = Ad.ease.out(Ad.span(t, 7200, 7900));
+    ph.style.transform = `rotateY(${(18 * (1 - settle)).toFixed(2)}deg) rotateX(${(10 * (1 - settle)).toFixed(2)}deg)`;
+    tapFx($("touch2"), $("ripple2"), t, 7750);
+    const sw = Ad.ease.out(Ad.span(t, 7900, 8200));
+    $("scrWelcome").style.transform = `translateX(${(-560 * sw).toFixed(1)}px)`;
+    $("scrFeed").style.transform = `translateX(${(560 * (1 - sw)).toFixed(1)}px)`;
+
+    // Scene D: day tiles flip down on the beat, then UNLOCKED stamps.
+    [[$("d1"), 10000], [$("d2"), 10500], [$("d3"), 11000]].forEach(([el, at]) => {
+      const p = Ad.ease.back(Ad.span(t, at, at + 320));
+      const out = Ad.span(t, 12450, 12670);
+      el.style.opacity = t < at ? "0" : (1 - out).toFixed(3);
+      el.style.visibility = t < at || out >= 1 ? "hidden" : "visible";
+      el.style.transform = `perspective(1400px) rotateX(${(-90 * (1 - p)).toFixed(1)}deg) scale(${(1 + 0.06 * kick * (t > at ? 1 : 0)).toFixed(3)})`;
+    });
+    const st = $("stamp");
+    const sp = Ad.span(t, 11500, 11700);
+    const so = Ad.span(t, 12450, 12650);
+    st.style.opacity = t < 11500 ? "0" : ((sp < 1 ? sp : 1) * (1 - so)).toFixed(3);
+    st.style.visibility = t < 11500 || so >= 1 ? "hidden" : "visible";
+    st.style.transform = `translateX(-50%) rotate(-8deg) scale(${(2.2 - 1.2 * Ad.ease.out(sp)).toFixed(3)})`;
+
+    scs.forEach(([el, i]) => {
+      const col = i % 2, y = ((i * 150 - (t - 9500) * 0.16) % 900 + 900) % 900 - 160;
+      el.style.left = col ? "560px" : "50px";
+      el.style.top = `${(y + col * 70).toFixed(1)}px`;
+    });
+  });
+})();
+</script>
+</body>
+</html>

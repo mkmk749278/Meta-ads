@@ -6,31 +6,44 @@ Paid-social creative and landing page for **Lumin** (consumer app of the
 
 | Path | What |
 |---|---|
-| `out/*.mp4` | Rendered ads — 1080×1920, 30fps, 20s, H.264, ready to upload |
-| `out/*.jpg` | Poster frames (thumbnails) |
+| `out/<ad>.mp4` | The ads — 1080×1920, 30fps, 18s, H.264 + AAC soundtrack (−14 LUFS), ready to upload |
+| `out/<ad>.jpg` | 9:16 cover (= frame 0) — Reels / Stories thumbnail |
+| `out/<ad>_4x5.jpg` | 4:5 cover (y 285–1635 crop) — Feed thumbnail |
 | `ads/<name>/index.html` | Source of each ad — an HTML animation, open it in a browser to preview |
-| `ads/_shared/` | Design system (`base.css`), scenery + end card (`shared.js`), deterministic timeline (`runtime.js`) |
-| `tools/render.py` | HTML → MP4 renderer |
+| `ads/_shared/` | Design system (`base.css`), deterministic timeline (`runtime.js`), effects (`fx.js`: live candle chart, number decode, camera shake + RGB split, particle bursts) |
+| `tools/render.py` | HTML → MP4 renderer (+ covers) |
+| `tools/soundtrack.py` | Synthesizes the score + SFX from the ad's `#soundtrack` cue list — no samples, nothing to license |
 | `site/` | Landing page, deployed to GitHub Pages by `.github/workflows/pages.yml` |
 | `docs/ad-copy.md` | Hinglish primary text / headline / description per ad |
 | `docs/campaign-plan.md` | Campaign structure, targeting, what to measure |
 | `docs/compliance-checklist.md` | Rules every creative passes + where each claim comes from |
 
-## The three ads
+## The ads — one per hook, run as an A/B/C test
 
-1. **01-signal-in-seconds**: "Signal aaya move ke BAAD?" → engine scans 24/7 → crystal-clear signal → Auto Trade places entry/stop/target on Binance → exit is clear either way.
-2. **02-clear-exit**: "TP1, TP2, TP3… exit kab karein?" → 1 entry, 1 stop, 1 exit → the plan drawn → win bhi, loss bhi.
-3. **03-auto-trade**: "Signal aaya… aap busy the?" → Step 1 API (withdrawal keys rejected) → Step 2 Auto ON → Step 3 Lumin handles it → Free / Assist / Auto.
+Three ads, identical offer and end card, **different hooks** (owner, 2026-09-25:
+"attract users, not basic"). Each one exists because it answers a test: which
+opening stops the scroll for this audience. Frame 0 of each is its thumbnail and
+is fully composed with no motion.
 
-Each ends with the CTA and the ASCI risk disclaimer on screen for 5.5s.
+| Ad | Hook (frame 0) | Test | Story |
+|---|---|---|---|
+| `hero-auto-trade` | *"Aap so rahe the. Trade lag gaya."* — 3:12 AM lock screen | **Outcome** (Auto Trade while you sleep) | scan → signal → Auto Trade → CTA |
+| `unlock-live` | *"Ye signal abhi LIVE hai."* — a live card, levels blurred under a padlock | **Curiosity** (the new masked-live funnel) | tap → lock bursts → levels decode → "Number nahi. Form nahi." → 3 din FREE |
+| `chaos-clarity` | *"20 indicators. 0 clarity."* — a chart buried under overlays and scribbles | **Pain** (chart overload) | mess collapses into Lumin → Entry/Stop/Target draw in → wins *and* losses on the record |
+
+`unlock-live` and `chaos-clarity` open on a pad and glitches only and **drop the
+beat on the first cut** (`drums_from` in the cue list); every cut shakes the
+camera and splits RGB. Only the winning hook should get budget after the test,
+see `docs/campaign-plan.md`.
 
 ## Edit and re-render
 
 ```bash
 pip install playwright imageio-ffmpeg     # Chromium: python -m playwright install chromium
-open ads/02-clear-exit/index.html          # live preview, loops
-python tools/render.py ads/02-clear-exit --stills 3000,8000   # QA frames → out/stills/
-python tools/render.py ads/*/              # all MP4s → out/  (~2 min per ad)
+pip install numpy                         # soundtrack synthesis
+open ads/hero-auto-trade/index.html       # live preview, loops (silent: the score is added at render)
+python tools/render.py ads/hero-auto-trade --stills 0,6600,11800   # QA frames → out/stills/
+python tools/render.py ads/hero-auto-trade   # MP4 + both covers → out/  (~1.5 min)
 ```
 
 Animation is declarative: `data-in="up" data-at="1200" data-dur="600"` enters

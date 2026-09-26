@@ -1,0 +1,376 @@
+<!doctype html>
+<!--
+  HERO — "Aap so rahe the. Trade lag gaya."   (the one ad we run)
+  Owner, 2026-09-25: the 3 older ads read like slide decks; ONE best ad is
+  enough, and the cover frame is what earns the click.
+
+  So frame 0 IS the thumbnail: a fully composed shot with the headline, the
+  phone lock screen at 3:12 AM and the Auto Trade notifications already on
+  screen. Nothing on it needs motion to be understood. Meta's cover picker
+  and data-poster both use t=0.
+
+  Story on a 120 BPM grid (cuts land on beats, the soundtrack is synthesized
+  from the #soundtrack cue list below by tools/soundtrack.py):
+    0.0–2.5s  HOOK   3 AM, phone buzzes: entry placed, stop set, target set
+    2.5–5.0s  HOW    "Kaise?" engine scans 24/7, 75+ pairs, every 15s → setup
+    5.0–8.5s  SIGNAL the signal, then 1 entry · 1 stop · 1 exit on the beat
+    8.5–12.5s AUTO   toggle ON → your Binance account → entry/stop/target;
+                     withdrawal-permission keys rejected
+    12.5–18s  END    CTA + ASCI disclaimer, 5.5s (≥5s rule)
+
+  Claims audit: docs/compliance-checklist.md. No P&L, no %, no win rate.
+  Prices are marked ILLUSTRATION. "Binance" in plain text, no logo.
+-->
+<html data-duration="18000">
+<head>
+<meta charset="utf-8">
+<title>Lumin — Aap so rahe the</title>
+<link rel="stylesheet" href="../_shared/base.css">
+<style>
+  #stage {
+    background:
+      radial-gradient(700px 520px at 88% 6%, rgba(155,107,255,.42), transparent 62%),
+      radial-gradient(900px 700px at 8% 38%, rgba(56,214,255,.16), transparent 62%),
+      radial-gradient(1100px 800px at 50% 108%, rgba(34,227,155,.18), transparent 60%),
+      linear-gradient(180deg, #0c0826 0%, #060417 55%, #02030b 100%);
+  }
+  #cam { position:absolute; inset:0; transform-origin: 50% 42%; }
+  .star { position:absolute; border-radius:50%; background:#fff; }
+  .moon { position:absolute; right:70px; top:120px; width:150px; height:150px; border-radius:50%;
+    box-shadow: -34px 18px 0 0 #ffe7a8; filter: drop-shadow(0 0 40px rgba(255,220,140,.55)); }
+
+  .brand-mini { position:absolute; left:64px; top:108px; display:flex; align-items:center; gap:16px; z-index:30; }
+  .brand-mini .logo { width:72px; height:72px; border-radius:20px; }
+  .brand-mini .logo svg { width:34px; height:40px; }
+  .brand-mini span { font:800 46px/1 "Poppins"; letter-spacing:-1px; }
+
+  .hook { font:900 104px/0.98 "Poppins"; letter-spacing:-4px; }
+  .hook.g { background: linear-gradient(90deg, #6affc6, #38d6ff 70%); -webkit-background-clip:text; background-clip:text; color:transparent;
+    filter: drop-shadow(0 0 28px rgba(34,227,155,.45)); }
+  .underline { position:absolute; height:14px; border-radius:14px; background: linear-gradient(90deg, #22e39b, #38d6ff);
+    box-shadow: 0 0 24px rgba(34,227,155,.8); }
+
+  /* phone: outer div is tweened by the runtime, inner .ph carries the 3D pose */
+  .phone-wrap { position:absolute; left:210px; top:590px; width:660px; height:1140px; perspective:2200px; }
+  .ph { position:absolute; inset:0; border-radius:92px; transform-style:preserve-3d;
+    background: linear-gradient(165deg, #1b1f3d 0%, #0b0d22 40%, #070818 100%);
+    border:3px solid rgba(255,255,255,.18);
+    box-shadow: inset 0 0 0 14px #04050d, inset 0 0 0 16px rgba(255,255,255,.08),
+      0 0 0 2px rgba(155,107,255,.35), 0 60px 140px rgba(0,0,0,.75), 0 0 120px rgba(56,214,255,.22); overflow:hidden; }
+  .ph::before { content:""; position:absolute; left:50%; top:30px; width:170px; height:44px; margin-left:-85px; border-radius:30px; background:#02030a; }
+  .ph .wall { position:absolute; inset:16px; border-radius:78px;
+    background: radial-gradient(420px 380px at 70% 18%, rgba(155,107,255,.5), transparent 70%),
+      radial-gradient(400px 400px at 20% 90%, rgba(56,214,255,.28), transparent 70%), #0a0a22; }
+  .ph .glare { position:absolute; inset:0; border-radius:92px; pointer-events:none;
+    background: linear-gradient(115deg, transparent 30%, rgba(255,255,255,.10) 42%, transparent 52%); }
+  .lock-date { position:absolute; left:0; right:0; top:120px; text-align:center; font:600 32px/1 "Inter"; color:rgba(238,245,255,.8); }
+  .lock-time { position:absolute; left:0; right:0; top:160px; text-align:center; font:600 176px/1 "Poppins"; letter-spacing:-6px; color:#f3f0ff;
+    text-shadow: 0 0 40px rgba(155,107,255,.6); }
+  .lock-ampm { font-size:54px; letter-spacing:0; margin-left:8px; color:#cbbcff; }
+  .notif { position:absolute; left:34px; right:34px; padding:24px 26px; border-radius:36px;
+    background: rgba(24,28,58,.86); border:2px solid rgba(255,255,255,.14);
+    box-shadow: 0 18px 50px rgba(0,0,0,.5); display:flex; gap:20px; align-items:flex-start; }
+  .notif.hot { border-color: rgba(34,227,155,.75); box-shadow: 0 0 50px rgba(34,227,155,.35), 0 18px 50px rgba(0,0,0,.5); }
+  .notif .mini { width:72px; height:72px; border-radius:20px; background:var(--brand); display:grid; place-items:center; flex:none;
+    box-shadow: 0 0 20px rgba(122,211,248,.6); }
+  .notif .mini svg { width:32px; height:38px; }
+  .notif .a { font:700 25px/1.2 "Inter"; color:#aab4d6; display:flex; justify-content:space-between; }
+  .notif .b { font:800 35px/1.18 "Inter"; color:#fff; margin-top:6px; }
+  .notif .c { font:600 29px/1.3 "Inter"; color:#bff5de; margin-top:6px; }
+  .ok { color:var(--green); }
+
+  .sticker { position:absolute; padding:16px 28px; border-radius:18px; font:900 38px/1 "Poppins"; letter-spacing:1px;
+    color:#041022; background: linear-gradient(90deg, #6affc6, #38d6ff); box-shadow: 0 0 50px rgba(34,227,155,.65); }
+
+  /* scene B */
+  .kaise { font:900 190px/1 "Poppins"; letter-spacing:-6px; }
+  .radar { position:absolute; left:50%; top:600px; width:560px; height:560px; margin-left:-280px; border-radius:50%;
+    background: radial-gradient(circle, rgba(56,214,255,.12) 0 22%, transparent 23%),
+      repeating-radial-gradient(circle, transparent 0 68px, rgba(56,214,255,.3) 69px 71px);
+    border:2px solid rgba(56,214,255,.55); box-shadow: 0 0 90px rgba(56,214,255,.25) inset, 0 0 70px rgba(56,214,255,.22); }
+  .sweep { position:absolute; inset:0; border-radius:50%;
+    background: conic-gradient(from 0deg, rgba(56,214,255,.6), rgba(56,214,255,0) 70deg, transparent 360deg);
+    animation: spin 1.5s linear infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .chip { position:absolute; padding:14px 22px; border-radius:18px; background:rgba(13,24,56,.94);
+    border:2px solid rgba(122,211,248,.35); font:700 28px/1 "Mono"; color:#cfe3ff; }
+  .chip.hit { border-color: var(--green); color: var(--green); font-size:40px; padding:20px 30px; box-shadow: 0 0 50px rgba(34,227,155,.7); }
+  .lockring { position:absolute; width:420px; height:150px; border-radius:40px; border:4px solid var(--green);
+    box-shadow: 0 0 40px rgba(34,227,155,.8); }
+  .stat { display:inline-flex; align-items:baseline; gap:10px; margin:0 8px; padding:18px 26px; border-radius:22px;
+    background:rgba(56,214,255,.1); border:2px solid rgba(56,214,255,.45); font:800 38px/1 "Poppins"; }
+  .stat small { font:600 26px "Inter"; color:var(--muted); }
+
+  /* scene C */
+  .beat { display:inline-block; padding:18px 30px; border-radius:22px; font:900 44px/1 "Poppins"; margin:0 6px;
+    background:rgba(13,24,56,.94); border:3px solid; }
+
+  /* scene D */
+  .toggle { position:absolute; width:250px; height:128px; border-radius:100px; border:3px solid rgba(255,255,255,.25); }
+  .knob { position:absolute; top:11px; width:100px; height:100px; border-radius:50%; background:#fff; box-shadow:0 8px 24px rgba(0,0,0,.5); }
+  .node { position:absolute; top:560px; width:280px; height:180px; border-radius:30px; display:grid; place-items:center; text-align:center; }
+  .beam { position:absolute; left:396px; top:644px; width:288px; height:10px; border-radius:10px;
+    background: linear-gradient(90deg, #38d6ff, #22e39b); box-shadow:0 0 26px rgba(56,214,255,.9); }
+  .pulse-dot { position:absolute; top:-10px; width:30px; height:30px; border-radius:50%; background:#fff;
+    box-shadow:0 0 26px 8px #38d6ff; animation: travel .5s linear infinite; }
+  @keyframes travel { from { left:-10px; } to { left:270px; } }
+  .shield { position:absolute; left:80px; right:80px; top:1152px; padding:22px 28px; border-radius:26px; display:flex; gap:24px; align-items:center;
+    background:rgba(40,8,18,.9); border:2px solid rgba(255,77,109,.6); box-shadow:0 0 50px rgba(255,77,109,.25); }
+  .shield b { font:800 36px/1.15 "Poppins"; color:#fff; }
+  .shield span { display:block; font:600 28px/1.3 "Inter"; color:#ffb3c1; margin-top:4px; }
+
+  /* flash on scene cuts */
+  #flash { position:absolute; inset:0; background:#fff; opacity:0; pointer-events:none; z-index:50; mix-blend-mode:overlay; }
+  /* lower third: equalizer that moves on the soundtrack's beat grid */
+  .eq { position:absolute; left:0; right:0; top:1470px; height:250px; display:flex; align-items:flex-end; justify-content:center; gap:10px; opacity:.55; }
+  .eq i { display:block; width:22px; border-radius:12px 12px 4px 4px; background: linear-gradient(180deg, #38d6ff, rgba(155,107,255,.2)); }
+</style>
+</head>
+<body>
+<!-- Cue list for tools/soundtrack.py. Times in ms. Keep in step with the scenes. -->
+<script type="application/json" id="soundtrack">
+{
+  "bpm": 120,
+  "music_from": 0,
+  "music_until": 12500,
+  "end": 18000,
+  "sfx": [
+    [0, "impact"], [60, "ding"], [900, "buzz"], [1400, "ding"],
+    [1500, "riser1"], [2500, "impact"], [2500, "whoosh"],
+    [3000, "blip"], [3250, "blip"], [3500, "blip"], [3750, "blip"], [4000, "blip"],
+    [4300, "lock"], [4000, "riser1"], [5000, "whoosh"], [5000, "impact"],
+    [5600, "tick"], [5850, "tick"], [6100, "tick"],
+    [7000, "hit"], [7500, "hit"], [8000, "hit"],
+    [7500, "riser1"], [8500, "whoosh"], [8500, "impact"],
+    [9000, "toggle"], [9500, "zap"], [10000, "tick"], [10500, "tick"], [11000, "tick"],
+    [11500, "alarm"], [11500, "riser1"], [12500, "impact"], [12500, "whoosh"]
+  ]
+}
+</script>
+
+<div id="stage" data-end-at="12500" data-poster="0">
+<div id="cam">
+  <div id="stars"></div>
+  <div class="moon" data-out="fade" data-until="2400"></div>
+  <div class="eq" id="eq"></div>
+
+  <div class="brand-mini" data-out="fade" data-until="12200">
+    <div class="logo" data-logo></div><span>Lumin</span>
+  </div>
+
+  <!-- ============ A. HOOK — the thumbnail (0–2.5s) ============ -->
+  <div class="abs" style="left:64px; top:318px" data-out="left" data-until="2450" data-odur="250">
+    <div class="hook">Aap so rahe the.</div>
+    <div class="hook g" style="margin-top:14px">Trade lag gaya.</div>
+  </div>
+  <div class="underline" style="left:66px; top:540px; width:780px" data-out="fade" data-until="2450" data-odur="250"></div>
+
+  <div class="phone-wrap" data-out="fade" data-until="2450" data-odur="250">
+    <div class="ph" id="ph1">
+      <div class="wall"></div>
+      <div class="lock-date">Sunday · Do not disturb</div>
+      <div class="lock-time">3:12<span class="lock-ampm">AM</span></div>
+      <div class="notif hot" style="top:390px">
+        <div class="mini" data-logo></div>
+        <div style="flex:1">
+          <div class="a"><span>LUMIN · AUTO TRADE</span><span>now</span></div>
+          <div class="b">BTCUSDT LONG <span class="ok">— live</span></div>
+          <div class="c">Entry ✓ &nbsp;Stop-loss ✓ &nbsp;Target ✓</div>
+        </div>
+      </div>
+      <div class="notif" style="top:640px; opacity:.72; transform:scale(.95)">
+        <div class="mini" data-logo></div>
+        <div style="flex:1">
+          <div class="a"><span>LUMIN</span><span>1m</span></div>
+          <div class="b" style="font-size:31px">New signal: setup found</div>
+        </div>
+      </div>
+      <div class="glare" id="glare"></div>
+    </div>
+  </div>
+  <div class="sticker" style="left:620px; top:576px" data-base="rotate(6deg)" data-out="fade" data-until="2450" data-odur="250">AUTO TRADE</div>
+
+  <!-- ============ B. HOW — engine scans (2.5–5.0s) ============ -->
+  <div class="abs" style="left:64px; top:292px" data-in="pop" data-at="2500" data-dur="350" data-out="left" data-until="4950" data-odur="220">
+    <div class="kaise">Kaise<span class="grad">?</span></div>
+  </div>
+  <div class="abs" style="left:66px; top:480px" data-in="left" data-at="2750" data-dur="350" data-out="left" data-until="4950" data-odur="220">
+    <div class="h3" style="color:#cfe3ff; font-size:46px">Lumin ka engine <span class="grad-green">24/7 jaagta hai.</span></div>
+  </div>
+  <div class="radar" data-in="zoom" data-at="2600" data-dur="500" data-out="fade" data-until="4950" data-odur="220"><div class="sweep"></div></div>
+  <div id="chips"></div>
+  <div class="lockring" style="left:330px; top:824px" data-in="zoom" data-at="4300" data-dur="250" data-out="fade" data-until="4950" data-odur="220"></div>
+  <div class="abs center-x" style="top:1195px; width:100%; text-align:center" data-in="up" data-at="3100" data-dur="350" data-out="fade" data-until="4950" data-odur="220">
+    <span class="stat">75+ <small>pairs</small></span><span class="stat"><small>har</small> 15 <small>sec</small></span>
+  </div>
+
+  <!-- ============ C. SIGNAL (5.0–8.5s) ============ -->
+  <div class="abs" style="left:64px; top:292px" data-in="left" data-at="5000" data-dur="350" data-out="left" data-until="8450" data-odur="220">
+    <div class="h1" style="font-size:96px">Setup bante hi</div>
+  </div>
+  <div class="abs" style="left:64px; top:394px" data-in="left" data-at="5120" data-dur="350" data-out="left" data-until="8450" data-odur="220">
+    <div class="h1" style="font-size:96px"><span class="grad">signal.</span></div>
+  </div>
+
+  <div class="card" style="left:90px; top:540px; width:900px; height:590px; padding:38px 46px" data-in="up" data-at="5150" data-dur="450" data-out="fade" data-until="8450" data-odur="220">
+    <div style="display:flex; justify-content:space-between; align-items:center">
+      <span class="pill live"><span class="dot"></span>NEW SIGNAL</span>
+      <span class="illus">ILLUSTRATION</span>
+    </div>
+    <div style="display:flex; align-items:center; gap:22px; margin:26px 0 10px">
+      <div style="font:800 58px/1 Poppins">BTCUSDT</div><span class="pill long">LONG</span>
+    </div>
+    <div class="row" data-in="left" data-at="5600" data-dur="300"><span>Entry</span><b>64,000.0</b></div>
+    <div class="row" data-in="left" data-at="5850" data-dur="300"><span>Stop Loss</span><b class="r">63,200.0</b></div>
+    <div class="row" data-in="left" data-at="6100" data-dur="300"><span>Target</span><b class="g">65,000.0</b></div>
+    <div data-in="up" data-at="6400" data-dur="350" style="margin-top:20px; padding:20px 26px; border-radius:22px; background:rgba(34,227,155,.1); border:2px solid rgba(34,227,155,.45); font:700 34px/1.2 Inter; color:#bff5de">
+      Target pe <span style="color:var(--green)">100% close</span>. Bas.
+    </div>
+  </div>
+
+  <div class="abs center-x" style="top:1170px; width:100%; text-align:center; white-space:nowrap">
+    <span class="beat" style="border-color:var(--cyan); color:#fff" data-in="pop" data-at="7000" data-dur="260" data-out="fade" data-until="8450" data-odur="220">1 Entry</span>
+    <span class="beat" style="border-color:var(--red); color:#ffd0d8" data-in="pop" data-at="7500" data-dur="260" data-out="fade" data-until="8450" data-odur="220">1 Stop</span>
+    <span class="beat" style="border-color:var(--green); color:#c9ffe9" data-in="pop" data-at="8000" data-dur="260" data-out="fade" data-until="8450" data-odur="220">1 Exit</span>
+  </div>
+
+  <!-- ============ D. AUTO TRADE (8.5–12.5s) ============ -->
+  <div class="abs" style="left:64px; top:292px" data-in="left" data-at="8500" data-dur="350" data-out="left" data-until="12450" data-odur="220">
+    <div class="h1" style="font-size:100px">Auto Trade</div>
+  </div>
+  <div class="toggle" id="toggle" style="left:760px; top:296px" data-in="pop" data-at="8600" data-dur="300" data-out="fade" data-until="12450" data-odur="220"><div class="knob" id="knob"></div></div>
+  <div class="abs" style="left:66px; top:410px" data-in="left" data-at="9050" data-dur="350" data-out="left" data-until="12450" data-odur="220">
+    <div class="h3" style="font-size:50px; color:#cfe3ff">Aap busy. <span class="grad-green">Lumin nahi.</span></div>
+  </div>
+
+  <div class="node card" style="left:110px" data-in="pop" data-at="9200" data-dur="300" data-out="fade" data-until="12450" data-odur="220">
+    <div><div class="logo" style="margin:0 auto 12px" data-logo></div><div style="font:800 34px Poppins">Lumin</div></div>
+  </div>
+  <div class="beam" data-in="wipe" data-at="9500" data-dur="300" data-out="fade" data-until="12450" data-odur="220"><div class="pulse-dot"></div></div>
+  <div class="node card green" style="left:690px" data-in="pop" data-at="9650" data-dur="300" data-out="fade" data-until="12450" data-odur="220">
+    <div><div style="font:900 36px/1.1 Poppins; color:var(--amber)">Binance</div><div style="font:600 28px/1.25 Inter; color:#cfe3ff; margin-top:8px">aapka apna<br>account</div></div>
+  </div>
+
+  <div class="abs" style="left:80px; right:80px; top:770px; display:grid; gap:16px">
+    <div class="check" data-in="left" data-at="10000" data-dur="300" data-out="fade" data-until="12450" data-odur="220"><div class="tick" data-tick></div>Entry order placed</div>
+    <div class="check" data-in="left" data-at="10500" data-dur="300" data-out="fade" data-until="12450" data-odur="220"><div class="tick" data-tick></div>Stop-loss set</div>
+    <div class="check" data-in="left" data-at="11000" data-dur="300" data-out="fade" data-until="12450" data-odur="220"><div class="tick" data-tick></div>Target set</div>
+  </div>
+
+  <div class="shield" data-in="up" data-at="11500" data-dur="300" data-out="fade" data-until="12450" data-odur="220">
+    <div class="tick cross" data-cross></div>
+    <div><b>Withdrawal permission wali key?</b><span>Hum accept hi nahi karte. Paisa aapke account mein.</span></div>
+  </div>
+
+  <!-- ============ E. END — CTA + ASCI disclaimer (12.5–18s, 5.5s) ============ -->
+  <div class="abs center-x" style="top:292px; width:100%; text-align:center" data-in="pop" data-at="12500" data-dur="500">
+    <div style="display:flex; align-items:center; justify-content:center; gap:22px">
+      <div class="logo" style="width:104px; height:104px; border-radius:28px" data-logo-lg></div>
+      <div style="font:900 84px/1 Poppins; letter-spacing:-2px">Lumin</div>
+    </div>
+    <div class="h2" style="margin-top:28px; font-size:72px">Live signals <span class="grad-green">3 din FREE.</span></div>
+    <div class="h2" style="margin-top:6px; font-size:72px">Auto Trade <span class="grad">jab chaho.</span></div>
+  </div>
+  <div class="abs center-x" style="top:640px; text-align:center; width:100%" data-in="up" data-at="12800" data-dur="450">
+    <div class="cta glow-pulse">Lumin try karo
+      <svg width="40" height="40" viewBox="0 0 40 40"><path d="M8 20h24M22 10l10 10-10 10" stroke="#041022" stroke-width="5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </div>
+    <div class="body" style="margin-top:22px; color:#cfe3ff">app.luminapp.org &nbsp;·&nbsp; Google Play</div>
+  </div>
+  <div class="disclaimer" style="top:865px" data-in="fade" data-at="12500" data-dur="300">
+    <h4>RISK DISCLAIMER</h4>
+    <p>Crypto products and NFTs are unregulated and can be highly risky. There may be no regulatory recourse for any loss from such transactions.</p>
+    <small>Futures trading carries a high risk of loss. Signals are not financial advice. 18+ only.</small>
+  </div>
+</div>
+<div id="flash"></div>
+</div>
+
+<script src="../_shared/runtime.js"></script>
+<script>
+(function () {
+  let seed = 11;
+  const rnd = () => ((seed = (seed * 16807) % 2147483647) / 2147483647);
+  const L = '<svg viewBox="0 0 46 52"><path d="M0 0h16v38h30v14H0z" fill="#0b1020"/></svg>';
+  const TICK = '<svg viewBox="0 0 32 32"><path d="M6 17l7 7L27 9" stroke="#04140d" stroke-width="5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+  const CROSS = '<svg viewBox="0 0 32 32"><path d="M9 9l14 14M23 9L9 23" stroke="#2a0710" stroke-width="5" stroke-linecap="round"/></svg>';
+  document.querySelectorAll("[data-logo]").forEach((el) => (el.innerHTML = L));
+  document.querySelectorAll("[data-logo-lg]").forEach((el) => (el.innerHTML = L.replace('viewBox', 'style="width:50px;height:58px" viewBox')));
+  document.querySelectorAll("[data-tick]").forEach((el) => (el.innerHTML = TICK));
+  document.querySelectorAll("[data-cross]").forEach((el) => (el.innerHTML = CROSS));
+
+  // Star field (static, deterministic) with a per-frame twinkle.
+  const stars = document.getElementById("stars");
+  const starEls = [];
+  for (let i = 0; i < 70; i++) {
+    const s = document.createElement("div");
+    s.className = "star";
+    const z = 1 + rnd() * 3;
+    s.style.cssText = `left:${(rnd() * 1080).toFixed(0)}px; top:${(rnd() * 1300).toFixed(0)}px; width:${z.toFixed(1)}px; height:${z.toFixed(1)}px`;
+    stars.appendChild(s); starEls.push([s, rnd() * 6.28, 0.3 + rnd() * 0.6]);
+  }
+
+  // Scanner chips around the radar; BTC is the setup it locks onto.
+  const pairs = [["ETH", 250, 640], ["SOL", 700, 650], ["BNB", 150, 880], ["XRP", 790, 1000],
+    ["DOGE", 230, 1080], ["AVAX", 690, 1090], ["LINK", 430, 580], ["BTC", 350, 836]];
+  const box = document.getElementById("chips");
+  pairs.forEach(([p, x, y], i) => {
+    const hit = p === "BTC";
+    box.insertAdjacentHTML("beforeend",
+      `<div class="chip${hit ? " hit" : ""}" style="left:${x}px; top:${y}px"
+        data-in="pop" data-at="${hit ? 4300 : 3000 + i * 180}" data-dur="250" data-out="fade" data-until="4950" data-odur="220">
+        ${hit ? "BTCUSDT · SETUP" : p + "USDT"}</div>`);
+  });
+
+  // Equalizer bars: heights are a pure function of t and the beat grid.
+  const eq = document.getElementById("eq");
+  const bars = [];
+  for (let i = 0; i < 34; i++) { const b = document.createElement("i"); eq.appendChild(b); bars.push([b, rnd(), rnd()]); }
+
+  const BEAT = 500, MUSIC_END = 12500;
+  const cam = document.getElementById("cam"), flash = document.getElementById("flash");
+  const ph = document.getElementById("ph1"), glare = document.getElementById("glare");
+  const knob = document.getElementById("knob"), toggle = document.getElementById("toggle");
+  const CUTS = [2500, 5000, 8500, 12500];
+
+  Ad.onFrame((t) => {
+    // Kick pulse: 1 on the beat, decaying over ~220ms. Silent in the end card.
+    const since = t % BEAT;
+    const kick = t < MUSIC_END ? Math.exp(-since / 110) : 0;
+
+    // Camera: slow push inside each scene + a small bump on every kick.
+    let sceneStart = 0; for (const c of CUTS) if (t >= c) sceneStart = c;
+    const drift = Math.min(1, (t - sceneStart) / 2500);
+    const scale = 1 + 0.035 * drift + 0.010 * kick;
+    cam.style.transform = `scale(${scale.toFixed(4)})`;
+
+    // White flash on each cut.
+    let f = 0; for (const c of CUTS) { const d = t - c; if (d >= 0 && d < 180) f = Math.max(f, 1 - d / 180); }
+    flash.style.opacity = (0.55 * f).toFixed(3);
+
+    // Phone pose: 3D tilt, easing toward face-on; buzz at 0.9s and 1.4s.
+    const settle = Ad.ease.out(Ad.span(t, 0, 2400));
+    let bx = 0;
+    for (const b of [900, 1400]) { const d = t - b; if (d >= 0 && d < 320) bx += Math.sin(d / 18) * 9 * (1 - d / 320); }
+    ph.style.transform = `rotateY(${(-16 + 6 * settle).toFixed(2)}deg) rotateX(${(7 - 2 * settle).toFixed(2)}deg) translateX(${bx.toFixed(1)}px)`;
+    glare.style.backgroundPosition = `${(-600 + 1200 * Ad.span(t, 200, 2200)).toFixed(0)}px 0`;
+    glare.style.backgroundSize = "200% 100%";
+
+    // Toggle flips ON at 9.0s.
+    const on = Ad.ease.back(Ad.span(t, 9000, 9250));
+    knob.style.left = `${(11 + 122 * on).toFixed(1)}px`;
+    toggle.style.background = on > 0.5 ? "linear-gradient(90deg,#16c784,#22e39b)" : "rgba(255,255,255,.08)";
+    toggle.style.boxShadow = on > 0.5 ? "0 0 50px rgba(34,227,155,.8)" : "none";
+
+    starEls.forEach(([s, ph0, base]) => { s.style.opacity = (base * (0.6 + 0.4 * Math.sin(t / 400 + ph0))).toFixed(3); });
+
+    bars.forEach(([b, a, c], i) => {
+      const wave = 0.5 + 0.5 * Math.sin(t / 180 + i * 0.55 + a * 6);
+      const energy = t < MUSIC_END ? 0.35 + 0.65 * kick : 0.15;
+      b.style.height = `${(18 + 210 * energy * (0.35 + 0.65 * wave) * (0.5 + c * 0.5)).toFixed(0)}px`;
+    });
+  });
+})();
+</script>
+</body>
+</html>
