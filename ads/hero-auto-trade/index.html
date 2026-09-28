@@ -14,12 +14,14 @@
     0.0–2.5s  HOOK   3 AM, phone buzzes: entry placed, stop set, target set
     2.5–5.0s  HOW    "Kaise?" engine scans 24/7, 75+ pairs, every 15s → setup
     5.0–8.5s  SIGNAL the signal, then 1 entry · 1 stop · 1 exit on the beat
-    8.5–12.5s AUTO   toggle ON → your Binance account → entry/stop/target;
-                     withdrawal-permission keys rejected
+    8.5–12.5s AUTO   toggle ON → your account on Binance OR CoinDCX (NEW,
+                     ₹ INR margin — for Indian users) → entry/stop/target;
+                     Lumin has no withdrawal path
+    (CoinDCX added 2026-09-28: engine 360-v2 #1075, live after #1081.)
     12.5–18s  END    CTA + ASCI disclaimer, 5.5s (≥5s rule)
 
   Claims audit: docs/compliance-checklist.md. No P&L, no %, no win rate.
-  Prices are marked ILLUSTRATION. "Binance" in plain text, no logo.
+  Prices are marked ILLUSTRATION. "Binance" / "CoinDCX" in plain text, no logos.
 -->
 <html data-duration="18000">
 <head>
@@ -114,6 +116,21 @@
   .pulse-dot { position:absolute; top:-10px; width:30px; height:30px; border-radius:50%; background:#fff;
     box-shadow:0 0 26px 8px #38d6ff; animation: travel .5s linear infinite; }
   @keyframes travel { from { left:-10px; } to { left:270px; } }
+  .xnode { position:absolute; left:640px; top:530px; width:360px; padding:22px 26px; border-radius:30px; display:grid; gap:12px; }
+  .xrow { display:flex; align-items:center; justify-content:space-between; padding:14px 20px; border-radius:18px;
+    background:rgba(255,255,255,.05); border:2px solid rgba(255,255,255,.12); font:900 36px/1 Poppins; }
+  .xrow.new { border-color: rgba(34,227,155,.8); background:rgba(34,227,155,.12); box-shadow:0 0 36px rgba(34,227,155,.45); }
+  .newtag { font:900 22px/1 Poppins; letter-spacing:2px; color:#041022; padding:8px 12px; border-radius:10px;
+    background: linear-gradient(90deg, #6affc6, #38d6ff); }
+  .india { position:absolute; left:80px; right:80px; top:830px; padding:24px 30px; border-radius:28px; text-align:center;
+    background: linear-gradient(90deg, rgba(255,153,51,.16), rgba(255,255,255,.05) 50%, rgba(19,136,8,.18));
+    border:3px solid rgba(255,197,66,.7); box-shadow:0 0 60px rgba(255,197,66,.3); }
+  .india b { display:block; font:900 50px/1.1 Poppins; letter-spacing:-1px; }
+  .india span { display:block; font:600 32px/1.3 Inter; color:#ffe3a8; margin-top:8px; }
+  .mini-checks { position:absolute; left:0; right:0; top:1030px; display:flex; justify-content:center; gap:14px; }
+  .mini-checks .check { padding:16px 22px; gap:14px; font-size:32px; }
+  .mini-checks .tick { width:44px; height:44px; }
+  .mini-checks .tick svg { width:24px; height:24px; }
   .shield { position:absolute; left:80px; right:80px; top:1152px; padding:22px 28px; border-radius:26px; display:flex; gap:24px; align-items:center;
     background:rgba(40,8,18,.9); border:2px solid rgba(255,77,109,.6); box-shadow:0 0 50px rgba(255,77,109,.25); }
   .shield b { font:800 36px/1.15 "Poppins"; color:#fff; }
@@ -142,7 +159,7 @@
     [5600, "tick"], [5850, "tick"], [6100, "tick"],
     [7000, "hit"], [7500, "hit"], [8000, "hit"],
     [7500, "riser1"], [8500, "whoosh"], [8500, "impact"],
-    [9000, "toggle"], [9500, "zap"], [10000, "tick"], [10500, "tick"], [11000, "tick"],
+    [9000, "toggle"], [9500, "zap"], [10000, "hit"], [10250, "ding"], [10750, "tick"], [11000, "tick"], [11250, "tick"],
     [11500, "alarm"], [11500, "riser1"], [12500, "impact"], [12500, "whoosh"]
   ]
 }
@@ -243,23 +260,30 @@
     <div class="h3" style="font-size:50px; color:#cfe3ff">Aap busy. <span class="grad-green">Lumin nahi.</span></div>
   </div>
 
-  <div class="node card" style="left:110px" data-in="pop" data-at="9200" data-dur="300" data-out="fade" data-until="12450" data-odur="220">
+  <div class="node card" style="left:80px; top:580px" data-in="pop" data-at="9200" data-dur="300" data-out="fade" data-until="12450" data-odur="220">
     <div><div class="logo" style="margin:0 auto 12px" data-logo></div><div style="font:800 34px Poppins">Lumin</div></div>
   </div>
-  <div class="beam" data-in="wipe" data-at="9500" data-dur="300" data-out="fade" data-until="12450" data-odur="220"><div class="pulse-dot"></div></div>
-  <div class="node card green" style="left:690px" data-in="pop" data-at="9650" data-dur="300" data-out="fade" data-until="12450" data-odur="220">
-    <div><div style="font:900 36px/1.1 Poppins; color:var(--amber)">Binance</div><div style="font:600 28px/1.25 Inter; color:#cfe3ff; margin-top:8px">aapka apna<br>account</div></div>
+  <div class="beam" style="left:366px; top:664px; width:268px" data-in="wipe" data-at="9500" data-dur="300" data-out="fade" data-until="12450" data-odur="220"><div class="pulse-dot"></div></div>
+  <div class="xnode card green" data-in="pop" data-at="9650" data-dur="300" data-out="fade" data-until="12450" data-odur="220">
+    <div class="xrow"><span style="color:var(--amber)">Binance</span></div>
+    <div class="xrow new" data-in="pop" data-at="10000" data-dur="280"><span style="color:#fff">CoinDCX</span><span class="newtag">NEW</span></div>
+    <div style="font:600 26px/1.2 Inter; color:#cfe3ff; text-align:center">aapka apna account</div>
   </div>
 
-  <div class="abs" style="left:80px; right:80px; top:770px; display:grid; gap:16px">
-    <div class="check" data-in="left" data-at="10000" data-dur="300" data-out="fade" data-until="12450" data-odur="220"><div class="tick" data-tick></div>Entry order placed</div>
-    <div class="check" data-in="left" data-at="10500" data-dur="300" data-out="fade" data-until="12450" data-odur="220"><div class="tick" data-tick></div>Stop-loss set</div>
-    <div class="check" data-in="left" data-at="11000" data-dur="300" data-out="fade" data-until="12450" data-odur="220"><div class="tick" data-tick></div>Target set</div>
+  <div class="india" data-in="up" data-at="10250" data-dur="350" data-out="fade" data-until="12450" data-odur="220">
+    <b>Ab <span class="grad-green" style="display:inline; font:inherit; margin:0">CoinDCX</span> pe bhi Auto Trade</b>
+    <span>Indian exchange · ₹ INR margin</span>
+  </div>
+
+  <div class="mini-checks">
+    <div class="check" data-in="up" data-at="10750" data-dur="260" data-out="fade" data-until="12450" data-odur="220"><div class="tick" data-tick></div>Entry</div>
+    <div class="check" data-in="up" data-at="11000" data-dur="260" data-out="fade" data-until="12450" data-odur="220"><div class="tick" data-tick></div>Stop-loss</div>
+    <div class="check" data-in="up" data-at="11250" data-dur="260" data-out="fade" data-until="12450" data-odur="220"><div class="tick" data-tick></div>Target</div>
   </div>
 
   <div class="shield" data-in="up" data-at="11500" data-dur="300" data-out="fade" data-until="12450" data-odur="220">
     <div class="tick cross" data-cross></div>
-    <div><b>Withdrawal permission wali key?</b><span>Hum accept hi nahi karte. Paisa aapke account mein.</span></div>
+    <div><b>Withdrawal? Lumin ke paas rasta hi nahi.</b><span>Sirf trade orders. Paisa aapke hi account mein.</span></div>
   </div>
 
   <!-- ============ E. END — CTA + ASCI disclaimer (12.5–18s, 5.5s) ============ -->
@@ -269,7 +293,7 @@
       <div style="font:900 84px/1 Poppins; letter-spacing:-2px">Lumin</div>
     </div>
     <div class="h2" style="margin-top:28px; font-size:72px">Live signals <span class="grad-green">3 din FREE.</span></div>
-    <div class="h2" style="margin-top:6px; font-size:72px">Auto Trade <span class="grad">jab chaho.</span></div>
+    <div class="h2" style="margin-top:6px; font-size:56px">Auto Trade: Binance <span class="grad">ya CoinDCX.</span></div>
   </div>
   <div class="abs center-x" style="top:640px; text-align:center; width:100%" data-in="up" data-at="12800" data-dur="450">
     <div class="cta glow-pulse">Lumin try karo
