@@ -30,6 +30,7 @@ first and a policy problem second.
 | Withdrawal-permission keys auto-rejected | Owner Brief B18 — **Binance only**. CoinDCX: user attestation (360-v2 `src/venues/coindcx/keystore.py` docstring) |
 | "Withdrawal? Lumin ke paas rasta hi nahi. Sirf trade orders." (`hero-auto-trade` scene D) | 360-v2 signing allow-lists: CoinDCX `src/venues/coindcx/signing.py` `PRIVATE_ENDPOINTS` (no wallet-transfer, withdrawal or spot path); Binance B18 rejects withdraw-enabled keys |
 | "Ab CoinDCX pe bhi Auto Trade" / "Auto Trade: Binance ya CoinDCX" (`hero-auto-trade`, landing) | 360-v2 #1075 (CoinDCX venue, merged 2026-09-27) + #1081 (reconciler stop fix, 2026-09-28); owner opened CoinDCX to all users 2026-09-27. lumin-legal #11 names CoinDCX in terms/risk/privacy. ⚠ Launch-day incident 2026-09-28: a CoinDCX position lost its stop (HBARUSDT), cause fixed in #1081 — see "Not verified here" |
+| "Chai pe the. Trade lag gaya." / "Chai aapki. Trade Lumin ka." (`chai-break`) | Same as the 3 AM row: Auto Trade places the order while the user is away (B1/B16), shown on CoinDCX. The ad shows the trade placed, never that it won. The end card says "Auto Trade ab CoinDCX pe" and never calls Auto free. Chai glass is drawn in CSS: no emoji, stock image or licence |
 | "₹ INR margin" (CoinDCX) | 360-v2 `src/venues/coindcx/dispatch.py` (margin currency defaults to INR); app platform page offers ₹ / USDT |
 | "Indian exchange" | CoinDCX is an India-based exchange; descriptive, no affiliation implied |
 | Funds stay in the user's account (non-custodial) | Owner Brief B16, B18 |

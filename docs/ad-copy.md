@@ -56,6 +56,19 @@ Variant primary text:
 
 ---
 
+## D — "Chai pe the" (`out/chai-break.mp4`, ad name `d_chai_break`) — CoinDCX, for Indian users
+
+**Primary text**
+> Chai pe the, aur Lumin ne kaam kar diya. Setup bante hi aapke apne CoinDCX account pe entry, stop-loss aur target khud lag gaye — ₹ INR margin ke saath. Live signals 3 din FREE.
+
+**Headline:** Chai pe the. Trade lag gaya.
+**Description:** Chai aapki. Trade Lumin ka.
+
+Variant primary text:
+> Indian exchange, Indian rupee. Lumin Auto Trade ab CoinDCX pe — aap chai break lo, engine 24/7 scan karta hai. Lumin sirf trade orders bhejta hai, withdrawal ka rasta hi nahi. Live signals 3 din FREE.
+
+---
+
 Retired 2026-09-25: the three earlier ads (signal-in-seconds, clear-exit,
 auto-trade) and their copy. See git history.
 
