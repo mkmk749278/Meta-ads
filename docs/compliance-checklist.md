@@ -16,7 +16,8 @@ rest of this list needs a human.
 - [ ] **No performance claims:** no profit, no %, no win rate, no "₹X/day", no track-record totals. The public track record overstates by ~25 bps/trade (entry drift, engine audit 2026-09-24) — never quote it.
 - [ ] **No "safe", "guaranteed", "risk-free", "sure-shot"**, and no implication that crypto solves money problems.
 - [ ] **Prices shown are illustrations** and labelled `ILLUSTRATION`; LONG geometry is coherent (stop < entry < target).
-- [ ] **No exchange logos.** "Binance" appears as plain text only (nominative: "your Binance account"). Landing footer states non-affiliation.
+- [ ] **No exchange logos.** "Binance" and "CoinDCX" appear as plain text only (nominative: "your Binance / CoinDCX account"). No partnership implied. Landing footer states non-affiliation with both.
+- [ ] **Withdrawal claims are per exchange.** "We reject withdrawal-permission keys" is true for **Binance only** (the engine reads the key's permissions). CoinDCX does not report them, so for CoinDCX the user *attests* it; never say we reject or verify a CoinDCX key. The claim both share is "Lumin sends only trade orders, it has no withdrawal path".
 - [ ] **No competitor named.**
 - [ ] **18+** on every creative and the landing page; target 21+ in Ads Manager.
 - [ ] Hinglish copy avoids Meta "personal attributes" phrasing (no "are you in debt / losing money").
@@ -26,13 +27,18 @@ rest of this list needs a human.
 | Claim in ads | Source |
 |---|---|
 | Engine scans 24/7, 75+ pairs, every 15s | `360-v2/OWNER_BRIEF.md` §3.1 |
-| "Aap so rahe the. Trade lag gaya." (Auto Trade places the order while the user is away, 3 AM shown) | Owner Brief B1/B16 (Auto = hands-free); engine scans 24/7 (§3.1). The ad shows the trade being placed and never says it won. Auto Trade is the paid tier and needs a connected key, so the end card says "jab chaho" and never calls it free |
+| "Aap so rahe the. Trade lag gaya." (Auto Trade places the order while the user is away, 3 AM shown) | Owner Brief B1/B16 (Auto = hands-free); engine scans 24/7 (§3.1). The ad shows the trade being placed and never says it won. Auto Trade is the paid tier and needs a connected key, so the end card names where it runs ("Auto Trade: Binance ya CoinDCX.", 2026-09-28; was "jab chaho") and never calls it free |
 | Notification "Entry ✓ Stop-loss ✓ Target ✓" | Same as "Stop-loss on every trade" below, including its audit caveat |
 | Signal "seconds mein" after the setup | `360-v2/ACTIVE_CONTEXT.md` (entry-drift section: order goes out seconds after the candle close) |
 | One exit: target = 100% close | Owner Brief §3.2 (TP1-full default, B17) |
 | Target set with fees in mind | Owner Brief B7, B11 |
 | Stop-loss on every trade | Owner Brief B12 + naked-position hard limit. ⚠ Audit 2026-09-24 item 1 (an engine-initiated close can strand a position) is a latent exception — fix before scaling Auto spend |
-| Withdrawal-permission keys auto-rejected | Owner Brief B18 |
+| Withdrawal-permission keys auto-rejected | Owner Brief B18 — **Binance only**. CoinDCX: user attestation (360-v2 `src/venues/coindcx/keystore.py` docstring) |
+| "Withdrawal? Lumin ke paas rasta hi nahi. Sirf trade orders." (`hero-auto-trade` scene D) | 360-v2 signing allow-lists: CoinDCX `src/venues/coindcx/signing.py` `PRIVATE_ENDPOINTS` (no wallet-transfer, withdrawal or spot path); Binance B18 rejects withdraw-enabled keys |
+| "Ab CoinDCX pe bhi Auto Trade" / "Auto Trade: Binance ya CoinDCX" (`hero-auto-trade`, landing) | 360-v2 #1075 (CoinDCX venue, merged 2026-09-27) + #1081 (reconciler stop fix, 2026-09-28); owner opened CoinDCX to all users 2026-09-27. lumin-legal #11 names CoinDCX in terms/risk/privacy. ⚠ Launch-day incident 2026-09-28: a CoinDCX position lost its stop (HBARUSDT), cause fixed in #1081 — see "Not verified here" |
+| "Chai pe the. Trade lag gaya." / "Chai aapki. Trade Lumin ka." (`chai-break`) | Same as the 3 AM row: Auto Trade places the order while the user is away (B1/B16), shown on CoinDCX. The ad shows the trade placed, never that it won. The end card says "Auto Trade ab CoinDCX pe" and never calls Auto free. Chai glass is drawn in CSS: no emoji, stock image or licence |
+| "₹ INR margin" (CoinDCX) | 360-v2 `src/venues/coindcx/dispatch.py` (margin currency defaults to INR); app platform page offers ₹ / USDT |
+| "Indian exchange" | CoinDCX is an India-based exchange; descriptive, no affiliation implied |
 | Funds stay in the user's account (non-custodial) | Owner Brief B16, B18 |
 | "Live signals 3 din FREE" (end card, landing) | Owner decision 2026-09-25 (360-v2 `src/api/signal_access.py`, OWNER_BRIEF B1/B16): every account gets 3 days of live signals from sign-up; closed signals always free. True before and after the paywall start, so the ad needs no re-render when it is switched on. **Never** write "Signals FREE" again — live signals are paid after 3 days |
 | "Number nahi. Form nahi. Seedha app mein." (`unlock-live`) | lumin-app #165 (2026-09-25): guest mode — one welcome screen, anonymous sign-in, no phone number to browse. Phone number is asked only at sign-up |
@@ -53,6 +59,8 @@ rest of this list needs a human.
 | "Auto Trade plan active" (guide checklist) | Owner Brief B16: hands-off execution runs only for `auto` tier. No price shown |
 
 ## Not verified here — owner to confirm
+
+- **CoinDCX "Stop-loss ✓" before spend scales.** Launch day (2026-09-28) a CoinDCX position sat open with no stop; the cause (reconciler read a missing row as flat and cancelled the stop) is fixed in 360-v2 #1081. Confirm a clean window of CoinDCX trades with SL + TP resting on the exchange (`read.coindcx`) before putting budget behind the CoinDCX variant.
 
 - **Meta crypto-ads eligibility** for the advertiser account (Meta requires prior approval / licensing evidence for some crypto categories; check Business Settings → the ad account's policy status).
 - Whether ASCI expects the disclaimer **also spoken** in audio-visual ads, and in the ad's own language (ads are Hinglish, disclaimer is English verbatim).

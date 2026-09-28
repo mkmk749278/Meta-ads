@@ -28,9 +28,10 @@ is fully composed with no motion.
 
 | Ad | Hook (frame 0) | Test | Story |
 |---|---|---|---|
-| `hero-auto-trade` | *"Aap so rahe the. Trade lag gaya."* — 3:12 AM lock screen | **Outcome** (Auto Trade while you sleep) | scan → signal → Auto Trade → CTA |
+| `hero-auto-trade` | *"Aap so rahe the. Trade lag gaya."* — 3:12 AM lock screen | **Outcome** (Auto Trade while you sleep) | scan → signal → Auto Trade on Binance **or CoinDCX (NEW, ₹ INR)** → CTA |
 | `unlock-live` | *"Ye signal abhi LIVE hai."* — a live card, levels blurred under a padlock | **Curiosity** (the new masked-live funnel) | tap → lock bursts → levels decode → "Number nahi. Form nahi." → 3 din FREE |
 | `chaos-clarity` | *"20 indicators. 0 clarity."* — a chart buried under overlays and scribbles | **Pain** (chart overload) | mess collapses into Lumin → Entry/Stop/Target draw in → wins *and* losses on the record |
+| `chai-break` | *"Chai pe the. Trade lag gaya."* — 4:15 PM, cutting chai beside a phone with a CoinDCX Auto Trade notification | **Relatable** (an everyday Indian moment; CoinDCX, ₹ INR) | scan → signal → Auto Trade on CoinDCX → "Chai aapki. Trade Lumin ka." → CTA. Held until the CoinDCX gate clears |
 
 ### Awareness + guidance (not part of the hook test)
 

@@ -1,45 +1,61 @@
 <!doctype html>
 <!--
-  HERO — "Aap so rahe the. Trade lag gaya."   (the one ad we run)
-  Owner, 2026-09-25: the 3 older ads read like slide decks; ONE best ad is
-  enough, and the cover frame is what earns the click.
+  CHAI BREAK — "Chai pe the. Trade lag gaya."   (hook test #4, added 2026-09-28)
+  The 3 AM idea moved to an ordinary Indian afternoon, for the CoinDCX launch:
+  the viewer is not asleep, just away from the screen for a cutting chai.
+  Test: RELATABLE (everyday moment) vs the other three hooks. Offer and
+  disclaimer match the others; the exchange shown is CoinDCX (₹ INR margin).
 
-  So frame 0 IS the thumbnail: a fully composed shot with the headline, the
-  phone lock screen at 3:12 AM and the Auto Trade notifications already on
-  screen. Nothing on it needs motion to be understood. Meta's cover picker
-  and data-poster both use t=0.
+  Frame 0 is the thumbnail: headline, chai glass with steam, phone showing the
+  CoinDCX Auto Trade notification. Fully readable with no motion.
 
-  Story on a 120 BPM grid (cuts land on beats, the soundtrack is synthesized
-  from the #soundtrack cue list below by tools/soundtrack.py):
-    0.0–2.5s  HOOK   3 AM, phone buzzes: entry placed, stop set, target set
+    0.0–2.5s  HOOK   4:15 PM, chai; phone: CoinDCX Auto Trade — entry/stop/target
     2.5–5.0s  HOW    "Kaise?" engine scans 24/7, 75+ pairs, every 15s → setup
     5.0–8.5s  SIGNAL the signal, then 1 entry · 1 stop · 1 exit on the beat
-    8.5–12.5s AUTO   toggle ON → your account on Binance OR CoinDCX (NEW,
-                     ₹ INR margin — for Indian users) → entry/stop/target;
-                     Lumin has no withdrawal path
-    (CoinDCX added 2026-09-28: engine 360-v2 #1075, live after #1081.)
+    8.5–12.5s AUTO   toggle ON → your own CoinDCX account (₹ INR margin)
+                     → entry/stop/target; Lumin has no withdrawal path
     12.5–18s  END    CTA + ASCI disclaimer, 5.5s (≥5s rule)
 
-  Claims audit: docs/compliance-checklist.md. No P&L, no %, no win rate.
-  Prices are marked ILLUSTRATION. "Binance" / "CoinDCX" in plain text, no logos.
+  Claims audit: docs/compliance-checklist.md (CoinDCX rows). No P&L, no %, no
+  win rate. Prices marked ILLUSTRATION. "CoinDCX" in plain text, no logo.
+  The chai glass is drawn in CSS: no emoji, no stock image, nothing to license.
 -->
 <html data-duration="18000">
 <head>
 <meta charset="utf-8">
-<title>Lumin — Aap so rahe the</title>
+<title>Lumin — Chai pe the</title>
 <link rel="stylesheet" href="../_shared/base.css">
 <style>
   #stage {
     background:
-      radial-gradient(700px 520px at 88% 6%, rgba(155,107,255,.42), transparent 62%),
-      radial-gradient(900px 700px at 8% 38%, rgba(56,214,255,.16), transparent 62%),
-      radial-gradient(1100px 800px at 50% 108%, rgba(34,227,155,.18), transparent 60%),
-      linear-gradient(180deg, #0c0826 0%, #060417 55%, #02030b 100%);
+      radial-gradient(760px 560px at 90% 4%, rgba(255,166,77,.45), transparent 62%),
+      radial-gradient(900px 700px at 6% 40%, rgba(255,110,90,.16), transparent 62%),
+      radial-gradient(1100px 800px at 50% 108%, rgba(34,227,155,.16), transparent 60%),
+      linear-gradient(180deg, #2a1208 0%, #150a14 45%, #070512 100%);
   }
   #cam { position:absolute; inset:0; transform-origin: 50% 42%; }
   .star { position:absolute; border-radius:50%; background:#fff; }
-  .moon { position:absolute; right:70px; top:120px; width:150px; height:150px; border-radius:50%;
-    box-shadow: -34px 18px 0 0 #ffe7a8; filter: drop-shadow(0 0 40px rgba(255,220,140,.55)); }
+  .moon { position:absolute; right:60px; top:96px; width:170px; height:170px; border-radius:50%;
+    background: radial-gradient(circle, #fff3c4 0 38%, #ffb347 70%, rgba(255,140,60,0) 72%);
+    filter: drop-shadow(0 0 60px rgba(255,180,90,.8)); }
+  #stars { display:none; }
+  /* cutting chai: glass, tea, foam line, steam */
+  .chai { position:absolute; left:40px; top:1120px; width:300px; height:420px; z-index:20; }
+  .glass { position:absolute; left:40px; bottom:0; width:220px; height:300px;
+    clip-path: polygon(0 0, 100% 0, 88% 100%, 12% 100%);
+    background: linear-gradient(90deg, rgba(255,255,255,.28), rgba(255,255,255,.08) 30%, rgba(255,255,255,.18) 70%, rgba(255,255,255,.34)); }
+  .tea { position:absolute; left:40px; bottom:0; width:220px; height:240px;
+    clip-path: polygon(3% 0, 97% 0, 88% 100%, 12% 100%);
+    background: linear-gradient(180deg, #e9b77a 0 7%, #b9692e 8%, #8a4719 60%, #5e2e0f 100%);
+    box-shadow: 0 0 80px rgba(255,160,80,.35); }
+  .glass-ridge { position:absolute; left:40px; bottom:0; width:220px; height:300px;
+    clip-path: polygon(0 0, 100% 0, 88% 100%, 12% 100%);
+    background: repeating-linear-gradient(90deg, transparent 0 26px, rgba(255,255,255,.14) 27px 30px); }
+  .rim { position:absolute; left:34px; bottom:292px; width:232px; height:16px; border-radius:10px;
+    background: rgba(255,255,255,.35); }
+  .steam { position:absolute; bottom:320px; width:26px; height:120px; border-radius:30px;
+    background: linear-gradient(180deg, rgba(255,255,255,0), rgba(255,255,255,.5) 50%, rgba(255,255,255,0));
+    filter: blur(6px); }
 
   .brand-mini { position:absolute; left:64px; top:108px; display:flex; align-items:center; gap:16px; z-index:30; }
   .brand-mini .logo { width:72px; height:72px; border-radius:20px; }
@@ -53,7 +69,7 @@
     box-shadow: 0 0 24px rgba(34,227,155,.8); }
 
   /* phone: outer div is tweened by the runtime, inner .ph carries the 3D pose */
-  .phone-wrap { position:absolute; left:210px; top:590px; width:660px; height:1140px; perspective:2200px; }
+  .phone-wrap { position:absolute; left:330px; top:590px; width:660px; height:1140px; perspective:2200px; }
   .ph { position:absolute; inset:0; border-radius:92px; transform-style:preserve-3d;
     background: linear-gradient(165deg, #1b1f3d 0%, #0b0d22 40%, #070818 100%);
     border:3px solid rgba(255,255,255,.18);
@@ -61,13 +77,13 @@
       0 0 0 2px rgba(155,107,255,.35), 0 60px 140px rgba(0,0,0,.75), 0 0 120px rgba(56,214,255,.22); overflow:hidden; }
   .ph::before { content:""; position:absolute; left:50%; top:30px; width:170px; height:44px; margin-left:-85px; border-radius:30px; background:#02030a; }
   .ph .wall { position:absolute; inset:16px; border-radius:78px;
-    background: radial-gradient(420px 380px at 70% 18%, rgba(155,107,255,.5), transparent 70%),
-      radial-gradient(400px 400px at 20% 90%, rgba(56,214,255,.28), transparent 70%), #0a0a22; }
+    background: radial-gradient(420px 380px at 70% 18%, rgba(255,166,77,.45), transparent 70%),
+      radial-gradient(400px 400px at 20% 90%, rgba(56,214,255,.24), transparent 70%), #140b1c; }
   .ph .glare { position:absolute; inset:0; border-radius:92px; pointer-events:none;
     background: linear-gradient(115deg, transparent 30%, rgba(255,255,255,.10) 42%, transparent 52%); }
   .lock-date { position:absolute; left:0; right:0; top:120px; text-align:center; font:600 32px/1 "Inter"; color:rgba(238,245,255,.8); }
   .lock-time { position:absolute; left:0; right:0; top:160px; text-align:center; font:600 176px/1 "Poppins"; letter-spacing:-6px; color:#f3f0ff;
-    text-shadow: 0 0 40px rgba(155,107,255,.6); }
+    text-shadow: 0 0 40px rgba(255,166,77,.6); }
   .lock-ampm { font-size:54px; letter-spacing:0; margin-left:8px; color:#cbbcff; }
   .notif { position:absolute; left:34px; right:34px; padding:24px 26px; border-radius:36px;
     background: rgba(24,28,58,.86); border:2px solid rgba(255,255,255,.14);
@@ -159,7 +175,7 @@
     [5600, "tick"], [5850, "tick"], [6100, "tick"],
     [7000, "hit"], [7500, "hit"], [8000, "hit"],
     [7500, "riser1"], [8500, "whoosh"], [8500, "impact"],
-    [9000, "toggle"], [9500, "zap"], [10000, "hit"], [10250, "ding"], [10750, "tick"], [11000, "tick"], [11250, "tick"],
+    [9000, "toggle"], [9500, "zap"], [9650, "hit"], [10250, "ding"], [10750, "tick"], [11000, "tick"], [11250, "tick"],
     [11500, "alarm"], [11500, "riser1"], [12500, "impact"], [12500, "whoosh"]
   ]
 }
@@ -177,20 +193,20 @@
 
   <!-- ============ A. HOOK — the thumbnail (0–2.5s) ============ -->
   <div class="abs" style="left:64px; top:318px" data-out="left" data-until="2450" data-odur="250">
-    <div class="hook">Aap so rahe the.</div>
+    <div class="hook">Chai pe the.</div>
     <div class="hook g" style="margin-top:14px">Trade lag gaya.</div>
   </div>
-  <div class="underline" style="left:66px; top:540px; width:780px" data-out="fade" data-until="2450" data-odur="250"></div>
+  <div class="underline" style="left:66px; top:540px; width:700px" data-out="fade" data-until="2450" data-odur="250"></div>
 
   <div class="phone-wrap" data-out="fade" data-until="2450" data-odur="250">
     <div class="ph" id="ph1">
       <div class="wall"></div>
-      <div class="lock-date">Sunday · Do not disturb</div>
-      <div class="lock-time">3:12<span class="lock-ampm">AM</span></div>
+      <div class="lock-date">Monday · Chai break</div>
+      <div class="lock-time">4:15<span class="lock-ampm">PM</span></div>
       <div class="notif hot" style="top:390px">
         <div class="mini" data-logo></div>
         <div style="flex:1">
-          <div class="a"><span>LUMIN · AUTO TRADE</span><span>now</span></div>
+          <div class="a"><span>LUMIN · AUTO · CoinDCX</span><span>now</span></div>
           <div class="b">BTCUSDT LONG <span class="ok">— live</span></div>
           <div class="c">Entry ✓ &nbsp;Stop-loss ✓ &nbsp;Target ✓</div>
         </div>
@@ -205,7 +221,11 @@
       <div class="glare" id="glare"></div>
     </div>
   </div>
-  <div class="sticker" style="left:620px; top:576px" data-base="rotate(6deg)" data-out="fade" data-until="2450" data-odur="250">AUTO TRADE</div>
+  <div class="sticker" style="left:600px; top:560px" data-base="rotate(6deg)" data-out="fade" data-until="2450" data-odur="250">CoinDCX · ₹ INR</div>
+  <div class="chai" data-out="fade" data-until="2450" data-odur="250">
+    <div class="steam" id="st1" style="left:90px"></div><div class="steam" id="st2" style="left:140px"></div><div class="steam" id="st3" style="left:190px"></div>
+    <div class="tea"></div><div class="glass"></div><div class="glass-ridge"></div><div class="rim"></div>
+  </div>
 
   <!-- ============ B. HOW — engine scans (2.5–5.0s) ============ -->
   <div class="abs" style="left:64px; top:292px" data-in="pop" data-at="2500" data-dur="350" data-out="left" data-until="4950" data-odur="220">
@@ -265,14 +285,14 @@
   </div>
   <div class="beam" style="left:366px; top:664px; width:268px" data-in="wipe" data-at="9500" data-dur="300" data-out="fade" data-until="12450" data-odur="220"><div class="pulse-dot"></div></div>
   <div class="xnode card green" data-in="pop" data-at="9650" data-dur="300" data-out="fade" data-until="12450" data-odur="220">
-    <div class="xrow"><span style="color:var(--amber)">Binance</span></div>
-    <div class="xrow new" data-in="pop" data-at="10000" data-dur="280"><span style="color:#fff">CoinDCX</span><span class="newtag">NEW</span></div>
+    <div class="xrow new"><span style="color:#fff">CoinDCX</span><span class="newtag">NEW</span></div>
+    <div class="xrow"><span style="color:var(--amber)">₹ INR margin</span></div>
     <div style="font:600 26px/1.2 Inter; color:#cfe3ff; text-align:center">aapka apna account</div>
   </div>
 
   <div class="india" data-in="up" data-at="10250" data-dur="350" data-out="fade" data-until="12450" data-odur="220">
-    <b>Ab <span class="grad-green" style="display:inline; font:inherit; margin:0">CoinDCX</span> pe bhi Auto Trade</b>
-    <span>Indian exchange · ₹ INR margin</span>
+    <b>Chai aapki. <span class="grad-green" style="display:inline; font:inherit; margin:0">Trade Lumin ka.</span></b>
+    <span>Indian exchange CoinDCX pe Auto Trade</span>
   </div>
 
   <div class="mini-checks">
@@ -293,7 +313,7 @@
       <div style="font:900 84px/1 Poppins; letter-spacing:-2px">Lumin</div>
     </div>
     <div class="h2" style="margin-top:28px; font-size:72px">Live signals <span class="grad-green">3 din FREE.</span></div>
-    <div class="h2" style="margin-top:6px; font-size:56px">Auto Trade: Binance <span class="grad">ya CoinDCX.</span></div>
+    <div class="h2" style="margin-top:6px; font-size:64px">Auto Trade <span class="grad">ab CoinDCX pe.</span></div>
   </div>
   <div class="abs center-x" style="top:640px; text-align:center; width:100%" data-in="up" data-at="12800" data-dur="450">
     <div class="cta glow-pulse">Lumin try karo
@@ -386,6 +406,12 @@
     toggle.style.background = on > 0.5 ? "linear-gradient(90deg,#16c784,#22e39b)" : "rgba(255,255,255,.08)";
     toggle.style.boxShadow = on > 0.5 ? "0 0 50px rgba(34,227,155,.8)" : "none";
 
+    ["st1","st2","st3"].forEach((id, k) => {
+      const el = document.getElementById(id); if (!el) return;
+      const p = ((t / 1400) + k / 3) % 1;
+      el.style.transform = `translateY(${(-90 * p).toFixed(1)}px) translateX(${(10 * Math.sin(t / 300 + k)).toFixed(1)}px) scaleY(${(0.8 + 0.4 * p).toFixed(2)})`;
+      el.style.opacity = (t < 2450 ? 0.25 + 0.75 * Math.sin(Math.PI * p) : 0).toFixed(3);
+    });
     starEls.forEach(([s, ph0, base]) => { s.style.opacity = (base * (0.6 + 0.4 * Math.sin(t / 400 + ph0))).toFixed(3); });
 
     bars.forEach(([b, a, c], i) => {

@@ -46,6 +46,7 @@ delivery and the hook is the only thing that differs:
 | `hero_3am_auto` | `out/hero-auto-trade.mp4` | Outcome: "Aap so rahe the. Trade lag gaya." |
 | `b_unlock_live` | `out/unlock-live.mp4` | Curiosity: "Ye signal abhi LIVE hai." |
 | `c_chaos_clarity` | `out/chaos-clarity.mp4` | Pain: "20 indicators. 0 clarity." |
+| `d_chai_break` | `out/chai-break.mp4` | Relatable (CoinDCX, ₹ INR): "Chai pe the. Trade lag gaya." — **hold** until the CoinDCX stop-loss gate in `compliance-checklist.md` clears, then add it as the fourth ad |
 
 In Ads Manager set each ad's cover to its `out/<ad>.jpg` for Reels/Stories and
 `out/<ad>_4x5.jpg` for Feed. Frame 0 is the same picture, so autoplay starts on

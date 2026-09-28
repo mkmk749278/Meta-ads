@@ -8,19 +8,25 @@ CTA button: **Learn More** (it is a landing page, not a direct install).
 
 Rules every line below already follows (`compliance-checklist.md`): no profit,
 no win rate, no "safe"/"guaranteed", no exchange logo, no competitor named.
+Exchanges (Binance, CoinDCX) are named only as where the user's own account is.
 
 ---
 
 ## Hero — "Aap so rahe the" (`out/hero-auto-trade.mp4`, ad name `hero_3am_auto`)
 
 **Primary text**
-> Raat 3 baje setup bana. Aap so rahe the — Lumin Auto Trade ne aapke apne Binance account pe entry, stop-loss aur target laga diya. Live signals 3 din FREE, Auto Trade jab chaho.
+> Raat 3 baje setup bana. Aap so rahe the — Lumin Auto Trade ne aapke apne account pe entry, stop-loss aur target laga diya. Ab Binance ke saath CoinDCX pe bhi, ₹ INR margin ke saath. Live signals 3 din FREE.
 
 **Headline:** Aap so rahe the. Trade lag gaya.
 **Description:** Ek entry. Ek stop. Ek exit.
 
 Variant primary text (A/B, same video):
-> Signal aaya aur aap busy the? Lumin ka engine 24/7 scan karta hai. Auto Trade ON ho to order aapke account pe khud lagta hai, stop-loss ke saath. Withdrawal permission wali key hum accept hi nahi karte.
+> Signal aaya aur aap busy the? Lumin ka engine 24/7 scan karta hai. Auto Trade ON ho to order aapke account pe khud lagta hai, stop-loss ke saath. Lumin sirf trade orders bhejta hai — withdrawal ka rasta hi nahi.
+
+Variant primary text — India (A/B, same video; added 2026-09-28 when CoinDCX Auto Trade opened):
+> Ab Indian exchange pe bhi Auto Trade! Lumin ab CoinDCX ke saath kaam karta hai — ₹ INR margin, aapka apna account. Setup bante hi entry, stop-loss aur target khud lagte hain. Live signals 3 din FREE.
+
+Headline for the India variant: **Ab CoinDCX pe bhi Auto Trade.**
 
 ---
 
@@ -47,6 +53,19 @@ Variant primary text:
 
 Variant primary text:
 > Buy? Sell? Breakout ya fakeout? Chart ghoorna band karo. Ek signal, ek entry, ek stop, ek exit — aur har result record mein. Live signals 3 din FREE.
+
+---
+
+## D — "Chai pe the" (`out/chai-break.mp4`, ad name `d_chai_break`) — CoinDCX, for Indian users
+
+**Primary text**
+> Chai pe the, aur Lumin ne kaam kar diya. Setup bante hi aapke apne CoinDCX account pe entry, stop-loss aur target khud lag gaye — ₹ INR margin ke saath. Live signals 3 din FREE.
+
+**Headline:** Chai pe the. Trade lag gaya.
+**Description:** Chai aapki. Trade Lumin ka.
+
+Variant primary text:
+> Indian exchange, Indian rupee. Lumin Auto Trade ab CoinDCX pe — aap chai break lo, engine 24/7 scan karta hai. Lumin sirf trade orders bhejta hai, withdrawal ka rasta hi nahi. Live signals 3 din FREE.
 
 ---
 
