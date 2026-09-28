@@ -12,6 +12,8 @@ Marketing repo for **Lumin** (consumer app of the 360 Crypto Eye engine). See
 - **Creative style (owner, 2026-09-24):** Hinglish; designed, eye-catching neon UI in
   the style of the brand boards — **not** screenshots of the real app; animated MP4
   with a story flow; highlight clear signals, the single exit, speed and Auto Trade.
+- **Exception (owner, 2026-09-26):** the API-connect awareness/guide videos
+  (`api-connect-reel`, `api-connect-guide`) are **English only**.
 - **No exchange logos**; "Binance" as plain text only.
 - **Safe zone:** words between y≈285 and y≈1300 on the 1080×1920 canvas.
 - **The ASCI disclaimer end card is ≥5s** (currently 5.5s: 12.5s → 18s). Keep
@@ -30,4 +32,6 @@ Marketing repo for **Lumin** (consumer app of the 360 Crypto Eye engine). See
 - The soundtrack is synthesized (`tools/soundtrack.py`), so there is no music licence
   to track. Cuts and SFX sit on its 120 BPM grid; move them together.
 - Re-render after any edit to `ads/` and commit the new `out/*.mp4` with the source.
+- Run `python tools/check_compliance.py` before pushing (CI runs it on every PR). A
+  failure names the rule; fix the creative, never loosen the rule to get green.
 - Every change ships via PR; merging to `main` deploys `site/` to GitHub Pages.

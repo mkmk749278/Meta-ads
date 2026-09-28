@@ -1,0 +1,320 @@
+<!doctype html>
+<!--
+  REEL — "Share an API key = share your money? NO." (45s awareness, English)
+
+  Owner, 2026-09-26: awareness + guidance on creating a Binance API key and
+  connecting it to Lumin Auto Trade. This is the short half; the full,
+  follow-along walkthrough is ads/api-connect-guide (2m24s).
+
+  Hook = the fear that stops people connecting a key: "if I give an app my API
+  key, can it take my money?" The answer the reel earns is structural, not a
+  promise — each line maps to a check the engine enforces
+  (360-v2 src/security/binance_connect_validator.py, OWNER_BRIEF B18):
+    withdrawals ON  → key rejected           IP not restricted → key rejected
+    futures OFF     → key rejected           Lumin IP missing  → key rejected
+  Defaults on screen: src/execution/tripwires.py ($500 position cap,
+  5 orders/min). The owner asked for "absolutely safer with Lumin"; the
+  compliance checklist bans "safe", so the reel says what is true instead —
+  "Aapka paisa. Aapka account. Aapka control." and the reasons.
+
+  Frame 0 is the thumbnail: question + masked key card, fully composed.
+
+  Story on a 120 BPM grid:
+     0.0– 4.0  HOOK     "API key dena = paisa dena?" → NAHI. stamp at 1.5s
+     4.0–11.0  WHY      permissions: Reading ✓ · Futures ✓ · Withdrawals ✕ OFF
+    11.0–16.5  IP LOCK  Lumin server → Binance ✓ ; anywhere else → ✕ blocked
+    16.5–32.0  3 STEPS  Binance: API banao → Lumin: paste (3 checks) → Live ON
+    32.0–38.5  CONTROL  secret sirf app mein · defaults · disconnect anytime
+    38.5–45.0  END      where to find it + ASCI disclaimer (6.5s, ≥5s rule)
+-->
+<html data-duration="45000">
+<head>
+<meta charset="utf-8">
+<title>Lumin — Share an API key = share your money?</title>
+<link rel="stylesheet" href="../_shared/base.css">
+<link rel="stylesheet" href="../_shared/guide.css">
+<style>
+  #stage {
+    background:
+      radial-gradient(760px 560px at 88% 6%, rgba(255,77,109,.22), transparent 62%),
+      radial-gradient(900px 760px at 8% 40%, rgba(56,214,255,.16), transparent 62%),
+      radial-gradient(1100px 800px at 50% 110%, rgba(34,227,155,.16), transparent 60%),
+      linear-gradient(180deg, #0c0f2c 0%, #060818 55%, #02030b 100%);
+  }
+  #cam { position:absolute; inset:0; transform-origin: 50% 42%; }
+  #flash { position:absolute; inset:0; background:#fff; opacity:0; pointer-events:none; z-index:50; mix-blend-mode:overlay; }
+  .brand-mini { position:absolute; left:64px; top:108px; display:flex; align-items:center; gap:16px; z-index:30; }
+  .brand-mini .logo { width:72px; height:72px; border-radius:20px; }
+  .brand-mini .logo svg { width:34px; height:40px; }
+  .brand-mini span { font:800 46px/1 "Poppins"; letter-spacing:-1px; }
+
+  .hook { font:900 110px/0.98 "Poppins"; letter-spacing:-4px; }
+  .hook.w { background: linear-gradient(90deg, #ffb347, #ff4d6d); -webkit-background-clip:text; background-clip:text; color:transparent;
+    filter: drop-shadow(0 0 26px rgba(255,77,109,.45)); }
+  .stampx { position:absolute; padding:18px 48px; border-radius:26px; border:8px solid var(--green); color:var(--green);
+    font:900 150px/1 "Poppins"; letter-spacing:4px; background:rgba(4,20,13,.85); box-shadow:0 0 80px rgba(34,227,155,.6); }
+
+  .keycard { position:absolute; left:140px; top:640px; width:800px; height:340px; border-radius:40px; padding:40px 46px;
+    background: linear-gradient(135deg, rgba(56,214,255,.16), rgba(155,107,255,.14)); border:2px solid rgba(122,211,248,.55);
+    box-shadow: 0 0 90px rgba(56,214,255,.25), 0 40px 90px rgba(0,0,0,.6); }
+  .keycard .k { font:800 26px/1 "Inter"; letter-spacing:4px; color:var(--muted); }
+  .keycard .m { font:700 50px/1 "Mono"; margin-top:26px; letter-spacing:4px; color:#dff6ff; }
+  .keycard .m2 { font:700 36px/1 "Mono"; margin-top:22px; letter-spacing:6px; color:var(--dim); }
+  .keyicon { position:absolute; right:40px; top:34px; width:120px; height:120px; }
+  .wallet { position:absolute; left:340px; top:1030px; width:400px; padding:22px 30px; border-radius:26px; text-align:center;
+    background:rgba(8,14,36,.92); border:2px dashed rgba(255,197,66,.7); font:800 34px/1.2 "Inter"; color:#ffe6ad; }
+
+  .perm { position:absolute; left:90px; right:90px; display:flex; align-items:center; gap:26px; padding:28px 34px; border-radius:26px;
+    background:rgba(13,24,56,.92); border:2px solid rgba(255,255,255,.14); font:700 44px/1 "Inter"; }
+  .perm .grow { flex:1; }
+  .perm .tag { font-size:30px; padding:12px 22px; }
+
+  .node { position:absolute; width:300px; height:170px; border-radius:30px; display:grid; place-items:center; text-align:center; }
+  .node b { display:block; font:900 38px/1.1 "Poppins"; }
+  .node span { display:block; font:600 26px/1.3 "Inter"; color:#cfe3ff; margin-top:6px; }
+  .beam { position:absolute; height:10px; border-radius:10px; }
+  .beam.g { background: linear-gradient(90deg, #38d6ff, #22e39b); box-shadow:0 0 26px rgba(56,214,255,.9); }
+  .beam.r { background: repeating-linear-gradient(90deg, #ff4d6d 0 26px, transparent 26px 44px); box-shadow:0 0 20px rgba(255,77,109,.7); }
+  .badge { position:absolute; width:96px; height:96px; border-radius:50%; display:grid; place-items:center; font:900 52px/1 "Poppins"; }
+
+  .stepcard { position:absolute; left:64px; right:64px; top:470px; height:120px; display:flex; align-items:center; gap:26px; padding:0 30px;
+    border-radius:28px; background:rgba(13,24,56,.94); border:3px solid var(--cyan); box-shadow:0 0 50px rgba(56,214,255,.35); }
+  .stepcard.bnb { border-color:var(--amber); box-shadow:0 0 50px rgba(255,197,66,.3); }
+  .stepcard .n { width:76px; height:76px; border-radius:50%; flex:none; display:grid; place-items:center; font:900 40px/1 "Poppins";
+    background:var(--cyan); color:#041022; }
+  .stepcard.bnb .n { background:var(--amber); color:#1a1100; }
+  .stepcard b { font:800 46px/1.1 "Poppins"; }
+  .stepcard small { display:block; font:700 22px/1 "Inter"; letter-spacing:3px; color:var(--muted); margin-bottom:8px; }
+
+  .rule { position:absolute; left:64px; right:64px; display:flex; gap:24px; align-items:center; padding:26px 30px; border-radius:26px;
+    background:rgba(13,24,56,.92); border:2px solid; font:700 38px/1.25 "Inter"; }
+  .rule .ic { width:74px; height:74px; flex:none; border-radius:22px; display:grid; place-items:center; font:900 38px/1 "Poppins"; }
+  .rule small { display:block; font:500 27px/1.3 "Inter"; color:#cfe3ff; margin-top:6px; }
+
+  .shield { position:absolute; left:80px; right:80px; padding:22px 28px; border-radius:26px; display:flex; gap:24px; align-items:center;
+    background:rgba(40,8,18,.9); border:2px solid rgba(255,77,109,.6); box-shadow:0 0 50px rgba(255,77,109,.25); }
+  .shield b { font:800 36px/1.15 "Poppins"; color:#fff; }
+  .shield span { display:block; font:600 28px/1.3 "Inter"; color:#ffb3c1; margin-top:4px; }
+  .eq { position:absolute; left:0; right:0; top:1470px; height:250px; display:flex; align-items:flex-end; justify-content:center; gap:10px; opacity:.5; }
+  .eq i { display:block; width:22px; border-radius:12px 12px 4px 4px; background: linear-gradient(180deg, #38d6ff, rgba(155,107,255,.2)); }
+</style>
+</head>
+<body>
+<!-- Cue list for tools/soundtrack.py. Times in ms. Keep in step with the scenes. -->
+<script type="application/json" id="soundtrack">
+{
+  "bpm": 120,
+  "prog": "dark",
+  "music_from": 0,
+  "drums_from": 4000,
+  "music_until": 38500,
+  "end": 45000,
+  "sfx": [
+    [0, "glitch"], [200, "sub"], [1000, "riser1"], [1500, "stamp"], [1500, "impact"],
+    [4000, "whoosh"], [4000, "impact"], [5000, "tick"], [5500, "tick"], [6000, "alarm"],
+    [8000, "lock"], [9500, "ding"],
+    [11000, "whoosh"], [11000, "impact"], [12000, "zap"], [13500, "shatter"], [14500, "lock"],
+    [16500, "whoosh"], [16500, "impact"], [17500, "tick"], [18000, "tick"], [18500, "alarm"],
+    [21500, "whoosh"], [22500, "tap"], [23500, "tap"], [24500, "hit"], [25000, "hit"], [25500, "hit"],
+    [26500, "whoosh"], [28500, "tap"], [29000, "toggle"], [29500, "ding"],
+    [31500, "riser1"], [32000, "whoosh"], [32000, "impact"], [32500, "hit"], [34000, "hit"], [35500, "hit"],
+    [37500, "riser1"], [38500, "impact"], [38500, "whoosh"]
+  ]
+}
+</script>
+
+<div id="stage" data-end-at="38500" data-poster="0">
+<div id="cam">
+  <div class="grid-floor" style="opacity:.3"></div>
+  <div class="eq" id="eq"></div>
+  <div class="brand-mini" data-w="-,0,38300">
+    <div class="logo" data-logo></div><span>Lumin</span>
+  </div>
+
+  <!-- ============ A. HOOK — thumbnail (0–4s) ============ -->
+  <div class="abs" style="left:64px; top:300px" data-w="-,0,3950">
+    <div class="hook" style="font-size:90px">Share an API key</div>
+    <div class="hook w" style="margin-top:12px; font-size:90px">= share your money?</div>
+  </div>
+  <div class="keycard" data-w="-,0,3950">
+    <div class="k">API KEY</div>
+    <div class="m">Xk9•••••••••••2Qa</div>
+    <div class="k" style="margin-top:34px">SECRET KEY</div>
+    <div class="m2">••••••••••••••••</div>
+    <svg class="keyicon" viewBox="0 0 120 120"><circle cx="40" cy="60" r="26" fill="none" stroke="#7ad3f8" stroke-width="10"/><path d="M64 60h46M92 60v18M106 60v12" stroke="#7ad3f8" stroke-width="10" stroke-linecap="round"/></svg>
+  </div>
+  <div class="wallet" data-w="-,0,3950">Your wallet 💰</div>
+  <div class="stampx" style="left:290px; top:760px" data-base="rotate(-8deg)" data-w="pop,1500,3950">NO.</div>
+  <div class="abs center-x" style="top:1180px; width:100%; text-align:center" data-w="up,2200,3950">
+    <span class="h3" style="font-size:44px; color:#cfe3ff">Here is why, in 40 seconds.</span>
+  </div>
+
+  <!-- ============ B. WHY — permissions (4–11s) ============ -->
+  <div class="abs" style="left:64px; top:292px" data-w="left,4000,10950">
+    <div class="h2" style="font-size:72px">Lumin only gets</div>
+    <div class="h2" style="font-size:72px"><span class="grad">access to trade.</span></div>
+  </div>
+  <div class="perm" style="top:520px" data-w="left,5000,10950"><div class="cb on"></div><div class="grow">Reading</div><span class="tag on">ON</span></div>
+  <div class="perm" style="top:660px" data-w="left,5500,10950"><div class="cb on"></div><div class="grow">Futures</div><span class="tag on">ON</span></div>
+  <div class="perm" style="top:800px; border-color:var(--red); box-shadow:0 0 50px rgba(255,77,109,.35)" data-w="left,6000,10950">
+    <div class="cb"></div><div class="grow">Withdrawals</div><span class="tag off">OFF 🔒</span></div>
+  <div class="shield" style="top:960px" data-w="up,8000,10950">
+    <div class="tick cross" data-cross></div>
+    <div><b>A key with withdrawals ON?</b><span>Lumin rejects it automatically.</span></div>
+  </div>
+  <div class="abs center-x" style="top:1170px; width:100%; text-align:center" data-w="up,9500,10950">
+    <span class="h3" style="font-size:46px">Funds <span class="grad-green">stay in your Binance.</span></span>
+  </div>
+
+  <!-- ============ C. IP LOCK (11–16.5s) ============ -->
+  <div class="abs" style="left:64px; top:292px" data-w="left,11000,16450">
+    <div class="h2" style="font-size:72px">The key only works</div>
+    <div class="h2" style="font-size:72px"><span class="grad">from Lumin's server.</span></div>
+  </div>
+  <div class="node card" style="left:70px; top:560px" data-w="pop,11300,16450"><div><b style="color:var(--brand)">Lumin</b><span>server IP</span></div></div>
+  <div class="beam g" style="left:370px; top:640px; width:340px" data-w="wipe,12000,16450"></div>
+  <div class="node card green" style="left:710px; top:560px" data-w="pop,12300,16450"><div><b style="color:var(--amber)">Binance</b><span>your account</span></div></div>
+  <div class="badge" style="left:492px; top:548px; background:var(--green); color:#04140d" data-w="pop,12400,16450">✓</div>
+
+  <div class="node card red" style="left:70px; top:880px" data-w="pop,13000,16450"><div><b style="color:#ffb3c1">Anyone else</b><span>from anywhere</span></div></div>
+  <div class="beam r" style="left:370px; top:960px; width:340px" data-w="wipe,13200,16450"></div>
+  <div class="node card" style="left:710px; top:880px" data-w="pop,13000,16450"><div><b style="color:var(--amber)">Binance</b><span>your account</span></div></div>
+  <div class="badge" style="left:492px; top:868px; background:var(--red); color:#2a0710" data-w="pop,13500,16450">✕</div>
+  <div class="abs center-x" style="top:1150px; width:100%; text-align:center" data-w="up,14500,16450">
+    <span class="h3" style="font-size:48px">Anywhere else? <span class="grad-warm">Blocked.</span></span>
+  </div>
+
+  <!-- ============ D. 3 STEPS (16.5–32s) ============ -->
+  <div class="abs" style="left:64px; top:292px" data-w="left,16500,31950">
+    <div class="h2" style="font-size:76px">Setup: <span class="grad-green">3 steps.</span></div>
+  </div>
+
+  <!-- 1: Binance -->
+  <div class="stepcard bnb" data-w="up,16800,21450"><div class="n">1</div><div><small>BINANCE APP</small><b>Create an API key</b></div></div>
+  <div class="screen bnb" style="top:640px; height:560px" data-w="up,17200,21450">
+    <div class="bar">Edit restrictions<span class="who">BINANCE</span></div>
+    <div class="srow"><div class="cb on"></div><div class="grow">Enable Futures</div><span class="tag on">ON</span></div>
+    <div class="srow"><div class="cb"></div><div class="grow">Enable Withdrawals</div><span class="tag off">OFF</span>
+      <div class="ring red" data-w="fade,18500,21450"></div></div>
+    <div class="srow"><div class="radio on"></div><div class="grow">Restrict access to trusted IPs only<span class="sub">Lumin's IP — copy it from the app</span></div></div>
+    <span class="illus">ILLUSTRATION</span>
+  </div>
+
+  <!-- 2: Lumin paste -->
+  <div class="stepcard" data-w="up,21500,26450"><div class="n">2</div><div><small>LUMIN APP</small><b>Paste the key</b></div></div>
+  <div class="screen" style="top:640px; height:580px" data-w="up,21800,26450">
+    <div class="bar">Server-side auto-trade<span class="who">LUMIN</span></div>
+    <div class="field"><label>API key</label><div class="v"><span data-w="wipe,22500,-" style="display:inline-block">Xk9•••••••••••••••2Qa</span></div></div>
+    <div class="field"><label>API secret</label><div class="v"><span data-w="wipe,23500,-" style="display:inline-block">••••••••••••••••••••</span></div></div>
+    <div style="padding:10px 34px; font:700 32px/1.55 Inter">
+      <div data-w="left,24500,-">✅ Withdraw disabled</div>
+      <div data-w="left,25000,-">✅ Futures enabled</div>
+      <div data-w="left,25500,-">✅ IP access list OK</div>
+    </div>
+  </div>
+
+  <!-- 3: Live ON -->
+  <div class="stepcard" data-w="up,26500,31950"><div class="n">3</div><div><small>LUMIN APP</small><b>Turn Live Trading ON</b></div></div>
+  <div class="screen" style="top:640px; height:420px" data-w="up,26800,31950">
+    <div class="bar">Auto-trade<span class="who">LUMIN</span></div>
+    <div class="srow"><div class="grow">Live Trading<span class="sub">Real orders on your Binance account</span></div>
+      <div class="swwrap"><div class="sw stack"><i></i></div><div class="sw on stack" data-w="fade,29000,-"><i></i></div></div>
+      <i class="tap" data-t="28500" style="left:790px; top:50%"></i></div>
+    <div class="srow"><div class="grow">Paper Trading<span class="sub">If you want to practise first</span></div>
+      <div class="swwrap"><div class="sw stack"><i></i></div></div></div>
+  </div>
+  <div class="abs center-x" style="top:1110px; width:100%; text-align:center" data-w="up,29500,31950">
+    <span class="h3" style="font-size:46px">Signal → <span class="grad-green">order on your account.</span></span>
+  </div>
+
+  <!-- ============ E. CONTROL (32–38.5s) ============ -->
+  <div class="abs" style="left:64px; top:292px" data-w="pop,32000,38450">
+    <div class="h2" style="font-size:60px">Your money.</div>
+    <div class="h2" style="font-size:60px">Your account. <span class="grad-green">Your control.</span></div>
+  </div>
+  <div class="rule" style="top:500px; border-color:var(--amber)" data-w="left,32500,38450">
+    <div class="ic" style="background:rgba(255,197,66,.14); color:var(--amber)">!</div>
+    <div>Paste the secret only into the Lumin app.<small>The Lumin team never asks for your key on DM / WhatsApp.</small></div>
+  </div>
+  <div class="rule" style="top:710px; border-color:var(--cyan)" data-w="left,34000,38450">
+    <div class="ic" style="background:rgba(56,214,255,.14); color:var(--cyan)">$</div>
+    <div>Default limit<small>$500 max position · 5 orders/min</small></div>
+  </div>
+  <div class="rule" style="top:900px; border-color:var(--green)" data-w="left,35500,38450">
+    <div class="ic" style="background:rgba(34,227,155,.14); color:var(--green)">⏻</div>
+    <div>Disconnect anytime<small>From the Lumin app, or by deleting the key on Binance.</small></div>
+  </div>
+
+  <!-- ============ F. END (38.5–45s, 6.5s) ============ -->
+  <div class="abs center-x" style="top:292px; width:100%; text-align:center" data-in="pop" data-at="38500" data-dur="500">
+    <div style="display:flex; align-items:center; justify-content:center; gap:22px">
+      <div class="logo" style="width:104px; height:104px; border-radius:28px" data-logo-lg></div>
+      <div style="font:900 84px/1 Poppins; letter-spacing:-2px">Lumin</div>
+    </div>
+    <div class="h2" style="margin-top:28px; font-size:64px">Your key.</div>
+    <div class="h2" style="margin-top:4px; font-size:64px"><span class="grad">Connected on your terms.</span></div>
+  </div>
+  <div class="abs center-x" style="top:640px; text-align:center; width:100%" data-in="up" data-at="38800" data-dur="450">
+    <div class="cta glow-pulse" style="font-size:40px">Menu › Auto-trade &amp; execution</div>
+    <div class="body" style="margin-top:22px; color:#cfe3ff">app.luminapp.org &nbsp;·&nbsp; Google Play</div>
+  </div>
+  <div class="disclaimer" style="top:865px" data-in="fade" data-at="38500" data-dur="300">
+    <h4>RISK DISCLAIMER</h4>
+    <p>Crypto products and NFTs are unregulated and can be highly risky. There may be no regulatory recourse for any loss from such transactions.</p>
+    <small>Futures trading carries a high risk of loss. Signals are not financial advice. 18+ only.</small>
+  </div>
+</div>
+<div id="flash"></div>
+</div>
+
+<script>
+/* Same shorthand as api-connect-guide: data-w="IN,AT,UNTIL", .tap[data-t]. */
+document.querySelectorAll("[data-w]").forEach((el) => {
+  const [kind, at, until] = el.dataset.w.split(",");
+  if (kind !== "-") { el.dataset.in = kind; el.dataset.at = at; el.dataset.dur = kind === "wipe" ? "600" : kind === "pop" ? "300" : "350"; }
+  if (until !== "-") { el.dataset.out = "fade"; el.dataset.until = until; el.dataset.odur = "220"; }
+});
+document.querySelectorAll(".tap[data-t]").forEach((el) => {
+  const t = +el.dataset.t;
+  Object.assign(el.dataset, { in: "pop", at: t - 150, dur: "200", out: "fade", until: t + 450, odur: "200" });
+});
+</script>
+<script src="../_shared/runtime.js"></script>
+<script>
+(function () {
+  let seed = 7;
+  const rnd = () => ((seed = (seed * 16807) % 2147483647) / 2147483647);
+  const L = '<svg viewBox="0 0 46 52"><path d="M0 0h16v38h30v14H0z" fill="#0b1020"/></svg>';
+  const CROSS = '<svg viewBox="0 0 32 32"><path d="M9 9l14 14M23 9L9 23" stroke="#2a0710" stroke-width="5" stroke-linecap="round"/></svg>';
+  document.querySelectorAll("[data-logo]").forEach((el) => (el.innerHTML = L));
+  document.querySelectorAll("[data-logo-lg]").forEach((el) => (el.innerHTML = L.replace('viewBox', 'style="width:50px;height:58px" viewBox')));
+  document.querySelectorAll("[data-cross]").forEach((el) => (el.innerHTML = CROSS));
+
+  const eq = document.getElementById("eq");
+  const bars = [];
+  for (let i = 0; i < 34; i++) { const b = document.createElement("i"); eq.appendChild(b); bars.push([b, rnd(), rnd()]); }
+
+  const BEAT = 500, DRUMS = 4000, MUSIC_END = 38500;
+  const cam = document.getElementById("cam"), flash = document.getElementById("flash");
+  const CUTS = [4000, 11000, 16500, 21500, 26500, 32000, 38500];
+
+  Ad.onFrame((t) => {
+    const since = t % BEAT;
+    const kick = t >= DRUMS && t < MUSIC_END ? Math.exp(-since / 110) : 0;
+    let sceneStart = 0; for (const c of CUTS) if (t >= c) sceneStart = c;
+    const drift = Math.min(1, (t - sceneStart) / 3000);
+    // Shake on the NAHI stamp.
+    const s = t - 1500; const shake = s >= 0 && s < 300 ? Math.sin(s / 14) * 10 * (1 - s / 300) : 0;
+    cam.style.transform = `translate(${shake.toFixed(1)}px, 0) scale(${(1 + 0.03 * drift + 0.008 * kick).toFixed(4)})`;
+    let f = 0; for (const c of [1500, ...CUTS]) { const d = t - c; if (d >= 0 && d < 180) f = Math.max(f, 1 - d / 180); }
+    flash.style.opacity = (0.5 * f).toFixed(3);
+    bars.forEach(([b, a, c], i) => {
+      const wave = 0.5 + 0.5 * Math.sin(t / 180 + i * 0.55 + a * 6);
+      const energy = t < MUSIC_END ? (t < DRUMS ? 0.2 : 0.35 + 0.65 * kick) : 0.12;
+      b.style.height = `${(18 + 210 * energy * (0.35 + 0.65 * wave) * (0.5 + c * 0.5)).toFixed(0)}px`;
+    });
+  });
+})();
+</script>
+</body>
+</html>

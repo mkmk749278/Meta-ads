@@ -4,6 +4,12 @@ Run every new creative through this before it spends a rupee. The app is live
 with real users' capital behind it; an ad that over-promises is a trust problem
 first and a policy problem second.
 
+The mechanical part — disclaimer verbatim and legible ≥ 5s, end-card timings
+in step with the soundtrack, 18+, the safe-zone top, and the banned claim words
+in the ads, landing page and `ad-copy.md` — runs on every PR
+(`python tools/check_compliance.py`, `.github/workflows/compliance.yml`). The
+rest of this list needs a human.
+
 ## Hard rules (every ad, every landing-page change)
 
 - [ ] **ASCI crypto disclaimer, verbatim:** "Crypto products and NFTs are unregulated and can be highly risky. There may be no regulatory recourse for any loss from such transactions." Video: on screen ≥ 5s, legible, inside the safe zone. Current ad: 5.5s (12.5–18s), y 866–1265.
@@ -44,6 +50,13 @@ first and a policy problem second.
 | Signals plan / Assist = one tap / Auto = hands-free | Owner Brief B16 (2026-09-25 revision) |
 | Every result recorded, wins and losses | Owner Brief B3, B9; app Track record |
 | Paper mode | app onboarding ("Paper mode — prove it first") |
+| "Share an API key = share your money? NO." / "Lumin only gets access to trade." (`api-connect-reel`) | `360-v2/src/security/binance_connect_validator.py` + Owner Brief B18: a key with withdrawal permission is rejected at connect, no override. States what the key *can* do, never "safe" |
+| "A key with withdrawals ON? Lumin rejects it automatically." | Same validator (`WithdrawEnabledError`) |
+| "The key only works from Lumin's server. Anywhere else? Blocked." | Validator requires IP restriction with Lumin's server IP on the list (`IpRestrictDisabledError` / `IpNotWhitelistedError`); Binance enforces the list |
+| Default limit "$500 max position · 5 orders/min" | `360-v2/src/execution/tripwires.py` (`DEFAULT_POSITION_CAP_USD = 500`, `DEFAULT_RATE_LIMIT_PER_MIN = 5`), same copy in the app's connect screen. ⚠ `OWNER_BRIEF` B18 still says 10/min — the code wins; re-render if the constant changes |
+| "The Lumin team never asks for your key on DM / WhatsApp" | Product fact: keys enter only through the in-app connect form (`/api/binance/connect`). **Owner to confirm this is also support policy** before spending on it |
+| Walkthrough screens (`api-connect-guide`) | Lumin labels copied from `lumin-app` settings pages (2026-09-26). Binance labels are Binance's published API Management wording; their layout changes, so every mock screen says ILLUSTRATION. Lumin's server IP is **never shown** — masked, "copy it from the app" — so the video cannot go stale when the server moves |
+| "Auto Trade plan active" (guide checklist) | Owner Brief B16: hands-off execution runs only for `auto` tier. No price shown |
 
 ## Not verified here — owner to confirm
 

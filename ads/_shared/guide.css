@@ -1,0 +1,170 @@
+/* Guide kit — designed mockups of the Binance and Lumin screens a user taps
+ * through when connecting an API key (used by api-connect-reel and
+ * api-connect-guide). Loaded AFTER base.css.
+ *
+ * These are illustrations in the ad design language, NOT screenshots
+ * (CLAUDE.md: designed UI, no exchange logos, "Binance" as plain text). The
+ * labels match the real apps' wording so a viewer can find the same control:
+ *   Lumin  — lumin-app lib/features/settings/pages/{trading_settings,
+ *            server_side_execution, auto_trade_settings}_page.dart
+ *   Binance — API Management wording as published by Binance; their layout
+ *            changes, so every screen carries "ILLUSTRATION".
+ *
+ * Everything with words sits inside y 285–1300 (base.css safe zone).
+ */
+
+/* ---------- mock screen ---------- */
+.screen {
+  position: absolute; left: 90px; width: 900px; border-radius: 40px; overflow: hidden;
+  background: linear-gradient(180deg, #0d1638, #080e26);
+  border: 2px solid rgba(255, 255, 255, 0.14);
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.04) inset, 0 0 70px rgba(56, 214, 255, 0.18), 0 40px 90px rgba(0, 0, 0, 0.6);
+}
+.screen.bnb { border-color: rgba(255, 197, 66, 0.45); box-shadow: 0 0 70px rgba(255, 197, 66, 0.16), 0 40px 90px rgba(0, 0, 0, 0.6); }
+.screen .bar {
+  height: 86px; display: flex; align-items: center; gap: 18px; padding: 0 34px;
+  background: rgba(255, 255, 255, 0.04); border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  font: 700 32px/1 "Inter"; color: var(--ink);
+}
+.screen .bar .back { font: 700 36px/1 "Inter"; color: var(--muted); }
+.screen .bar .who { margin-left: auto; font: 800 22px/1 "Inter"; letter-spacing: 2px; color: var(--brand); }
+.screen.bnb .bar .who { color: var(--amber); }
+.screen .illus { position: absolute; right: 30px; bottom: 16px; }
+
+.sec { padding: 20px 34px 6px; font: 700 22px/1 "Inter"; letter-spacing: 2px; color: var(--dim); }
+.srow {
+  position: relative; display: flex; align-items: center; gap: 22px; padding: 22px 34px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07); font: 600 34px/1.15 "Inter"; color: var(--ink);
+}
+.srow .grow { flex: 1; min-width: 0; }
+.srow .sub { display: block; font: 500 24px/1.3 "Inter"; color: var(--muted); margin-top: 6px; }
+.srow .chev { font: 700 34px/1 "Inter"; color: var(--dim); }
+.srow.dim { opacity: 0.4; }
+.ico {
+  width: 60px; height: 60px; border-radius: 16px; flex: none; display: grid; place-items: center;
+  background: rgba(122, 211, 248, 0.12); border: 2px solid rgba(122, 211, 248, 0.3);
+  font: 800 28px/1 "Inter"; color: var(--brand);
+}
+
+/* checkboxes and radios; a state change is a second element popped on top */
+.cb {
+  position: relative; width: 50px; height: 50px; border-radius: 12px; flex: none;
+  border: 3px solid rgba(255, 255, 255, 0.35); background: rgba(255, 255, 255, 0.04);
+}
+.cb.on { border-color: var(--green); background: var(--green); box-shadow: 0 0 22px rgba(34, 227, 155, 0.7); }
+.cb.on::after {
+  content: ""; position: absolute; left: 14px; top: 4px; width: 13px; height: 26px;
+  border: solid #04140d; border-width: 0 6px 6px 0; transform: rotate(45deg);
+}
+.cb.stack { position: absolute; left: 0; top: 0; }
+.cbwrap { position: relative; width: 50px; height: 50px; flex: none; }
+.radio { width: 44px; height: 44px; border-radius: 50%; border: 3px solid rgba(255, 255, 255, 0.35); flex: none; position: relative; }
+.radio.on { border-color: var(--cyan); box-shadow: 0 0 18px rgba(56, 214, 255, 0.6); }
+.radio.on::after { content: ""; position: absolute; inset: 8px; border-radius: 50%; background: var(--cyan); }
+
+.tag { padding: 8px 16px; border-radius: 12px; font: 800 24px/1 "Inter"; letter-spacing: 1px; white-space: nowrap; }
+.tag.off { color: #fff; background: var(--red); box-shadow: 0 0 22px rgba(255, 77, 109, 0.7); }
+.tag.on { color: #04140d; background: var(--green); box-shadow: 0 0 22px rgba(34, 227, 155, 0.7); }
+.tag.info { color: #041022; background: var(--cyan); }
+
+/* input field and button */
+.field {
+  position: relative; margin: 16px 34px; padding: 18px 24px; border-radius: 18px;
+  background: #050a1d; border: 2px solid rgba(122, 211, 248, 0.3);
+}
+.field label { display: block; font: 600 22px/1 "Inter"; color: var(--muted); margin-bottom: 12px; }
+.field .v { font: 700 32px/1.1 "Mono"; color: var(--ink); white-space: nowrap; overflow: hidden; }
+.field .ph { font: 500 30px/1.1 "Inter"; color: var(--dim); }
+.field .copy { position: absolute; right: 22px; bottom: 16px; font: 800 26px/1 "Inter"; color: var(--cyan); }
+.field .filled { position: absolute; left: 24px; right: 24px; bottom: 18px; background: #050a1d; }
+.btnx {
+  position: relative; margin: 18px 34px 28px; padding: 26px; border-radius: 20px; text-align: center;
+  font: 800 32px/1 "Poppins"; color: #041022; background: linear-gradient(90deg, #2f7bff, #38d6ff);
+  box-shadow: 0 0 40px rgba(56, 214, 255, 0.4);
+}
+.btnx.amber { background: linear-gradient(90deg, #ffb347, #ffc542); color: #1a1100; box-shadow: 0 0 40px rgba(255, 197, 66, 0.35); }
+.btnx.ghost { background: transparent; border: 2px solid rgba(255, 255, 255, 0.25); color: var(--ink); box-shadow: none; }
+
+.warnbox {
+  margin: 18px 34px; padding: 20px 24px; border-radius: 18px;
+  background: rgba(255, 197, 66, 0.08); border: 2px solid rgba(255, 197, 66, 0.6);
+  font: 600 26px/1.4 "Inter"; color: #ffe6ad;
+}
+.warnbox b { color: var(--amber); display: block; font: 800 26px/1.2 "Inter"; margin-bottom: 6px; }
+.dangerbox { background: rgba(255, 77, 109, 0.1); border-color: rgba(255, 77, 109, 0.7); color: #ffd0d8; }
+.dangerbox b { color: var(--red); }
+.okbox { background: rgba(34, 227, 155, 0.08); border-color: rgba(34, 227, 155, 0.6); color: #c9ffe9; }
+.okbox b { color: var(--green); }
+
+.toast {
+  position: absolute; left: 34px; right: 34px; bottom: 26px; padding: 22px 26px; border-radius: 18px;
+  background: #e9f3ff; color: #06112a; font: 700 26px/1.2 "Inter"; box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+}
+
+/* switch (base.css .toggle is the big hero one) */
+.sw { position: relative; width: 104px; height: 58px; border-radius: 40px; flex: none; background: rgba(255, 255, 255, 0.12); border: 2px solid rgba(255, 255, 255, 0.2); }
+.sw i { position: absolute; top: 5px; left: 6px; width: 44px; height: 44px; border-radius: 50%; background: #fff; }
+.sw.on { background: linear-gradient(90deg, #16c784, #22e39b); border-color: transparent; box-shadow: 0 0 26px rgba(34, 227, 155, 0.7); }
+.sw.on i { left: 52px; }
+.sw.stack { position: absolute; left: 0; top: 0; }
+.swwrap { position: relative; width: 104px; height: 58px; flex: none; }
+
+/* dialog over a screen */
+.dialog {
+  position: absolute; left: 70px; right: 70px; padding: 36px 34px 30px; border-radius: 30px;
+  background: #121c44; border: 2px solid rgba(56, 214, 255, 0.5); box-shadow: 0 30px 90px rgba(0, 0, 0, 0.8);
+}
+.dialog h5 { font: 800 36px/1.2 "Poppins"; margin-bottom: 14px; }
+.dialog p { font: 500 26px/1.4 "Inter"; color: var(--muted); }
+.dialog .btns { display: flex; gap: 18px; justify-content: flex-end; margin-top: 26px; }
+.dialog .btns span { position: relative; padding: 18px 28px; border-radius: 16px; font: 800 28px/1 "Inter"; }
+.scrim { position: absolute; inset: 86px 0 0 0; background: rgba(2, 4, 12, 0.72); }
+
+/* ---------- tap marker + focus ring ---------- */
+.tap {
+  position: absolute; width: 96px; height: 96px; margin: -48px 0 0 -48px; border-radius: 50%; z-index: 5;
+  border: 5px solid #fff; background: rgba(255, 255, 255, 0.2);
+  box-shadow: 0 0 34px rgba(255, 255, 255, 0.85), inset 0 0 22px rgba(255, 255, 255, 0.5);
+}
+.tap::after {
+  content: ""; position: absolute; inset: -5px; border-radius: 50%; border: 4px solid rgba(255, 255, 255, 0.7);
+  animation: ripple 0.8s ease-out infinite;
+}
+@keyframes ripple { from { transform: scale(1); opacity: 1; } to { transform: scale(1.9); opacity: 0; } }
+.ring {
+  position: absolute; inset: 4px; border-radius: 16px; pointer-events: none; z-index: 4;
+  border: 4px solid var(--cyan); box-shadow: 0 0 30px rgba(56, 214, 255, 0.8), inset 0 0 24px rgba(56, 214, 255, 0.25);
+  animation: glowPulse 1s ease-in-out infinite;
+}
+.ring.red { border-color: var(--red); box-shadow: 0 0 30px rgba(255, 77, 109, 0.8), inset 0 0 24px rgba(255, 77, 109, 0.25); }
+.ring.green { border-color: var(--green); box-shadow: 0 0 30px rgba(34, 227, 155, 0.8), inset 0 0 24px rgba(34, 227, 155, 0.25); }
+
+/* ---------- step header ---------- */
+.stephead { position: absolute; left: 64px; right: 64px; top: 292px; }
+.stepno {
+  display: inline-flex; align-items: center; gap: 14px; padding: 12px 24px; border-radius: 999px;
+  background: rgba(56, 214, 255, 0.12); border: 2px solid rgba(56, 214, 255, 0.55);
+  font: 800 28px/1 "Poppins"; letter-spacing: 2px; color: var(--cyan);
+}
+.stepno.bnb { background: rgba(255, 197, 66, 0.1); border-color: rgba(255, 197, 66, 0.6); color: var(--amber); }
+.stepno small { font: 700 22px/1 "Inter"; letter-spacing: 1px; color: var(--muted); }
+.steptitle { font: 800 66px/1.08 "Poppins"; letter-spacing: -2px; margin-top: 18px; }
+.crumb {
+  display: inline-block; margin-top: 16px; padding: 10px 18px; border-radius: 14px;
+  background: rgba(255, 255, 255, 0.06); border: 1px solid rgba(255, 255, 255, 0.12);
+  font: 600 26px/1.2 "Inter"; color: #cfe3ff; white-space: nowrap;
+}
+.crumb b { color: var(--muted); font-weight: 600; margin: 0 8px; }
+.note {
+  position: absolute; left: 64px; right: 64px; padding: 18px 24px; border-radius: 18px;
+  background: rgba(8, 14, 36, 0.92); border-left: 8px solid var(--cyan);
+  font: 700 32px/1.3 "Inter"; color: var(--ink);
+}
+.note.warn { border-left-color: var(--amber); }
+.note.danger { border-left-color: var(--red); }
+.note.ok { border-left-color: var(--green); }
+
+/* progress pips under the brand bar */
+.pips { position: absolute; right: 64px; top: 124px; display: flex; gap: 10px; z-index: 30; }
+.pips i { display: block; width: 42px; height: 10px; border-radius: 10px; background: rgba(255, 255, 255, 0.15); }
+.pips i.on { background: linear-gradient(90deg, #2f7bff, #38d6ff); box-shadow: 0 0 14px rgba(56, 214, 255, 0.7); }
